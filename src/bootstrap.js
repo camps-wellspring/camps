@@ -8,8 +8,7 @@ import { messages } from "@/lang";
 Vue.use(Vuelidate);
 Vue.use(vuelidateErrorExtractor, {
   messages,
-  i18n: "validation",
-  i18nattributes: "attributes"
+  i18n: "validation"
 });
 
 Vue.component("form-group", FormGroup);
