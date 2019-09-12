@@ -6,6 +6,7 @@ import vuetify from "./plugins/vuetify";
 import i18n from "./lang"; // Internationalization
 import "./permission";
 import "./bootstrap";
+import "./assets/scss/main.scss";
 
 Vue.config.productionTip = false;
 
