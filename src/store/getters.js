@@ -4,8 +4,8 @@ const getters = {
   serverErrors: state => state.errors.serverErrors,
   notification: state => state.notification.snackbar,
   //   errgetUserInfoors: state => state.notification.errors,
-  language: state => state.user.language
-  //   addRouters: state => state.permission.addRouters,
-  //   permission_routers: state => state.permission.routers
+  language: state => state.user.language,
+  addRouters: state => state.permission.addRouters,
+  permission_routers: state => state.permission.routers
 };
 export default getters;

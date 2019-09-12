@@ -22,11 +22,14 @@ router.beforeEach((to, from, next) => {
         store
           .dispatch("GetUserInfo")
           .then(() => {
-            next({ ...to, replace: true });
+            store.dispatch("GenerateRoutesNoPermissions").then(() => {
+              router.addRoutes(store.getters.addRouters);
+              next({ ...to, replace: true });
+            });
           })
           .catch(err => {
             console.log(err);
-            store.dispatch("FedLogOut").then(() => {
+            store.dispatch("ClientLogOut").then(() => {
               next({ path: "/" });
             });
           });

@@ -1,4 +1,4 @@
-# restaurants
+# dashboard_base_template
 
 ## Project setup
 ```
