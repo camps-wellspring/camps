@@ -42,7 +42,7 @@
           <v-list-item
             :to="resolvePath(subItem.path)"
             :key="subItem.meta.title"
-            v-if="!subItem.hidden"
+            v-if="!subItem.children && !subItem.hidden"
           >
             <v-list-item-action>
               <v-icon>{{ subItem.meta.icon }}</v-icon>
