@@ -10,7 +10,11 @@
               </v-toolbar>
               <v-card-text>
                 <v-form>
-                  <form-group name="email" :validator="$v.email">
+                  <form-group
+                    name="email"
+                    :validator="$v.email"
+                    attribute="fields.email"
+                  >
                     <template slot-scope="{ attrs }">
                       <v-text-field
                         v-bind="attrs"
@@ -22,7 +26,11 @@
                     </template>
                   </form-group>
 
-                  <form-group name="password" :validator="$v.password">
+                  <form-group
+                    name="password"
+                    :validator="$v.password"
+                    attribute="fields.password"
+                  >
                     <template slot-scope="{ attrs }">
                       <v-text-field
                         v-bind="attrs"
