@@ -59,10 +59,10 @@
     </v-navigation-drawer>
 
     <v-app-bar
+      elevation="5"
       :clipped-left="$vuetify.breakpoint.lgAndUp"
+      color="primary"
       app
-      color="blue darken-3"
-      dark
     >
       <v-toolbar-title style="width: 300px" class="ml-0 pl-4">
         <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
