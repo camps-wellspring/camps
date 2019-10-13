@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vuelidate from "vuelidate";
 import vuelidateErrorExtractor, { templates } from "vuelidate-error-extractor";
 import FormGroup from "@/components/FormGroup";
+import CustomButton from "@/components/CustomButton";
 
 import { messages } from "@/lang";
 
@@ -13,3 +14,4 @@ Vue.use(vuelidateErrorExtractor, {
 
 Vue.component("form-group", FormGroup);
 Vue.component("formWrapper", templates.FormWrapper);
+Vue.component("CustomButton", CustomButton);

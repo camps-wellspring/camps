@@ -1,0 +1,48 @@
+import request from "@/utils/request";
+import cookies from "js-cookie";
+import checkThereIsQuery from "@/helpers/checkQuery";
+
+export function index(reqName, query = {}, locale) {
+  return request({
+    url: `api/admin/${reqName}${checkThereIsQuery(query)}`,
+    headers: { "X-locale": locale ? locale : cookies.get("language") },
+    method: "get"
+  });
+}
+
+export function showData(reqName, slug, locale = "en") {
+  return request({
+    url: `api/admin/${reqName}/${slug}`,
+    headers: { "X-locale": locale },
+    method: "get"
+  });
+}
+
+export function storeData(reqName, data) {
+  return request({
+    url: `api/admin/${reqName}`,
+    method: "post",
+    data
+  });
+}
+export const updateData = (reqName, data, id, locale = "en") => {
+  return request({
+    url: `api/admin/${reqName}/${id}`,
+    method: "post",
+    headers: { "X-locale": locale ? locale : cookies.get("language") },
+    data: { ...data, _method: "put", locale }
+  });
+};
+export function deleteData(reqName, id) {
+  return request({
+    url: `api/admin/${reqName}/${id}`,
+    method: "delete"
+  });
+}
+export function mediaUpdate(id, data) {
+  return request({
+    url: `api/admin/media/${id}`,
+    method: "post",
+    data
+  });
+}

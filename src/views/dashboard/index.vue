@@ -6,7 +6,12 @@
 
 <script>
 export default {
-  name: "DashBoardPage"
+  name: "DashBoardPage",
+  methods: {
+    handleClick() {
+      console.log("clicked");
+    }
+  }
 };
 </script>
 
