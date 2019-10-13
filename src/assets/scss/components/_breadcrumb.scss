@@ -1,0 +1,19 @@
+.breadcrumb-area {
+    display: inline-block;
+    .router-link-active {
+        text-decoration: none;
+        color: $color-black;
+        font-family: $code-font-stack;
+        font-size: 16px;
+        text-transform: capitalize;
+        // @include();
+        &:hover {
+            color: #f6d24d; // temporarely --------
+        }
+    }
+    .router-link-exact-active {
+        cursor: unset !important;
+        color: #f6d24d; // temporarely --------
+        font-family: $code-font-stack;
+    }
+}
