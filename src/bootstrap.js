@@ -3,6 +3,9 @@ import Vuelidate from "vuelidate";
 import vuelidateErrorExtractor, { templates } from "vuelidate-error-extractor";
 import FormGroup from "@/components/FormGroup";
 import CustomButton from "@/components/CustomButton";
+import GlobalToolbar from "@/components/GlobalToolbar";
+import GlobalImagePreview from "@/components/GlobalImagePreview";
+import NewImageUpload from "@/components/NewImageUpload";
 
 import { messages } from "@/lang";
 
@@ -15,3 +18,6 @@ Vue.use(vuelidateErrorExtractor, {
 Vue.component("form-group", FormGroup);
 Vue.component("formWrapper", templates.FormWrapper);
 Vue.component("CustomButton", CustomButton);
+Vue.component("global-toolbar", GlobalToolbar);
+Vue.component("global-image-preview", GlobalImagePreview);
+Vue.component("new-image-upload", NewImageUpload);

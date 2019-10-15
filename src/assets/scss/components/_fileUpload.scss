@@ -1,0 +1,44 @@
+.file-upload {
+  position: relative;
+  &__image {
+    height: 56px;
+    border-radius: 5px;
+    box-shadow: 0 0 4px 0 rgba(193, 193, 193, 0.5);
+    background-color: $color-white;
+    border-bottom: transparent;
+    overflow: hidden;
+    &--button {
+      position: absolute;
+      right: -8px;
+      top: -7px;
+    }
+    &__placeholder {
+      padding: 10px;
+      line-height: 34px;
+      color: $color-light;
+      font-family: $font-regular;
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      box-shadow: 0 0 4px 0 rgba(193, 193, 193, 0.5);
+      border: 1px solid $color-file-upload;
+      border-radius: 5px;
+
+      &--active {
+        border: 1px solid $color-file-upload;
+        border-radius: 5px;
+        color: $color-black;
+        box-shadow: none;
+      }
+    }
+  }
+  &__gallery {
+    min-width: 100%;
+    min-height: 128px;
+    border-radius: 5px;
+    box-shadow: 0 0 4px 0 rgba(193, 193, 193, 0.5);
+    background-color: #ffffff;
+    padding: 15px;
+  }
+}
