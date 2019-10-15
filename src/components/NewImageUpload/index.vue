@@ -17,7 +17,8 @@
       v-on="$attrs"
       :title="$t('labels.upload_image')"
     >
-      <v-icon dark class="icon-upload"></v-icon>
+      <!-- <v-icon dark class="icon-upload"></v-icon> -->
+      <span>{{ $t("labels.hoss") }}</span>
     </v-btn>
 
     <!-- Image Preview -->

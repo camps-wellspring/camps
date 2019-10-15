@@ -1,3 +1,146 @@
 // -----------------------------------------------------------------------------
 // This file contains all styles related to the button component.
 // -----------------------------------------------------------------------------
+
+.button {
+    line-height: normal;
+    padding: 0 0.5rem;
+    border-radius: 4px;
+    color: $color-white !important;
+    height: 56px;
+    font: 1rem $font-bold;
+    text-transform: capitalize;
+    min-width: unset !important;
+    text-indent: unset !important;
+    &--lg {
+      max-height: $h-form-input !important;
+      height: 56px !important;
+      // width: 100% !important;
+    }
+    &--md {
+      max-height: $h-button-md;
+    }
+    &--login {
+      font: 1rem $font-bold !important;
+      background-image: $gradient-accent !important;
+      box-shadow: 0 12px 24px -12px $color-accent !important;
+    }
+    &--submit {
+      background-color: $color-tertiary !important;
+      box-shadow: 0 12px 24px -12px $color-tertiary !important;
+      // min-width: 8.5rem;
+    }
+    &--edit {
+      background-color: $color-success !important;
+      box-shadow: 0 12px 12px -12px $color-success !important;
+    }
+    &--reset {
+      background-color: $color-warning !important;
+      // box-shadow: 0 12px 12px -12px $color-warning !important;
+      box-shadow: 0 12px 24px -12px $color-warning !important;
+    }
+    &--upload {
+      width: $h-form-input;
+      height: 56px !important;
+      float: right;
+  
+      background: $gradient-accent !important;
+      box-shadow: 0 12px 12px -12px $gradient-accent !important;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+    &--add {
+      background: $color-secondary !important;
+      box-shadow: 0 12px 12px -12px $color-secondary !important;
+      // max-height: $h-form-input;
+      // font-size: 1rem;
+    }
+    &--disabled {
+      background: $color-gray-header !important;
+      box-shadow: 0 12px 12px -12px $color-gray-header !important;
+    }
+    &__icon {
+      min-width: auto;
+      width: 2.25rem;
+      height: 2.25rem;
+      font-size: 1rem;
+      &--edit {
+        box-shadow: 0 12px 12px -12px $color-success !important;
+        background-color: $color-success !important;
+      }
+      &--delete {
+        box-shadow: 0 12px 12px -12px $color-fail !important;
+        background-color: $color-fail !important;
+      }
+      &--details {
+        box-shadow: 0 12px 12px -12px $color-secondary !important;
+        background-color: $color-secondary !important;
+      }
+      &--report {
+        box-shadow: 0 12px 12px -12px $color-warning !important;
+        background-color: $color-warning !important;
+      }
+    }
+    &--upload {
+      width: $h-form-input;
+      height: 56px !important;
+      float: right;
+  
+      background: $color-warning !important;
+      box-shadow: 0 12px 12px -12px $color-warning !important;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+    &--status {
+      color: $color-light !important;
+      border: none !important;
+      background-color: $color-disabled;
+      &__pending,
+      &__delivered,
+      &__shipping,
+      &__returned,
+      &__canceled,
+      &__rejected,
+      &__approved {
+        color: $color-white !important;
+      }
+      &__pending {
+        background-color: $color-status-pending;
+      }
+      &__delivered {
+        background-color: $color-status-delivered;
+      }
+      &__shipping {
+        background-color: $color-status-shipping;
+      }
+      &__returned {
+        background-color: $color-status-returned;
+      }
+      &__canceled {
+        background-color: $color-status-canceled;
+      }
+      &__rejected {
+        background-color: $color-status-rejected;
+      }
+      &__approved {
+        background-color: $color-status-approved;
+      }
+    }
+    &--close-outlined {
+      color: $color-accent-error !important;
+      border: 1px solid $color-accent-error !important;
+    }
+    &--warning {
+      background: $color-warning !important;
+      box-shadow: 0 12px 24px -12px $color-warning !important;
+    }
+    &--disabled {
+      background: $color-gray-header !important;
+      box-shadow: 0 12px 24px -12px $color-gray-header !important;
+    }
+    &:disabled {
+      background: $color-gray-header !important;
+      box-shadow: 0 12px 24px -12px $color-gray-header !important;
+    }
+  }
+  

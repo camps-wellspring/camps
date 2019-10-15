@@ -2,11 +2,13 @@
   <!-- Image Preview -->
   <v-dialog v-model="showDialog" max-width="500" persistent>
     <section class="img-preview-overlay">
-      <i
+      <!-- <i
         class="icon-close img-preview-close hover-pointer"
         @click="closePreview"
         :title="$t('labels.close')"
-      ></i>
+      ></i> -->
+      <span class="img-preview-close" @click="closePreview">{{ $t("labels.hoss") }}</span>
+
       <div class="img-preview-container">
         <img class="img-preview-img" :src="imagePath" />
       </div>
