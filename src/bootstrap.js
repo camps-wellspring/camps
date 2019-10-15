@@ -6,6 +6,7 @@ import CustomButton from "@/components/CustomButton";
 import GlobalToolbar from "@/components/GlobalToolbar";
 import GlobalImagePreview from "@/components/GlobalImagePreview";
 import NewImageUpload from "@/components/NewImageUpload";
+import NoData from "@/components/NoData";
 
 import { messages } from "@/lang";
 
@@ -21,3 +22,4 @@ Vue.component("CustomButton", CustomButton);
 Vue.component("global-toolbar", GlobalToolbar);
 Vue.component("global-image-preview", GlobalImagePreview);
 Vue.component("new-image-upload", NewImageUpload);
+Vue.component("NoData", NoData);
