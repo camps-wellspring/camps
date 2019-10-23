@@ -1,12 +1,15 @@
 import request from "@/utils/request";
 import cookies from "js-cookie";
-import checkThereIsQuery from "@/helpers/checkQuery";
+// import checkThereIsQuery from "@/helpers/checkQuery";
 
 export function index(reqName, query = {}, locale) {
   return request({
-    url: `api/admin/${reqName}${checkThereIsQuery(query)}`,
+    url: `api/admin/${reqName}`,
     headers: { "X-locale": locale ? locale : cookies.get("language") },
-    method: "get"
+    method: "get",
+    params: {
+      ...query
+    }
   });
 }
 
