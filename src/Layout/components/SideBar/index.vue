@@ -4,6 +4,7 @@
       v-model="drawer"
       :clipped="$vuetify.breakpoint.lgAndUp"
       app
+      :right="isRight"
     >
       <v-list>
         <sidebar-item
@@ -38,7 +39,7 @@
         <v-icon>mdi-apps</v-icon>
       </v-btn> -->
       <v-btn icon title="language">
-        <v-icon>mdi-earth</v-icon>
+        <v-icon @click="handleChangeLanguage">mdi-earth</v-icon>
       </v-btn>
       <v-btn icon large @click="logout" title="logout">
         <v-icon>mdi-logout</v-icon>
@@ -53,7 +54,7 @@
 </template>
 
 <script>
-import Cookies from "js-cookie";
+import cookie from "js-cookie";
 import { mapGetters } from "vuex";
 import SidebarItem from "./SideBarItem";
 
@@ -66,7 +67,7 @@ export default {
   },
   computed: {
     isRight() {
-      if (Cookies.get("language") === "ar") {
+      if (cookie.get("language") === "ar") {
         return true;
       } else {
         return false;
@@ -83,6 +84,19 @@ export default {
       this.$store.dispatch("LogOut").then(() => {
         location.reload(); // In order to re-instantiate the vue-router object to avoid bugs
       });
+    },
+    handleChangeLanguage() {
+      const lang = cookie.get("language");
+
+      if (lang === "ar") {
+        this.changeCookie("en");
+      } else {
+        this.changeCookie("ar");
+      }
+    },
+    changeCookie(lang) {
+      cookie.set("language", lang);
+      window.location.reload();
     }
   }
 };

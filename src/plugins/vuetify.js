@@ -1,9 +1,11 @@
 import Vue from "vue";
 import Vuetify from "vuetify/lib";
+import ChangeDirection from "@/helpers/ChangeDirection";
 
 Vue.use(Vuetify);
 
 export default new Vuetify({
+  rtl: ChangeDirection(),
   icons: {
     iconfont: "mdi"
   },
