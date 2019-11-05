@@ -34,11 +34,11 @@
         class="hidden-sm-and-down"
       ></v-text-field>
       <div class="flex-grow-1"></div>
-      <v-btn icon>
+      <!-- <v-btn icon>
         <v-icon>mdi-apps</v-icon>
-      </v-btn>
-      <v-btn icon>
-        <v-icon>mdi-bell</v-icon>
+      </v-btn> -->
+      <v-btn icon title="language">
+        <v-icon>mdi-earth</v-icon>
       </v-btn>
       <v-btn icon large @click="logout" title="logout">
         <v-icon>mdi-logout</v-icon>
