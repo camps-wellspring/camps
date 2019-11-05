@@ -40,14 +40,8 @@
       <v-btn icon>
         <v-icon>mdi-bell</v-icon>
       </v-btn>
-      <v-btn icon large @click="logout">
-        <v-avatar size="32px" item>
-          <v-img
-            src="https://cdn.vuetifyjs.com/images/logos/logo.svg"
-            alt="Vuetify"
-          >
-          </v-img
-        ></v-avatar>
+      <v-btn icon large @click="logout" title="logout">
+        <v-icon>mdi-logout</v-icon>
       </v-btn>
     </v-app-bar>
     <v-content>
