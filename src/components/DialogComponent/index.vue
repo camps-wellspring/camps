@@ -1,7 +1,7 @@
 <template>
-  <v-dialog v-model="showDialog" max-width="800">
+  <v-dialog v-model="showDialog" max-width="900">
     <v-card>
-      <v-card-title class="headline grey lighten-2" primary-title>
+      <v-card-title class="headline grey lighten-2 mb-5" primary-title>
         <slot name="heading"></slot>
       </v-card-title>
 
@@ -9,12 +9,12 @@
         <slot name="body">asadasdasd</slot>
       </v-card-text>
 
-      <v-divider></v-divider>
+      <!-- <v-divider></v-divider>
 
       <v-card-actions>
         <v-spacer></v-spacer>
         <slot name="actions">asdasdadas</slot>
-      </v-card-actions>
+      </v-card-actions> -->
     </v-card>
   </v-dialog>
 </template>
@@ -38,6 +38,9 @@ export default {
         this.$emit("input", value);
       }
     }
+  },
+  beforeDestroy() {
+    console.log("destroyed");
   }
 };
 </script>

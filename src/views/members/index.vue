@@ -34,15 +34,15 @@
     <!-- dialog -->
     <DialogComponent v-model="dialog">
       <template #heading>
-        <h1>create</h1>
+        <v-card-title>{{ dialogTitle }}</v-card-title>
       </template>
       <template #body>
-        <p>this is body</p>
+        <form-component @click="dialog = false" />
       </template>
-      <template #actions>
+      <!-- <template #actions>
         <v-btn class="primary">save</v-btn>
-        <v-btn class="warning">close</v-btn>
-      </template>
+        <v-btn class="warning" @click="dialog = false">close</v-btn>
+      </template> -->
     </DialogComponent>
     <!-- dialog -->
   </div>
@@ -53,12 +53,19 @@ import TableHeaders from "@/helpers/TableHeaders";
 import { IndexData } from "@/helpers/apiMethods";
 export default {
   name: "Memebers",
+  components: {
+    FormComponent: () => import("./formComponent")
+  },
   data() {
     return {
       headers: [],
       items: [],
       tableLoading: true,
-      dialog: false
+      dialog: false,
+      isEdit: false,
+      dialogTitle: this.isEdit
+        ? this.$t("heading.edit")
+        : this.$t("heading.create")
     };
   },
   mounted() {
@@ -86,10 +93,7 @@ export default {
     },
     showDialog() {
       this.dialog = !this.dialog;
-      console.log("object");
     }
   }
 };
 </script>
-
-<style lang="scss" scoped></style>
