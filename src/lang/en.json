@@ -36,7 +36,9 @@
   },
   "heading": {
     "members": "Members",
-    "services": "Services"
+    "services": "Services",
+    "edit": "Edit",
+    "create": "Create"
   },
   "table": {
     "name": "Name",
@@ -61,7 +63,9 @@
     "name": "Name",
     "priority": "Priority",
     "short_description": "Short Description",
-    "description": "Description"
+    "description": "Description",
+    "position": "Position",
+    "bio": "Bio"
   },
   "title": {
     "edit_service": "Edit Service",
