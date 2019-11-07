@@ -50,11 +50,12 @@ export const asyncRouterMap = [
     path: "/services",
     component: Layout,
     redirect: "/services/list",
+    // alwaysShow: true,
+
     meta: {
       title: "services",
       icon: "mdi-account-circle"
     },
-    alwaysShow: true,
     children: [
       {
         path: "list",
@@ -64,9 +65,32 @@ export const asyncRouterMap = [
         meta: {
           title: "list",
           icon: "mdi-account-circle"
-        }
+        },
+        hidden: true
       }
     ]
   },
+  //   {
+  //     path: "/services",
+  //     component: Layout,
+  //     redirect: "/services/list",
+  //     meta: {
+  //       title: "services",
+  //       icon: "mdi-account-circle"
+  //     },
+  //     alwaysShow: true,
+  //     children: [
+  //       {
+  //         path: "list",
+  //         component: () => import("@/views/services/index"),
+  //         name: "ServicesList",
+
+  //         meta: {
+  //           title: "list",
+  //           icon: "mdi-account-circle"
+  //         }
+  //       }
+  //     ]
+  //   },
   { path: "*", redirect: "/404", hidden: true }
 ];
