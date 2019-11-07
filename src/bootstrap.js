@@ -39,3 +39,11 @@ Vue.component("new-image-upload", NewImageUpload);
 Vue.component("multi-image-upload", multiImageUpload);
 Vue.component("global-image-preview", GlobalImagePreview);
 Vue.component("NoData", NoData);
+
+Vue.filter("truncate", function(value, strCount = 50) {
+  if (!value) {
+    return "";
+  }
+
+  return value.substring(0, strCount) + "...";
+});

@@ -18,6 +18,8 @@
       <template v-slot:item="{ item }">
         <tr>
           <td>{{ item.name }}</td>
+          <td>{{ item.position }}</td>
+          <td :title="item.bio">{{ item.bio | truncate }}</td>
         </tr>
       </template>
     </v-data-table>
