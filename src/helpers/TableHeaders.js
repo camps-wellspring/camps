@@ -6,7 +6,7 @@ const createTableHeaders = (headersName = []) => {
       text: header ? i18n.t(`table.${header}`) : "",
       align: "center",
       sortable: false,
-      class: "table__header",
+
       width:
         header === "edit" ||
         header === "delete" ||
