@@ -5,7 +5,7 @@
         &lt; {{ $t("button.back") }}
       </a>
       <h4 class="main-header__title__header">
-        {{ $t(`headings.${title}`) }}
+        {{ $t(`heading.${title}`) }}
       </h4>
     </v-toolbar-title>
 

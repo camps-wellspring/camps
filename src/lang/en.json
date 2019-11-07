@@ -38,13 +38,45 @@
   },
   "heading": {
     "members": "Members",
-    "solutionplus_store": "Solutionplus Store"
+    "solutionplus_store": "Solutionplus Store",
+    "create": "Create",
+    "ok": "OK",
+    "close": "Close",
+    "got_it": "Got It",
+    "technologies": "Technologies"
   },
+
   "table": {
     "name": "Name",
     "position": "Position",
     "bio": "Bio",
     "image": "Image",
-    "configs": "Configurations"
+    "configs": "Configurations",
+    "actions": "Actions",
+    "url": "URL",
+    "logo": "Logo",
+    "description": "Description"
+  },
+  "label": {
+    "hoss": "Hoss",
+    "upload_image": "Upload Image",
+    "show_image": "Show Image",
+    "close": "Close",
+    "preview": "Preview",
+    "no_photo": "No Photo",
+    "service_photo": "Service Photo",
+    "edit": "Edit",
+    "delete": "Delete",
+    "add_sub_service": "Add Sub Service",
+    "name": "Name",
+    "priority": "Priority",
+    "short_description": "Short Description",
+    "description": "Description",
+    "position": "Position",
+    "bio": "Bio"
+  },
+  "title": {
+    "edit_service": "Edit Service",
+    "create_service": "Create Service"
   }
 }

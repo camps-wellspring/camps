@@ -11,11 +11,15 @@ import GlobalToolbar from "@/components/GlobalToolbar";
 import NewImageUpload from "@/components/NewImageUpload";
 import multiImageUpload from "@/components/multiImageUpload";
 import GlobalImagePreview from "@/components/GlobalImagePreview";
+import DialogComponent from "@/components/DialogComponent";
+import { SweetAlert } from "@/helpers/mixins/SweetAlert.js";
+import VueSweetalert2 from "vue-sweetalert2";
 import NoData from "@/components/NoData";
 
 import { messages } from "@/lang";
 
 Vue.use(Vuelidate);
+Vue.use(VueSweetalert2);
 Vue.use(VueGoogleMaps, {
   load: {
     // key: "AIzaSyBPocaJkDl6MtFaT4MF4C4saWVOiV1CJBs",
@@ -28,6 +32,10 @@ Vue.use(vuelidateErrorExtractor, {
   i18n: "validation"
 });
 
+// Mixins -----------------------------------------------
+Vue.mixin(SweetAlert);
+
+// Components -------------------------------------------
 Vue.component("form-group", FormGroup);
 Vue.component("formWrapper", templates.FormWrapper);
 Vue.component("CustomButton", CustomButton);
@@ -39,3 +47,14 @@ Vue.component("new-image-upload", NewImageUpload);
 Vue.component("multi-image-upload", multiImageUpload);
 Vue.component("global-image-preview", GlobalImagePreview);
 Vue.component("NoData", NoData);
+Vue.component("DialogComponent", DialogComponent);
+
+Vue.filter("truncate", function(value, strCount = 50) {
+  if (!value) {
+    return "";
+  }
+
+  return value.substring(0, strCount) + "...";
+});
+
+window.eventBus = new Vue();

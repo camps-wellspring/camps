@@ -1,40 +1,37 @@
 <template>
   <div>
-    <!-- <v-img :src="ImageUrl || ''" max-height="300" /> -->
-    <input type="file" ref="file" @change="onFileChange" style="display:none" />
-
-    <span
-      class="file-upload__image__placeholder hover-pointer"
-      :class="{ 'file-upload__image__placeholder--active': ImageUrl }"
-      @click="showImagePreview"
-      >{{ imageName ? imageName : $t("label.upload_image") }}</span
-    >
-    <v-btn
-      class="button button--upload"
-      small
-      text
-      @click="$refs.file.click()"
-      v-on="$attrs"
-      :title="$t('label.upload_image')"
-    >
-      <!-- <v-icon dark class="icon-upload"></v-icon> -->
-      <span>{{ $t("label.hoss") }}</span>
-    </v-btn>
-
-    <!-- Image Preview -->
-    <global-image-preview
-      :showDialog="overlay"
-      :imagePath="ImageUrl"
-      @closePreview="overlay = false"
-    />
-    <!-- Image Preview -->
+    <v-card>
+      <v-img
+        :src="ImageUrl || imgUrl || require('@/assets/imgs/Default.png')"
+        :max-height="maxHeight"
+        :min-height="minHeight"
+        :error-messages="
+          $store.getters.getServerErrors
+            ? $store.getters.getServerErrors['main_image']
+            : ''
+        "
+      />
+      <!-- <v-img :src="ImageUrl || ''" max-height="300" /> -->
+      <input
+        type="file"
+        ref="file"
+        @change="onFileChange"
+        style="display:none"
+      />
+      <div class="text-xs-center mt-3 mb-3">
+        <v-btn small @click="$refs.file.click()">
+          <span class="mx-2"> {{ $t("buttons.choose") }}</span>
+          <v-icon right dark>cloud_upload</v-icon>
+        </v-btn>
+      </div>
+    </v-card>
 
     <v-dialog v-model="errorDialog" max-width="300" persistent>
       <v-card>
         <v-card-text class="subheading">{{ ImageErrorMsg }}</v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn @click="resetData">{{ $t("button.got_it") }}</v-btn>
+          <v-btn @click="resetData" flat>{{ $t("buttons.got_it") }}</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -73,10 +70,6 @@ export default {
       type: Boolean,
       default: false
     },
-    resetToggle: {
-      type: Boolean,
-      default: false
-    },
     fieldName: {
       type: String,
       default: ""
@@ -88,24 +81,11 @@ export default {
   watch: {
     reset: {
       handler(newValue) {
-        if (newValue === true) {
+        if (newValue) {
           this.resetImageFile();
         }
       }
-    },
-    resetToggle: {
-      handler() {
-        this.resetImageFile();
-      }
-    },
-    imgUrl: {
-      handler(newValue) {
-        console.log("image >>", newValue);
-        if (newValue) {
-          this.imageName = this.$t("label.show_image");
-          this.ImageUrl = newValue;
-        }
-      }
+      //   immediate: true
     }
   },
   computed: {
@@ -126,15 +106,10 @@ export default {
   },
   data() {
     return {
-      imageName: null,
       ImageUrl: null,
       errorDialog: null,
       errorText: "",
-      errorType: "",
-      //   imagePreview: "",
-      absolute: false,
-      overlay: false,
-      zIndex: 990
+      errorType: ""
     };
   },
   methods: {
@@ -147,7 +122,6 @@ export default {
             this.validateDimentions(imageFile)
               .then(() => {
                 this.readImage(imageFile);
-                console.log("imageFile", imageFile);
               })
               .catch(() => {
                 this.errorType = "DIMENSIONS";
@@ -164,8 +138,6 @@ export default {
     },
     readImage(imageFile) {
       if (this.validateSize(imageFile)) {
-        // console.log("image file", imageFile);
-        this.imageName = imageFile.name;
         this.ImageUrl = URL.createObjectURL(imageFile);
         if (imageFile) {
           let dataObj = {
@@ -218,7 +190,7 @@ export default {
       }
     },
     resetImageFile() {
-      this.imageName = this.$t("label.upload_image");
+      console.log("reset");
       this.ImageUrl = null;
       this.$refs.file.value = "";
     },
@@ -228,11 +200,6 @@ export default {
       setTimeout(() => {
         this.errorType = "";
       }, 300);
-    },
-    showImagePreview() {
-      if (this.ImageUrl) {
-        this.overlay = true;
-      }
     }
   }
 };

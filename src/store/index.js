@@ -5,6 +5,7 @@ import user from "./modules/user";
 import errors from "./modules/errors";
 import notification from "./modules/notification";
 import permission from "./modules/permission";
+
 import getters from "./getters";
 
 Vue.use(Vuex);
