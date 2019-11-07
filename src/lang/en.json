@@ -35,7 +35,8 @@
     "members": "Members",
     "services": "Services",
     "edit": "Edit",
-    "create": "Create"
+    "create": "Create",
+    "technologies": "Technologies"
   },
   "table": {
     "name": "Name",
@@ -43,8 +44,10 @@
     "bio": "Bio",
     "image": "Image",
     "configs": "Configurations",
-    "description": "Description",
-    "actions": "Actions"
+    "actions": "Actions",
+    "url": "URL",
+    "logo": "Logo",
+    "description": "Description"
   },
   "label": {
     "hoss": "Hoss",

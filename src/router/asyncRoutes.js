@@ -46,6 +46,29 @@ export const asyncRouterMap = [
     ]
   },
   {
+    path: "/technologies",
+    component: Layout,
+    // redirect: "/",
+    meta: {
+      title: "Technologies",
+      icon: "mdi-account-circle"
+    },
+    alwaysShow: true,
+    children: [
+      {
+        path: "list",
+        component: () => import("@/views/technologies"),
+        name: "Technologies",
+        // hidden: true,
+
+        meta: {
+          title: "list",
+          icon: "mdi-account-circle"
+        }
+      }
+    ]
+  },
+  {
     path: "/services",
     component: Layout,
     redirect: "/services/list",
@@ -73,6 +96,7 @@ export const asyncRouterMap = [
       }
     ]
   },
+
   //   {
   //     path: "/members",
   //     component: Layout,
