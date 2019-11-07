@@ -66,7 +66,7 @@
           </v-col>
           <v-col cols="12">
             <v-btn class="primary">save</v-btn>
-            <v-btn class="warning" v-on="$listeners">close</v-btn>
+            <v-btn class="warning mx-2" v-on="$listeners">close</v-btn>
           </v-col>
         </v-row>
       </form>
@@ -81,6 +81,7 @@ import {
   maxLength,
   numeric
 } from "vuelidate/lib/validators";
+
 export default {
   name: "FormComponent",
   data() {
@@ -96,14 +97,29 @@ export default {
       maxsize: 2.48
     };
   },
+
   methods: {
     handleImageSelect(photo) {
       console.log(photo);
     },
     hadleChange(name) {
       this.$v.form[name].$touch();
+    },
+    reset() {
+      this.$v.form.$reset();
+      this.form = {};
+      this.resetImage = true;
+      this.$store.dispatch("ClearServerErrors");
     }
   },
+  mounted() {
+    window.eventBus.$on("SET_DIALOG", value => {
+      if (!value) {
+        this.reset();
+      }
+    });
+  },
+
   validations() {
     return {
       form: {

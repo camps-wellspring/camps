@@ -39,10 +39,6 @@
       <template #body>
         <form-component @click="dialog = false" />
       </template>
-      <!-- <template #actions>
-        <v-btn class="primary">save</v-btn>
-        <v-btn class="warning" @click="dialog = false">close</v-btn>
-      </template> -->
     </DialogComponent>
     <!-- dialog -->
   </div>
