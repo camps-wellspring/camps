@@ -25,7 +25,7 @@ export function logout() {
 
 export function getUserInfo() {
   return request({
-    url: "api/profile/user",
+    url: "api/admin/profile/user",
     method: "get"
   });
 }
