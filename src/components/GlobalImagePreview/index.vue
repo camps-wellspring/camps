@@ -5,9 +5,18 @@
       <!-- <i
         class="icon-close img-preview-close hover-pointer"
         @click="closePreview"
-        :title="$t('labels.close')"
+        :title="$t('label.close')"
       ></i> -->
-      <span class="img-preview-close" @click="closePreview">{{ $t("labels.hoss") }}</span>
+      <v-icon
+        class="img-preview-close"
+        @click="closePreview"
+        :title="$t('label.close')"
+      >
+        mdi-close
+      </v-icon>
+      <!-- <span class="img-preview-close" @click="closePreview">{{
+        $t("label.hoss")
+      }}</span> -->
 
       <div class="img-preview-container">
         <img class="img-preview-img" :src="imagePath" />

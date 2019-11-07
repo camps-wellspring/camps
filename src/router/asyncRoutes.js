@@ -64,6 +64,12 @@ export const asyncRouterMap = [
           title: "list",
           icon: "mdi-account-circle"
         }
+      },
+      {
+        path: "handleService/:slug",
+        component: () => import("@/views/services/handleService/index"),
+        name: "HandleService",
+        hidden: true
       }
     ]
   },

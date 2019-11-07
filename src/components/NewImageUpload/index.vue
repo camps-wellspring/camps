@@ -7,7 +7,7 @@
       class="file-upload__image__placeholder hover-pointer"
       :class="{ 'file-upload__image__placeholder--active': ImageUrl }"
       @click="showImagePreview"
-      >{{ imageName ? imageName : $t("labels.upload_image") }}</span
+      >{{ imageName ? imageName : $t("label.upload_image") }}</span
     >
     <v-btn
       class="button button--upload"
@@ -15,10 +15,10 @@
       text
       @click="$refs.file.click()"
       v-on="$attrs"
-      :title="$t('labels.upload_image')"
+      :title="$t('label.upload_image')"
     >
       <!-- <v-icon dark class="icon-upload"></v-icon> -->
-      <span>{{ $t("labels.hoss") }}</span>
+      <span>{{ $t("label.hoss") }}</span>
     </v-btn>
 
     <!-- Image Preview -->
@@ -102,7 +102,7 @@ export default {
       handler(newValue) {
         console.log("image >>", newValue);
         if (newValue) {
-          this.imageName = this.$t("labels.show_image");
+          this.imageName = this.$t("label.show_image");
           this.ImageUrl = newValue;
         }
       }
@@ -218,7 +218,7 @@ export default {
       }
     },
     resetImageFile() {
-      this.imageName = this.$t("labels.upload_image");
+      this.imageName = this.$t("label.upload_image");
       this.ImageUrl = null;
       this.$refs.file.value = "";
     },
