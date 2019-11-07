@@ -6,7 +6,7 @@
       </v-card-title>
 
       <v-card-text>
-        <slot name="body">asadasdasd</slot>
+        <slot name="body"></slot>
       </v-card-text>
 
       <!-- <v-divider></v-divider>
@@ -39,8 +39,15 @@ export default {
       }
     }
   },
-  beforeDestroy() {
-    console.log("destroyed");
+  watch: {
+    showDialog: {
+      handler(value) {
+        if (!value) {
+          window.eventBus.$emit("SET_DIALOG", value);
+        }
+      },
+      immediate: true
+    }
   }
 };
 </script>

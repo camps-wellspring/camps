@@ -22,11 +22,6 @@
   "message": {
     "no_results": "No results found."
   },
-  "labels": {
-    "hoss": "Hoss",
-    "upload_image": "Upload Image",
-    "show_image": "Show Image"
-  },
   "button": {
     "search": "Search",
     "clear_filter": "Clear Filter",
@@ -34,10 +29,14 @@
     "edit": "Edit",
     "save": "Save",
     "back": "Back",
-    "create": "Create"
+    "create": "Create",
+    "ok": "OK",
+    "close": "Close",
+    "got_it": "Got It"
   },
   "heading": {
     "members": "Members",
+    "services": "Services",
     "edit": "Edit",
     "create": "Create",
     "technologies": "Technologies"
@@ -50,12 +49,29 @@
     "configs": "Configurations",
     "actions": "Actions",
     "url": "URL",
-    "logo": "Logo"
+    "logo": "Logo",
+    "description": "Description"
   },
   "label": {
+    "hoss": "Hoss",
+    "upload_image": "Upload Image",
+    "show_image": "Show Image",
+    "close": "Close",
+    "preview": "Preview",
+    "no_photo": "No Photo",
+    "service_photo": "Service Photo",
+    "edit": "Edit",
+    "delete": "Delete",
+    "add_sub_service": "Add Sub Service",
     "name": "Name",
-    "position": "Position",
     "priority": "Priority",
+    "short_description": "Short Description",
+    "description": "Description",
+    "position": "Position",
     "bio": "Bio"
+  },
+  "title": {
+    "edit_service": "Edit Service",
+    "create_service": "Create Service"
   }
 }

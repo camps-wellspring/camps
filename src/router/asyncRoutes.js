@@ -68,6 +68,35 @@ export const asyncRouterMap = [
       }
     ]
   },
+  {
+    path: "/services",
+    component: Layout,
+    redirect: "/services/list",
+    meta: {
+      title: "services",
+      icon: "mdi-account-circle"
+    },
+    alwaysShow: true,
+    children: [
+      {
+        path: "list",
+        component: () => import("@/views/services/index"),
+        name: "ServicesList",
+
+        meta: {
+          title: "list",
+          icon: "mdi-account-circle"
+        }
+      },
+      {
+        path: "handleService/:slug",
+        component: () => import("@/views/services/handleService/index"),
+        name: "HandleService",
+        hidden: true
+      }
+    ]
+  },
+
   //   {
   //     path: "/members",
   //     component: Layout,
