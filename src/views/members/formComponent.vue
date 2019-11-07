@@ -1,9 +1,9 @@
 <template>
   <v-container>
     <form-wrapper :validator="$v.form">
-      <form>
+      <form @submit.prevent="handleSubmit">
         <v-row>
-          <v-col cols="12">
+          <v-col cols="12" md="6">
             <new-image-upload
               class="file-upload__image"
               :imgUrl="form.main_image ? form.main_image.path : ''"
@@ -51,22 +51,32 @@
               </template>
             </form-group>
           </v-col>
-          <v-col cols="12" md="6">
+          <v-col cols="12">
             <form-group name="bio">
               <template slot-scope="{ attrs }">
-                <v-text-field
+                <v-textarea
+                  auto-grow
+                  row-height="20"
                   v-bind="attrs"
                   v-model="form.bio"
                   outlined
                   :label="$t('label.bio')"
                   @input="hadleChange('bio')"
-                ></v-text-field>
+                ></v-textarea>
               </template>
             </form-group>
           </v-col>
           <v-col cols="12">
-            <v-btn class="primary">save</v-btn>
-            <v-btn class="warning mx-2" v-on="$listeners">close</v-btn>
+            <v-btn
+              type="submit"
+              class="primary"
+              :disabled="$v.form.$invalid"
+              :loading="btnLoading"
+              >{{ $t("button.save") }}</v-btn
+            >
+            <v-btn class="warning mx-2" v-on="$listeners">{{
+              $t("button.close")
+            }}</v-btn>
           </v-col>
         </v-row>
       </form>
@@ -81,6 +91,7 @@ import {
   maxLength,
   numeric
 } from "vuelidate/lib/validators";
+import { StoreData } from "@/helpers/apiMethods";
 
 export default {
   name: "FormComponent",
@@ -94,18 +105,52 @@ export default {
         priority: "",
         main_image: ""
       },
-      maxsize: 2.48
+      maxsize: 2.48,
+      isEdited: false,
+      btnLoading: false
     };
   },
 
   methods: {
+    createMethod() {
+      this.btnLoading = true;
+      const formDate = new FormData();
+      Object.keys(this.form).map(key => {
+        formDate.append(key, this.form[key]);
+      });
+
+      StoreData({ reqName: "members", data: formDate })
+        .then(res => {
+          console.log(res);
+          const { member } = res.data;
+          this.$emit("set_memeber", member);
+        })
+        .catch(err => {
+          console.log(err);
+        })
+        .finally(() => {
+          this.btnLoading = false;
+          this.reset();
+        });
+    },
+    editMethod() {},
+    handleSubmit() {
+      if (!this.isEdited) {
+        // in case create
+        this.createMethod();
+      } else {
+        // in case Edit
+        this.editMethod();
+      }
+    },
     handleImageSelect(photo) {
-      console.log(photo);
+      this.form.main_image = photo.file;
     },
     hadleChange(name) {
       this.$v.form[name].$touch();
     },
     reset() {
+      this.$emit("close_dialog");
       this.$v.form.$reset();
       this.form = {};
       this.resetImage = true;
@@ -136,6 +181,9 @@ export default {
         priority: {
           required,
           numeric
+        },
+        main_image: {
+          required
         },
         bio: {
           minLength: minLength(3),

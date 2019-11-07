@@ -34,7 +34,8 @@
     "edit": "Edit",
     "save": "Save",
     "back": "Back",
-    "create": "Create"
+    "create": "Create",
+    "close": "Close"
   },
   "heading": {
     "members": "Members",

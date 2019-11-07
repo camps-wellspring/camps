@@ -13,19 +13,31 @@
       :headers="headers"
       :items="items"
       hide-default-footer
+      :items-per-page="20"
       :loading="tableLoading"
     >
-      <template v-slot:item="{ item }">
+      <template v-slot:item="{ item, index }">
         <tr>
           <td>{{ item.name }}</td>
           <td>{{ item.position }}</td>
           <td :title="item.bio">{{ item.bio | truncate }}</td>
           <td>
-            <v-img aspect-ratio="1" src="@/assets/imgs/user.jpg"></v-img>
+            <v-avatar size="50">
+              <v-img
+                aspect-ratio="1"
+                :src="
+                  item.main_image
+                    ? item.main_image.path
+                    : '@/assets/imgs/user.jpg'
+                "
+              ></v-img>
+            </v-avatar>
           </td>
           <td>
             <v-icon medium title="edit"> mdi-pencil</v-icon>
-            <v-icon medium title="delete"> mdi-delete</v-icon>
+            <v-icon medium title="delete" @click="handleDelete(item, index)">
+              mdi-delete</v-icon
+            >
           </td>
         </tr>
       </template>
@@ -37,7 +49,11 @@
         <v-card-title>{{ dialogTitle }}</v-card-title>
       </template>
       <template #body>
-        <form-component @click="dialog = false" />
+        <form-component
+          @click="dialog = false"
+          @close_dialog="dialog = false"
+          @set_memeber="handleSetMember"
+        />
       </template>
     </DialogComponent>
     <!-- dialog -->
@@ -46,7 +62,7 @@
 
 <script>
 import TableHeaders from "@/helpers/TableHeaders";
-import { IndexData } from "@/helpers/apiMethods";
+import { IndexData, DeleteData } from "@/helpers/apiMethods";
 export default {
   name: "Memebers",
   components: {
@@ -69,6 +85,19 @@ export default {
     this.handleGetMembers();
   },
   methods: {
+    handleDelete({ slug }, index) {
+      DeleteData({ reqName: "members", id: slug })
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    handleSetMember(item) {
+      console.log(item);
+      this.items.push(item);
+    },
     createTableHeaders() {
       const headersList = ["name", "position", "bio", "image", "configs"];
       this.headers = TableHeaders(headersList);

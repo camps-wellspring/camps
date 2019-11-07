@@ -1,6 +1,9 @@
 .file-upload {
-  position: relative;
+//   position: relative;
+
+  width: 100%;
   &__image {
+  position: relative;
     height: 56px;
     border-radius: 5px;
     box-shadow: 0 0 4px 0 rgba(193, 193, 193, 0.5);
@@ -18,10 +21,10 @@
       color: $color-light;
       font-family: $font-regular;
       position: absolute;
-      //   top: 0;
-      //   right: 0;
-      width: 90%;
-    //   left: 0;
+        top: 0;
+        right: 0;
+      //   width: 90%;
+        left: 0;
       box-shadow: 0 0 4px 0 rgba(193, 193, 193, 0.5);
       border: 1px solid $color-file-upload;
       border-radius: 5px;
