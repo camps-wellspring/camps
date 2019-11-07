@@ -26,25 +26,46 @@ export const asyncRouterMap = [
     path: "/members",
     component: Layout,
     redirect: "/members/list",
-    // alwaysShow: true,
-
     meta: {
       title: "Members",
       icon: "mdi-account-circle"
     },
+    alwaysShow: true,
     children: [
       {
         path: "list",
         component: () => import("@/views/members/index"),
-        name: "membersList",
+        name: "MembersList",
+        // hidden: true,
 
         meta: {
           title: "list",
           icon: "mdi-account-circle"
-        },
-        hidden: true
+        }
       }
     ]
   },
+  //   {
+  //     path: "/members",
+  //     component: Layout,
+  //     redirect: "/members/list",
+  //     meta: {
+  //       title: "Members",
+  //       icon: "mdi-account-circle"
+  //     },
+  //     children: [
+  //       {
+  //         path: "list",
+  //         component: () => import("@/views/members/index"),
+  //         name: "membersList",
+
+  //         meta: {
+  //           title: "list",
+  //           icon: "mdi-account-circle"
+  //         },
+  //         hidden: true
+  //       }
+  //     ]
+  //   },
   { path: "*", redirect: "/404", hidden: true }
 ];

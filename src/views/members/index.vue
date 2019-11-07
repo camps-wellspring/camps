@@ -8,12 +8,59 @@
         {{ $t("button.create") }}
       </v-btn>
     </v-toolbar>
+    <!-- table -->
+    <v-data-table
+      :headers="headers"
+      :items="items"
+      hide-default-footer
+      :loading="tableLoading"
+    >
+      <template v-slot:item="{ item }">
+        <tr>
+          <td>{{ item.name }}</td>
+        </tr>
+      </template>
+    </v-data-table>
+    <!-- table -->
   </div>
 </template>
 
 <script>
+import TableHeaders from "@/helpers/TableHeaders";
+import { IndexData } from "@/helpers/apiMethods";
 export default {
-  name: "Memebers"
+  name: "Memebers",
+  data() {
+    return {
+      headers: [],
+      items: [],
+      tableLoading: true
+    };
+  },
+  mounted() {
+    this.createTableHeaders();
+    this.handleGetMembers();
+  },
+  methods: {
+    createTableHeaders() {
+      const headersList = ["name", "position", "bio", "image", "configs"];
+      this.headers = TableHeaders(headersList);
+    },
+    handleGetMembers() {
+      IndexData({ reqName: "members" })
+        .then(res => {
+          const { data } = res.data;
+          this.items = data;
+          console.log(data);
+        })
+        .catch(err => {
+          console.log(err);
+        })
+        .finally(() => {
+          this.tableLoading = false;
+        });
+    }
+  }
 };
 </script>
 
