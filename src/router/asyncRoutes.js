@@ -20,16 +20,16 @@ export const asyncRouterMap = [
           icon: "mdi-account-circle"
         }
       }
-      //   {
-      //     path: "create",
-      //     component: () => import("@/views/users/index"),
-      //     name: "createUsersList",
-      //     meta: {
-      //       title: "users2",
-      //       icon: "mdi-account-circle"
-      //     }
-      //   }
     ]
+  },
+  {
+    path: "/members",
+    component: Layout,
+    redirect: "/members/list",
+    meta: {
+      title: "Members",
+      icon: "mdi-account-circle"
+    }
   },
   { path: "*", redirect: "/404", hidden: true }
 ];
