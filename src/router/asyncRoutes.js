@@ -31,5 +31,27 @@ export const asyncRouterMap = [
       icon: "mdi-account-circle"
     }
   },
+  {
+    path: "/services",
+    component: Layout,
+    redirect: "/services/list",
+    meta: {
+      title: "services",
+      icon: "mdi-account-circle"
+    },
+    alwaysShow: true,
+    children: [
+      {
+        path: "list",
+        component: () => import("@/views/services/index"),
+        name: "ServicesList",
+
+        meta: {
+          title: "list",
+          icon: "mdi-account-circle"
+        }
+      }
+    ]
+  },
   { path: "*", redirect: "/404", hidden: true }
 ];
