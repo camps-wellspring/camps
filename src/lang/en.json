@@ -37,7 +37,10 @@
     "create": "Create"
   },
   "heading": {
-    "members": "Members"
+    "members": "Members",
+    "edit": "Edit",
+    "create": "Create",
+    "technologies": "Technologies"
   },
   "table": {
     "name": "Name",
@@ -48,5 +51,11 @@
     "actions": "Actions",
     "url": "URL",
     "logo": "Logo"
+  },
+  "label": {
+    "name": "Name",
+    "position": "Position",
+    "priority": "Priority",
+    "bio": "Bio"
   }
 }
