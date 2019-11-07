@@ -7,7 +7,9 @@
         @click="closePreview"
         :title="$t('labels.close')"
       ></i> -->
-      <span class="img-preview-close" @click="closePreview">{{ $t("labels.hoss") }}</span>
+      <span class="img-preview-close" @click="closePreview">{{
+        $t("labels.hoss")
+      }}</span>
 
       <div class="img-preview-container">
         <img class="img-preview-img" :src="imagePath" />
