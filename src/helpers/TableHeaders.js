@@ -5,8 +5,8 @@ const createTableHeaders = (headersName = []) => {
     return {
       text: header ? i18n.t(`table.${header}`) : "",
       align: "center",
-      sortable: false,
-      width: header === "actions" && "1"
+      sortable: false
+      // width: header === "actions" && "1"
     };
   });
 };
