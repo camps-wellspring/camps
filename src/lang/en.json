@@ -36,6 +36,10 @@
     "reset": "Reset",
     "edit": "Edit",
     "save": "Save",
-    "back": "Back"
+    "back": "Back",
+    "create": "Create"
+  },
+  "heading": {
+    "members": "Members"
   }
 }

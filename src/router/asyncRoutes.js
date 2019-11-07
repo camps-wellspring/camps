@@ -26,10 +26,25 @@ export const asyncRouterMap = [
     path: "/members",
     component: Layout,
     redirect: "/members/list",
+    // alwaysShow: true,
+
     meta: {
       title: "Members",
       icon: "mdi-account-circle"
-    }
+    },
+    children: [
+      {
+        path: "list",
+        component: () => import("@/views/members/index"),
+        name: "membersList",
+
+        meta: {
+          title: "list",
+          icon: "mdi-account-circle"
+        },
+        hidden: true
+      }
+    ]
   },
   {
     path: "/services",
