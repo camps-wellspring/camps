@@ -80,8 +80,8 @@ export default {
   },
   data() {
     return {
-      email: "",
-      password: "",
+      email: "super@solutionplus.sa",
+      password: "123123",
 
       loading: false,
       redirect: undefined

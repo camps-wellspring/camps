@@ -1,41 +1,49 @@
 {
-  "form_box": {
-    "login": "Login"
-  },
-  "fields": {
-    "password": "Password",
-    "email": "Email"
-  },
-  "headings": {
-    "hoss": "Hoss"
-  },
-  "validation": {
-    "required": "%{attribute} is required",
-    "maxLength": "%{attribute} must be at most %{max} characters long",
-    "minLength": "%{attribute} must be %{min} characters at least",
-    "valid": "must be valid",
-    "number": " must be numbers",
-    "set_as_default_address": "Set as default Address",
-    "add_address": "Add New address",
-    "signout": "Sign Out",
-    "password_min": "must be 6 numbers",
-    "numeric": "must be numbers",
-    "email": "%{attribute} is not valid Email Address"
-  },
-  "message": {
-    "no_results": "No results found."
-  },
-  "labels": {
-    "hoss": "Hoss",
-    "upload_image": "Upload Image",
-    "show_image": "Show Image"
-  },
-  "button": {
-    "search": "Search",
-    "clear_filter": "Clear Filter",
-    "reset": "Reset",
-    "edit": "Edit",
-    "save": "Save",
-    "back": "Back"
-  }
+    "form_box": {
+        "login": "Login"
+    },
+    "fields": {
+        "password": "Password",
+        "email": "Email"
+    },
+    "validation": {
+        "required": "%{attribute} is required",
+        "maxLength": "%{attribute} must be at most %{max} characters long",
+        "minLength": "%{attribute} must be %{min} characters at least",
+        "valid": "must be valid",
+        "number": " must be numbers",
+        "set_as_default_address": "Set as default Address",
+        "add_address": "Add New address",
+        "signout": "Sign Out",
+        "password_min": "must be 6 numbers",
+        "numeric": "must be numbers",
+        "email": "%{attribute} is not valid Email Address"
+    },
+    "message": {
+        "no_results": "No results found."
+    },
+    "labels": {
+        "hoss": "Hoss",
+        "upload_image": "Upload Image",
+        "show_image": "Show Image"
+    },
+    "button": {
+        "search": "Search",
+        "clear_filter": "Clear Filter",
+        "reset": "Reset",
+        "edit": "Edit",
+        "save": "Save",
+        "back": "Back",
+        "create": "Create"
+    },
+    "heading": {
+        "members": "Members"
+    },
+    "table": {
+        "name": "Name",
+        "position": "Position",
+        "bio": "Bio",
+        "image": "Image",
+        "configs": "Configurations"
+    }
 }

@@ -20,16 +20,52 @@ export const asyncRouterMap = [
           icon: "mdi-account-circle"
         }
       }
-      //   {
-      //     path: "create",
-      //     component: () => import("@/views/users/index"),
-      //     name: "createUsersList",
-      //     meta: {
-      //       title: "users2",
-      //       icon: "mdi-account-circle"
-      //     }
-      //   }
     ]
   },
+  {
+    path: "/members",
+    component: Layout,
+    redirect: "/members/list",
+    meta: {
+      title: "Members",
+      icon: "mdi-account-circle"
+    },
+    alwaysShow: true,
+    children: [
+      {
+        path: "list",
+        component: () => import("@/views/members/index"),
+        name: "MembersList",
+        // hidden: true,
+
+        meta: {
+          title: "list",
+          icon: "mdi-account-circle"
+        }
+      }
+    ]
+  },
+  //   {
+  //     path: "/members",
+  //     component: Layout,
+  //     redirect: "/members/list",
+  //     meta: {
+  //       title: "Members",
+  //       icon: "mdi-account-circle"
+  //     },
+  //     children: [
+  //       {
+  //         path: "list",
+  //         component: () => import("@/views/members/index"),
+  //         name: "membersList",
+
+  //         meta: {
+  //           title: "list",
+  //           icon: "mdi-account-circle"
+  //         },
+  //         hidden: true
+  //       }
+  //     ]
+  //   },
   { path: "*", redirect: "/404", hidden: true }
 ];

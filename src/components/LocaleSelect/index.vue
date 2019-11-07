@@ -24,7 +24,7 @@ export default {
     }
   },
   beforeDestroy() {
-    this.$store.commit("RESET_LOCALE");
+    // this.$store.commit("RESET_LOCALE");
   },
   methods: {
     handleChange(value) {
