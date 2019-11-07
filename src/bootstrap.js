@@ -11,6 +11,7 @@ import GlobalToolbar from "@/components/GlobalToolbar";
 import NewImageUpload from "@/components/NewImageUpload";
 import multiImageUpload from "@/components/multiImageUpload";
 import GlobalImagePreview from "@/components/GlobalImagePreview";
+import DialogComponent from "@/components/DialogComponent";
 import NoData from "@/components/NoData";
 
 import { messages } from "@/lang";
@@ -39,6 +40,7 @@ Vue.component("new-image-upload", NewImageUpload);
 Vue.component("multi-image-upload", multiImageUpload);
 Vue.component("global-image-preview", GlobalImagePreview);
 Vue.component("NoData", NoData);
+Vue.component("DialogComponent", DialogComponent);
 
 Vue.filter("truncate", function(value, strCount = 50) {
   if (!value) {
