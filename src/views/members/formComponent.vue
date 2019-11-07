@@ -91,10 +91,21 @@ import {
   maxLength,
   numeric
 } from "vuelidate/lib/validators";
-import { StoreData } from "@/helpers/apiMethods";
+import { StoreData, UpdateData } from "@/helpers/apiMethods";
 
 export default {
   name: "FormComponent",
+  props: {
+    isEdited: {
+      type: Boolean,
+      default: false,
+      required: true
+    },
+    editForm: {
+      type: Object,
+      default: () => {}
+    }
+  },
   data() {
     return {
       resetImage: false,
@@ -106,22 +117,25 @@ export default {
         main_image: ""
       },
       maxsize: 2.48,
-      isEdited: false,
       btnLoading: false
     };
   },
 
   methods: {
-    createMethod() {
-      this.btnLoading = true;
+    buildData() {
       const formDate = new FormData();
       Object.keys(this.form).map(key => {
         formDate.append(key, this.form[key]);
       });
+      formDate.append("locale", "en");
+      return formDate;
+    },
+    createMethod() {
+      this.btnLoading = true;
+      const formDate = this.buildData();
 
       StoreData({ reqName: "members", data: formDate })
         .then(res => {
-          console.log(res);
           const { member } = res.data;
           this.$emit("set_memeber", member);
         })
@@ -133,7 +147,25 @@ export default {
           this.reset();
         });
     },
-    editMethod() {},
+    editMethod() {
+      const formDate = this.buildData();
+
+      UpdateData({
+        reqName: "members",
+        data: formDate,
+        id: this.editForm.slug
+      })
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => {
+          console.log(err);
+        })
+        .finally(() => {
+          this.btnLoading = false;
+          this.reset();
+        });
+    },
     handleSubmit() {
       if (!this.isEdited) {
         // in case create
@@ -161,8 +193,13 @@ export default {
     window.eventBus.$on("SET_DIALOG", value => {
       if (!value) {
         this.reset();
+        this.$emit("toggleEdit");
       }
     });
+
+    // if (this.isEdited) {
+    //   this.form = this.editForm;
+    // }
   },
 
   validations() {
@@ -191,6 +228,16 @@ export default {
         }
       }
     };
+  },
+  watch: {
+    isEdited: {
+      handler(value) {
+        if (value) {
+          this.form = this.editForm;
+        }
+      },
+      immediate: true
+    }
   }
 };
 </script>

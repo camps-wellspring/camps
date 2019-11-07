@@ -1,7 +1,7 @@
 export const SweetAlert = {
   methods: {
     popUp(
-      title = this.$t("field.message.warning"),
+      title = this.$t("message.warning"),
       type = "warning",
       singleButton = false
     ) {

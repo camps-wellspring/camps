@@ -34,7 +34,9 @@
             </v-avatar>
           </td>
           <td>
-            <v-icon medium title="edit"> mdi-pencil</v-icon>
+            <v-icon medium title="edit" @click="handleEdit(item, index)">
+              mdi-pencil</v-icon
+            >
             <v-icon medium title="delete" @click="handleDelete(item, index)">
               mdi-delete</v-icon
             >
@@ -53,6 +55,9 @@
           @click="dialog = false"
           @close_dialog="dialog = false"
           @set_memeber="handleSetMember"
+          @toggleEdit="isEdit = false"
+          :isEdited="isEdit"
+          :editForm="editForm"
         />
       </template>
     </DialogComponent>
@@ -70,6 +75,7 @@ export default {
   },
   data() {
     return {
+      editForm: {},
       headers: [],
       items: [],
       tableLoading: true,
@@ -85,14 +91,24 @@ export default {
     this.handleGetMembers();
   },
   methods: {
+    handleEdit(item) {
+      this.editForm = item;
+      console.log(this.editForm);
+      this.dialog = true;
+      this.isEdit = true;
+    },
     handleDelete({ slug }, index) {
-      DeleteData({ reqName: "members", id: slug })
-        .then(res => {
-          console.log(res);
-        })
-        .catch(err => {
-          console.log(err);
-        });
+      this.popUp().then(value => {
+        if (!value.dismiss) {
+          DeleteData({ reqName: "members", id: slug })
+            .then(() => {
+              this.$delete(this.items, index);
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        }
+      });
     },
     handleSetMember(item) {
       console.log(item);
@@ -107,7 +123,6 @@ export default {
         .then(res => {
           const { data } = res.data;
           this.items = data;
-          console.log(data);
         })
         .catch(err => {
           console.log(err);
