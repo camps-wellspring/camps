@@ -121,9 +121,12 @@ export default {
         priority: null,
         short_description: "",
         description: "",
-        main_image: {},
-        photos: []
-      }
+        main_image: {}
+      },
+
+      photos: [],
+      media: [],
+      photosMaxSize: 1.024
     };
   },
   methods: {
@@ -132,6 +135,17 @@ export default {
     },
     handleUploadMainImage(photoFile) {
       this.service.main_image = photoFile.file;
+    },
+    setPhotos(photos) {
+      this.photos = photos;
+    },
+    getPhotos() {
+      if (this.media) {
+        return this.media;
+      }
+    },
+    handleDelete(index) {
+      this.media.splice(index, 1);
     }
   },
   validations() {
