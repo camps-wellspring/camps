@@ -113,7 +113,6 @@ export default {
         .then(res => {
           const { data } = res.data;
           this.services = data;
-          console.log("hoss", data[0].main_image);
         })
         .catch(err => {
           console.log(err);
@@ -124,7 +123,6 @@ export default {
     },
     showImagePreview(image) {
       if (image) {
-        console.log(image.path);
         this.currentPreviewImage = image.path;
         this.imageOverlay = true;
       }
@@ -134,7 +132,6 @@ export default {
       this.$router.push({ name: "HandleService", params: { slug: slug } });
     },
     handleDelete({ slug }, index) {
-      console.log("deleeete");
       this.popUp().then(value => {
         if (!value.dismiss) {
           DeleteData({ reqName: "services", id: slug })

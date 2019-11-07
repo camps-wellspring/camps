@@ -1,5 +1,6 @@
 .file-upload {
   width: 100%;
+  position: relative;
 
   &__image {
   position: relative;
@@ -15,7 +16,6 @@
       top: -7px;
     }
     &__placeholder {
-        position: relative;
       padding: 10px;
       line-height: 34px;
       color: $color-light;
@@ -44,5 +44,9 @@
     box-shadow: 0 0 4px 0 rgba(193, 193, 193, 0.5);
     background-color: #ffffff;
     padding: 15px;
+  }
+
+  .button--upload {
+      z-index: 1;
   }
 }
