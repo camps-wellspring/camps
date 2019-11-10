@@ -1,7 +1,7 @@
 <template>
   <main>
     <!-- Toolbar -->
-    <v-toolbar flat color="white" class="mb-4">
+    <!-- <v-toolbar flat color="white" class="mb-4">
       <v-toolbar-title>{{ $t("heading.services") }}</v-toolbar-title>
 
       <v-divider class="mx-2" inset vertical></v-divider>
@@ -10,7 +10,12 @@
       <v-btn color="primary" to="handleService/new">
         {{ $t("button.create") }}
       </v-btn>
-    </v-toolbar>
+    </v-toolbar> -->
+    <global-toolbar
+      title="services"
+      :actionButton="true"
+      @ButtonClicked="createService"
+    />
     <!-- Toolbar -->
 
     <!-- Table -->
@@ -50,7 +55,7 @@
               @click="handleSubs(item)"
               color="primary"
             >
-              <v-icon class="edit" small>mdi-plus</v-icon>
+              <v-icon class="edit">mdi-plus</v-icon>
             </v-btn>
           </td>
           <td>
@@ -148,6 +153,9 @@ export default {
         "actions"
       ];
       this.headers = TableHeaders(headersList);
+    },
+    createService() {
+      this.$router.push({ name: "HandleService", params: { slug: "new" } });
     },
     getServices() {
       IndexData({ reqName: "services" })
