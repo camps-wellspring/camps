@@ -17,12 +17,37 @@
         <template v-slot:item="{ item, index }">
           <tr>
             <td>{{ item.name }}</td>
+
             <td class="table-logo">
               <v-avatar class="square">
                 <img :src="item.icon.path" :alt="item.icon.description"
               /></v-avatar>
             </td>
-            <td><toggle-service /></td>
+
+            <td>
+              <v-menu
+                bottom
+                origin="center center"
+                transition="scale-transition"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-btn depressed :color="item.color" v-on="on" />
+                </template>
+                <v-color-picker :value="item.color" mode="hexa" />
+              </v-menu>
+            </td>
+
+            <td class="text-center">
+              <toggle-service
+                :is-edit="true"
+                model-name="platforms"
+                :model-id="item.id"
+                field="visible"
+                v-model="item.visible"
+                :validate="true"
+              />
+            </td>
+
             <td>
               <v-btn icon @click="initDialog(true, item)">
                 <v-icon medium title="edit">mdi-pencil</v-icon>
@@ -70,7 +95,7 @@ export default {
 
   data() {
     return {
-      headerValues: ["name", "logo", "visible", "actions"],
+      headerValues: ["name", "logo", "color", "visible", "actions"],
       items: [],
       isEdit: false,
       editingItem: {},
