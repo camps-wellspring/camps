@@ -236,8 +236,7 @@ export default {
       UpdateData({
         reqName: "services",
         id: this.$route.params.slug,
-        data: { ...this.service },
-        locale: this.locale
+        data: { ...this.service, locale: this.locale }
       })
         .then(() => {
           this.$router.push({ name: "ServicesList" });

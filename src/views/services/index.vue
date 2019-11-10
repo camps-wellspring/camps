@@ -45,13 +45,22 @@
             {{ item.short_description | truncate }}
           </td>
           <td>
-            <v-icon
+            <v-btn
+              :title="$t('label.sub_services')"
+              @click="handleSubs(item)"
+              color="primary"
+            >
+              <v-icon class="edit" small>mdi-plus</v-icon>
+            </v-btn>
+          </td>
+          <td>
+            <!-- <v-icon
               class="edit"
               small
               :title="$t('label.sub_services')"
               @click="handleSubs(item)"
               >mdi-plus</v-icon
-            >
+            > -->
             <v-icon
               class="edit"
               small
@@ -71,6 +80,18 @@
       </template>
     </v-data-table>
     <!-- Table -->
+
+    <!-- pagination -->
+    <!-- <div class="text-xs-center pt-2">
+      <v-pagination
+        v-if="services.length > 0 && pagination.last_page > 1"
+        v-model="pagination.current_page"
+        :length="pagination.last_page"
+        :total-visible="10"
+        @input="handlePagination"
+      ></v-pagination>
+    </div> -->
+    <!-- pagination -->
 
     <!-- Image Preview -->
     <global-image-preview
@@ -96,16 +117,36 @@ export default {
       tableLoading: true,
 
       imageOverlay: false,
-      currentPreviewImage: ""
+      currentPreviewImage: "",
+
+      pagination: {},
+      queries: {}
     };
   },
   mounted() {
     this.createTableHeaders();
     this.getServices();
   },
+  //   watch: {
+  //     $route: {
+  //       handler(route) {
+  //         this.queries = {
+  //           ...route.query
+  //         };
+  //         this.getServices();
+  //       },
+  //       immediate: true
+  //     }
+  //   },
   methods: {
     createTableHeaders() {
-      const headersList = ["image", "name", "description", "actions"];
+      const headersList = [
+        "image",
+        "name",
+        "description",
+        "sub_services",
+        "actions"
+      ];
       this.headers = TableHeaders(headersList);
     },
     getServices() {
@@ -113,6 +154,7 @@ export default {
         .then(res => {
           const { data } = res.data;
           this.services = data;
+          //   this.pagination = meta;
         })
         .catch(err => {
           console.log(err);
@@ -143,6 +185,10 @@ export default {
             .catch(err => console.log(err));
         }
       });
+    },
+    handlePagination(value) {
+      this.queries.page = value;
+      this.$router.push({ query: this.queries });
     }
   }
 };

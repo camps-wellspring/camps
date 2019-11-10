@@ -48,13 +48,6 @@
             <v-icon
               class="edit"
               small
-              :title="$t('label.sub_services')"
-              @click="handleSubs(item)"
-              >mdi-plus</v-icon
-            >
-            <v-icon
-              class="edit"
-              small
               :title="$t('label.edit')"
               @click="handleEdit(item, index)"
               >mdi-mouse</v-icon
@@ -72,12 +65,29 @@
     </v-data-table>
     <!-- Table -->
 
+    <!-- pagination -->
+    <div class="text-xs-center pt-2">
+      <v-pagination
+        v-if="subServices.length > 0 && pagination.last_page > 1"
+        v-model="pagination.current_page"
+        :length="pagination.last_page"
+        :total-visible="10"
+        @input="handlePagination"
+      ></v-pagination>
+    </div>
+    <!-- pagination -->
+
     <!-- Dialog -->
     <v-dialog v-model="showSubServiceDialog" max-width="700px">
       <v-card>
-        <v-card-title></v-card-title>
+        <v-card-title>{{
+          editMode
+            ? this.$t("label.edit_sub_service")
+            : this.$t("label.create_sub_service")
+        }}</v-card-title>
         <v-divider></v-divider>
-        <v-card-text>
+
+        <v-card-text class="py-3">
           <!-- Locale -->
           <v-row v-if="editMode" justify="center">
             <v-col cols="6">
@@ -90,7 +100,7 @@
           <v-form v-if="showSubServiceDialog">
             <form-wrapper :validator="$v.subService">
               <v-row>
-                <v-col md="4" cols="12">
+                <v-col md="6" cols="12">
                   <form-group name="name">
                     <template slot-scope="{ attrs }">
                       <v-text-field
@@ -105,7 +115,7 @@
                   </form-group>
                 </v-col>
 
-                <v-col md="4" cols="12">
+                <v-col md="6" cols="12">
                   <new-image-upload
                     class="file-upload__image"
                     :imgUrl="subService.icon ? subService.icon.path : ''"
@@ -113,7 +123,7 @@
                   />
                 </v-col>
 
-                <v-col md="6" cols="12">
+                <v-col cols="12">
                   <form-group name="short_description">
                     <template slot-scope="{ attrs }">
                       <v-textarea
@@ -133,14 +143,21 @@
           </v-form>
           <!-- Form -->
         </v-card-text>
-        <v-divider></v-divider>
-        <v-card-actions>
+
+        <v-divider class="mx-4"></v-divider>
+        <v-card-actions class="py-4 mx-2">
+          <v-spacer></v-spacer>
+
           <v-btn color="secondary" @click="closeSubServiceDialog">{{
             this.$t("button.cancel")
           }}</v-btn>
-          <v-btn color="primary" @click="save">{{
-            this.$t("button.save")
-          }}</v-btn>
+          <v-btn
+            color="primary"
+            :loading="loading.save"
+            :disabled="$v.$invalid || !subService.icon"
+            @click="save"
+            >{{ this.$t("button.save") }}</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -159,7 +176,13 @@
 <script>
 import TableHeaders from "@/helpers/TableHeaders";
 import { required, minLength, maxLength } from "vuelidate/lib/validators";
-import { IndexData, ShowData, DeleteData } from "@/helpers/apiMethods";
+import {
+  IndexData,
+  ShowData,
+  StoreData,
+  UpdateData,
+  DeleteData
+} from "@/helpers/apiMethods";
 import Cookies from "js-cookie";
 
 export default {
@@ -195,7 +218,18 @@ export default {
   },
   mounted() {
     this.createTableHeaders();
-    this.getSubServices();
+    // this.getSubServices();
+  },
+  watch: {
+    $route: {
+      handler(route) {
+        this.queries = {
+          ...route.query
+        };
+        this.getSubServices();
+      },
+      immediate: true
+    }
   },
   methods: {
     createTableHeaders() {
@@ -205,8 +239,9 @@ export default {
     getSubServices() {
       IndexData({ reqName: `sub-services?service_id=${this.serviceId}` })
         .then(res => {
-          const { data } = res.data;
+          const { data, meta } = res.data;
           this.subServices = data;
+          this.pagination = meta;
         })
         .catch(err => {
           console.log(err);
@@ -253,7 +288,60 @@ export default {
         });
     },
 
-    save() {},
+    save() {
+      this.loading.save = true;
+
+      // handle requests
+      if (!this.editMode) {
+        this.StoreSubService();
+      } else {
+        this.UpdateSubService();
+      }
+    },
+    StoreSubService() {
+      // set the request data
+      let formData = new FormData();
+      Object.keys(this.subService).forEach(key => {
+        formData.append(key, this.subService[key]);
+      });
+
+      // Create Sub Serveice
+      StoreData({
+        reqName: "sub-services",
+        data: formData
+      })
+        .then(res => {
+          this.loading.save = false;
+          this.subServices.push(res.data.sub_service);
+          this.closeSubServiceDialog();
+        })
+        .catch(err => {
+          console.log(err);
+          this.loading.save = false;
+        });
+    },
+    UpdateSubService() {
+      // Edit serveice
+      UpdateData({
+        reqName: "sub-services",
+        id: this.currentSubServiceSlug,
+        data: { ...this.subService, locale: this.locale }
+      })
+        .then(res => {
+          this.subServices.splice(
+            this.currentSubServiceIndex,
+            1,
+            res.data.sub_service
+          );
+
+          this.loading.save = false;
+          this.closeSubServiceDialog();
+        })
+        .catch(err => {
+          console.log(err);
+          this.loading.save = false;
+        });
+    },
 
     handleDelete({ slug }, index) {
       this.popUp().then(value => {
@@ -272,17 +360,22 @@ export default {
       this.resetSubService();
     },
     resetSubService() {
+      this.$v.$reset();
       this.subService = {
         service_id: this.$route.params.id,
         name: "",
         icon: null,
         short_description: ""
       };
-      console.log("serviceIcon", this.subService.icon);
 
+      this.locale = Cookies.get("language");
       this.currentSubServiceSlug = null;
       this.currentSubServiceIndex = null;
       this.editMode = false;
+    },
+    handlePagination(value) {
+      this.queries.page = value;
+      this.$router.push({ query: this.queries });
     }
   },
   validations() {
