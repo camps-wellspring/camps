@@ -17,7 +17,7 @@
   },
   "message": {
     "no_results": "No results found.",
-    "warning": "Are You Sure?"
+    "delete": "Are you sure that you want to delete this item?"
   },
   "labels": {
     "hoss": "Hoss",
@@ -31,7 +31,9 @@
     "edit": "Edit",
     "save": "Save",
     "back": "Back",
-    "create": "Create"
+    "create": "Create",
+    "yes": "Yes",
+    "cancel": "Cancel"
   },
   "heading": {
     "members": "Members",
@@ -40,9 +42,9 @@
     "ok": "OK",
     "close": "Close",
     "got_it": "Got It",
-    "technologies": "Technologies"
+    "technologies": "Technologies",
+    "edit": "Edit"
   },
-
   "table": {
     "name": "Name",
     "position": "Position",
