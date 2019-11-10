@@ -54,7 +54,8 @@
     "actions": "Actions",
     "url": "URL",
     "logo": "Logo",
-    "description": "Description"
+    "description": "Description",
+    "priority":"Priority"
   },
   "label": {
     "hoss": "Hoss",
