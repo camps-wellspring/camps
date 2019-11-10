@@ -1,5 +1,7 @@
 <template>
   <v-container>
+    <locale-select @change="handleLocaleChange" />
+
     <form-wrapper :validator="$v.form">
       <form @submit.prevent="submit">
         <v-row>
@@ -8,7 +10,7 @@
               <template slot-scope="{ attrs }">
                 <v-text-field
                   v-bind="attrs"
-                  :value="item.name"
+                  :value="item && item.name ? item.name : curItem.name"
                   outlined
                   :label="$t('label.name')"
                   @blur="$v.form.name.$touch()"
@@ -23,7 +25,7 @@
               <template slot-scope="{ attrs }">
                 <v-text-field
                   v-bind="attrs"
-                  :value="item.url"
+                  :value="item && item.url ? item.url : curItem.url"
                   outlined
                   :label="$t('label.url')"
                   @blur="$v.form.url.$touch()"
@@ -36,7 +38,7 @@
           <v-col cols="12" md="6">
             <new-image-upload
               class="file-upload__image"
-              :imgUrl="item.icon.path"
+              :imgUrl="curItem.icon.path"
               @fileSelected="hadnleImg"
             />
           </v-col>
@@ -57,35 +59,32 @@
 </template>
 
 <script>
-import { required, minLength, maxLength, url } from "vuelidate/lib/validators";
-import { StoreData } from "@/helpers/apiMethods";
+import { minLength, maxLength, url } from "vuelidate/lib/validators";
+import { UpdateData, ShowData } from "@/helpers/apiMethods";
 
 export default {
-  data() {
-    return {
-      form: {
-        name: "",
-        url: "",
-        icon: null
-      },
-      loading: {
-        submit: false
-      }
-    };
-  },
-
   props: {
-    item: {
+    curItem: {
       type: Object,
       default: () => {}
     }
+  },
+
+  data() {
+    return {
+      form: {},
+      item: {},
+      loading: {
+        submit: false,
+        fetch: false
+      }
+    };
   },
 
   validations() {
     return {
       form: {
         name: {
-          required,
           minLength: minLength(3),
           maxLength: maxLength(20)
         },
@@ -106,14 +105,35 @@ export default {
         this.loading.submit = true;
         let payload = new FormData();
         for (const el in this.form) {
+          console.log("TCL: submit -> this.form[el]", this.form[el]);
           payload.append(el, this.form[el]);
         }
-        StoreData({ reqName: "technologies", data: payload })
+        payload.append("_method", "put");
+        UpdateData({
+          reqName: "technologies",
+          data: payload,
+          id: this.curItem.id
+        })
           .then(() => {
             this.loading.submit = false;
           })
           .catch(() => (this.loading.submit = false));
       }
+    },
+
+    handleLocaleChange(locale) {
+      this.loading.fetch = true;
+      this.locale = locale;
+      ShowData({ reqName: "technologies", id: this.curItem.id, locale }).then(
+        res => {
+          console.log(
+            "TCL: handleLocaleChange -> res.data.data",
+            res.data.data
+          );
+          this.item = res.data.data;
+          this.loading.fetch = false;
+        }
+      );
     }
   }
 };

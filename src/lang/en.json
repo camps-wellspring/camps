@@ -41,7 +41,8 @@
     "create": "Create",
     "yes": "Yes",
     "cancel": "Cancel",
-    "submit": "Submit"
+    "submit": "Submit",
+    "close": "Close"
   },
   "heading": {
     "members": "Members",

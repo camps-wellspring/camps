@@ -45,9 +45,9 @@
         <template #heading>
           <v-card-title>{{ dialogTitle }}</v-card-title>
         </template>
-        <template #body>
+        <template #body v-if="dialog.edit">
           <component
-            :item="editingItem"
+            :cur-item="editingItem"
             :is="isEdit ? 'editItem' : 'createItem'"
           />
         </template>

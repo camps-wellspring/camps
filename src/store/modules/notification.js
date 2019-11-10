@@ -23,11 +23,9 @@ const notification = {
 
   actions: {
     ShowNotification({ commit }, payload) {
-      console.log("Show Notification");
       commit("SHOW", payload);
     },
     CloseNotification({ commit }) {
-      console.log("Close Notification");
       commit("CLOSE");
     }
   }
