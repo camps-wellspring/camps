@@ -7,12 +7,21 @@
       outlined
       @change="handleChange"
       v-bind="$attrs"
+      :loading="loading"
+      loader-height="5"
     ></v-select>
   </div>
 </template>
 
 <script>
 export default {
+  props: {
+    loading: {
+      type: Boolean,
+      default: false
+    }
+  },
+
   data() {
     return {
       items: [{ text: "English", value: "en" }, { text: "Arabic", value: "ar" }]
@@ -35,5 +44,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped></style>
