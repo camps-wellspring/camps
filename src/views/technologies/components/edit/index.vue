@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <locale-select @change="handleLocaleChange" />
+    <locale-select :loading="loading.fetch" @change="handleLocaleChange" />
 
     <form-wrapper :validator="$v.form">
       <form @submit.prevent="submit">
@@ -60,7 +60,7 @@
 
 <script>
 import { minLength, maxLength, url } from "vuelidate/lib/validators";
-import { UpdateData, ShowData } from "@/helpers/apiMethods";
+import { UpdateData, UpdateMedia, ShowData } from "@/helpers/apiMethods";
 
 export default {
   props: {
@@ -74,6 +74,8 @@ export default {
     return {
       form: {},
       item: {},
+      icon: null,
+      locale: "",
       loading: {
         submit: false,
         fetch: false
@@ -97,27 +99,35 @@ export default {
 
   methods: {
     hadnleImg(img) {
-      this.form.icon = img.file;
+      this.icon = img.file;
     },
 
     submit() {
-      if (!this.$v.form.$invalid) {
+      if (!this.$v.form.$invalid && Object.entries(this.form).length > 0) {
+        console.log(this.form);
         this.loading.submit = true;
-        let payload = new FormData();
-        for (const el in this.form) {
-          console.log("TCL: submit -> this.form[el]", this.form[el]);
-          payload.append(el, this.form[el]);
-        }
-        payload.append("_method", "put");
+
         UpdateData({
           reqName: "technologies",
-          data: payload,
+          data: this.form,
           id: this.curItem.id
         })
           .then(() => {
             this.loading.submit = false;
           })
           .catch(() => (this.loading.submit = false));
+      }
+      if (this.icon) {
+        let payload = new FormData();
+        payload.append("file", this.icon);
+        payload.append("_method", "put");
+        payload.append(
+          "locale",
+          this.locale ? this.locale : this.$store.getters.locale
+        );
+        UpdateMedia({ id: this.curItem.icon.id, data: payload }).then(res => {
+          console.log(res);
+        });
       }
     },
 
@@ -126,11 +136,7 @@ export default {
       this.locale = locale;
       ShowData({ reqName: "technologies", id: this.curItem.id, locale }).then(
         res => {
-          console.log(
-            "TCL: handleLocaleChange -> res.data.data",
-            res.data.data
-          );
-          this.item = res.data.data;
+          this.item = res.data.technology;
           this.loading.fetch = false;
         }
       );
