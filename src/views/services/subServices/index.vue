@@ -3,6 +3,13 @@
     <!-- Toolbar -->
     <v-toolbar flat color="white" class="mb-4">
       <v-toolbar-title>{{ $t("heading.sub_services") }}</v-toolbar-title>
+
+      <v-divider class="mx-2" inset vertical></v-divider>
+      <v-spacer></v-spacer>
+
+      <v-btn color="primary" @click="showSubServiceDialog = true">
+        {{ $t("button.create") }}
+      </v-btn>
     </v-toolbar>
     <!-- Toolbar -->
 
@@ -68,9 +75,9 @@
     <!-- Dialog -->
     <v-dialog v-model="showSubServiceDialog" max-width="700px">
       <v-card>
-        <v-card-title>Select Country</v-card-title>
+        <v-card-title></v-card-title>
         <v-divider></v-divider>
-        <v-card-text style="height: 700px;">
+        <v-card-text>
           <!-- Locale -->
           <v-row v-if="editMode" justify="center">
             <v-col cols="6">
@@ -80,34 +87,18 @@
           <!-- Locale -->
 
           <!-- Form -->
-          <v-form>
-            <form-wrapper :validator="$v.service">
+          <v-form v-if="showSubServiceDialog">
+            <form-wrapper :validator="$v.subService">
               <v-row>
                 <v-col md="4" cols="12">
                   <form-group name="name">
                     <template slot-scope="{ attrs }">
                       <v-text-field
                         :label="$t('label.name')"
-                        v-model="service.name"
+                        v-model="subService.name"
                         v-bind="attrs"
                         outlined
-                        @blur="$v.service.name.$touch()"
-                      >
-                      </v-text-field>
-                    </template>
-                  </form-group>
-                </v-col>
-
-                <v-col md="4" cols="12">
-                  <form-group name="priority">
-                    <template slot-scope="{ attrs }">
-                      <v-text-field
-                        :label="$t('label.priority')"
-                        v-model="service.priority"
-                        v-bind="attrs"
-                        type="number"
-                        outlined
-                        @blur="$v.service.priority.$touch()"
+                        @blur="$v.subService.name.$touch()"
                       >
                       </v-text-field>
                     </template>
@@ -117,8 +108,8 @@
                 <v-col md="4" cols="12">
                   <new-image-upload
                     class="file-upload__image"
-                    :imgUrl="service.main_image ? service.main_image.path : ''"
-                    @fileSelected="handleUploadMainImage"
+                    :imgUrl="subService.icon ? subService.icon.path : ''"
+                    @fileSelected="handleUploadIcon"
                   />
                 </v-col>
 
@@ -127,27 +118,11 @@
                     <template slot-scope="{ attrs }">
                       <v-textarea
                         :label="$t('label.short_description')"
-                        v-model="service.short_description"
+                        v-model="subService.short_description"
                         v-bind="attrs"
                         :rows="5"
                         outlined
-                        @blur="$v.service.short_description.$touch()"
-                      >
-                      </v-textarea>
-                    </template>
-                  </form-group>
-                </v-col>
-
-                <v-col md="6" cols="12">
-                  <form-group name="description">
-                    <template slot-scope="{ attrs }">
-                      <v-textarea
-                        :label="$t('label.description')"
-                        v-model="service.description"
-                        v-bind="attrs"
-                        :rows="5"
-                        outlined
-                        @blur="$v.service.description.$touch()"
+                        @blur="$v.subService.short_description.$touch()"
                       >
                       </v-textarea>
                     </template>
@@ -160,8 +135,12 @@
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
-          <v-btn color="secondary" @click="closeSubServiceDialog">Close</v-btn>
-          <v-btn color="primary" @click="dialog = false">Save</v-btn>
+          <v-btn color="secondary" @click="closeSubServiceDialog">{{
+            this.$t("button.cancel")
+          }}</v-btn>
+          <v-btn color="primary" @click="save">{{
+            this.$t("button.save")
+          }}</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -179,6 +158,7 @@
 
 <script>
 import TableHeaders from "@/helpers/TableHeaders";
+import { required, minLength, maxLength } from "vuelidate/lib/validators";
 import { IndexData, ShowData, DeleteData } from "@/helpers/apiMethods";
 import Cookies from "js-cookie";
 
@@ -235,19 +215,22 @@ export default {
           this.tableLoading = false;
         });
     },
+    handleUploadIcon(photoFile) {
+      this.subService.icon = photoFile.file;
+    },
     showImagePreview(image) {
       if (image) {
         this.currentPreviewImage = image.path;
         this.imageOverlay = true;
       }
     },
-    handleSubs({ id }) {
-      this.$router.push({ name: "SubServices", params: { id: id } });
-    },
     handleEdit({ slug }, index) {
       this.currentSubServiceSlug = slug;
       this.currentSubServiceIndex = index;
       this.editMode = true;
+      this.showSubServiceDialog = true;
+
+      this.getSubServiceData();
     },
     fireLocaleChange(locale) {
       this.locale = locale;
@@ -269,6 +252,21 @@ export default {
           console.log(err);
         });
     },
+
+    save() {},
+
+    handleDelete({ slug }, index) {
+      this.popUp().then(value => {
+        if (!value.dismiss) {
+          DeleteData({ reqName: "sub-services", id: slug })
+            .then(() => {
+              this.subServices.splice(index, 1);
+            })
+            .catch(err => console.log(err));
+        }
+      });
+    },
+
     closeSubServiceDialog() {
       this.showSubServiceDialog = false;
       this.resetSubService();
@@ -280,22 +278,27 @@ export default {
         icon: null,
         short_description: ""
       };
+      console.log("serviceIcon", this.subService.icon);
 
       this.currentSubServiceSlug = null;
       this.currentSubServiceIndex = null;
       this.editMode = false;
-    },
-    handleDelete({ slug }, index) {
-      this.popUp().then(value => {
-        if (!value.dismiss) {
-          DeleteData({ reqName: "sub-services", id: slug })
-            .then(() => {
-              this.subServices.splice(index, 1);
-            })
-            .catch(err => console.log(err));
-        }
-      });
     }
+  },
+  validations() {
+    return {
+      subService: {
+        name: {
+          required,
+          minLength: minLength(3),
+          maxLength: maxLength(20)
+        },
+        short_description: {
+          required,
+          minLength: minLength(3)
+        }
+      }
+    };
   }
 };
 </script>

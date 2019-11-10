@@ -1,7 +1,13 @@
 <template>
   <div class="technologies">
     <v-container>
-      <global-toolbar title="technologies" actions-type="filter" filter-mode />
+      <div>
+        <v-spacer />
+        <v-btn class="primary" @click="initDialog(false)">{{
+          $t("button.create")
+        }}</v-btn>
+      </div>
+      <global-toolbar title="technologies" />
       <v-data-table
         :headers="headers"
         :items="items"
@@ -18,7 +24,7 @@
             </td>
             <td>{{ item.url }}</td>
             <td>
-              <v-btn icon @click="initDialog(true)">
+              <v-btn icon @click="initDialog(true, item)">
                 <v-icon medium title="edit">mdi-pencil</v-icon>
               </v-btn>
               <v-btn icon>
@@ -39,8 +45,11 @@
         <template #heading>
           <v-card-title>{{ dialogTitle }}</v-card-title>
         </template>
-        <template #body>
-          <create-item />
+        <template #body v-if="dialog.edit">
+          <component
+            :cur-item="editingItem"
+            :is="isEdit ? 'editItem' : 'createItem'"
+          />
         </template>
       </DialogComponent>
     </v-container>
@@ -55,13 +64,15 @@ export default {
   name: "Technologies",
 
   components: {
-    createItem: () => import("./components/create")
+    createItem: () => import("./components/create"),
+    editItem: () => import("./components/edit")
   },
   data() {
     return {
       headerValues: ["name", "logo", "url", "actions"],
       items: [],
       isEdit: false,
+      editingItem: {},
       loading: {
         table: false
       },
@@ -93,9 +104,9 @@ export default {
       });
     },
 
-    initDialog(state) {
-      console.log("TCL: initDialog -> state", this.isEdit);
+    initDialog(state, curItem) {
       this.isEdit = state;
+      state && (this.editingItem = curItem);
       this.dialog.edit = true;
     },
 
