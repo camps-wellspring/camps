@@ -44,6 +44,28 @@ export const asyncRouterMap = [
     ]
   },
   {
+    path: "/works",
+    component: Layout,
+    redirect: "/works/list",
+    meta: {
+      title: "Works",
+      icon: "mdi-account-circle"
+    },
+    children: [
+      {
+        path: "list",
+        component: () => import("@/views/works/index"),
+        name: "WorksList",
+        // hidden: true,
+
+        meta: {
+          title: "work_list",
+          icon: "mdi-account-circle"
+        }
+      }
+    ]
+  },
+  {
     path: "/technologies",
     component: Layout,
     // redirect: "/",
