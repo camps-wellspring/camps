@@ -19,6 +19,11 @@
     "no_results": "No results found.",
     "warning": "Are You Sure?"
   },
+  "labels": {
+    "hoss": "Hoss",
+    "upload_image": "Upload Image",
+    "show_image": "Show Image"
+  },
   "button": {
     "search": "Search",
     "clear_filter": "Clear Filter",
@@ -26,18 +31,18 @@
     "edit": "Edit",
     "save": "Save",
     "back": "Back",
-    "create": "Create",
-    "ok": "OK",
-    "close": "Close",
-    "got_it": "Got It"
+    "create": "Create"
   },
   "heading": {
     "members": "Members",
-    "services": "Services",
-    "edit": "Edit",
+    "solutionplus_store": "Solutionplus Store",
     "create": "Create",
+    "ok": "OK",
+    "close": "Close",
+    "got_it": "Got It",
     "technologies": "Technologies"
   },
+
   "table": {
     "name": "Name",
     "position": "Position",

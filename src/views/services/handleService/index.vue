@@ -109,10 +109,17 @@
 
 <script>
 import { required, minLength, maxLength } from "vuelidate/lib/validators";
+import { ShowData } from "@/helpers/apiMethods";
+import Cookies from "js-cookie";
 
 export default {
   name: "handle-service",
 
+  mounted() {
+    if (this.$route.params.slug !== "new") {
+      this.getServiceData();
+    }
+  },
   data() {
     return {
       editMode: this.$route.params.slug !== "new",
@@ -123,6 +130,7 @@ export default {
         description: "",
         main_image: {}
       },
+      locale: Cookies.get("language"),
 
       photos: [],
       media: [],
@@ -130,8 +138,26 @@ export default {
     };
   },
   methods: {
+    getServiceData() {
+      ShowData({
+        reqName: "services",
+        id: this.$route.params.slug,
+        locale: this.locale
+      })
+        .then(res => {
+          const { service } = res.data;
+          Object.keys(this.service).forEach(key => {
+            this.service[key] = service[key];
+          });
+
+          this.media = [...service.media];
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
     fireLocaleChange(locale) {
-      console.log("localeChange", locale);
+      this.locale = locale;
     },
     handleUploadMainImage(photoFile) {
       this.service.main_image = photoFile.file;
