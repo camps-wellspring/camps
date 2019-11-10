@@ -55,9 +55,11 @@
           @click="dialog = false"
           @close_dialog="dialog = false"
           @set_memeber="handleSetMember"
+          @set_edited_member="handleEditedMember"
           @toggleEdit="isEdit = false"
+          @set_refresh="handleGetMembers"
           :isEdited="isEdit"
-          :editForm="editForm"
+          :slug="slug"
         />
       </template>
     </DialogComponent>
@@ -75,12 +77,13 @@ export default {
   },
   data() {
     return {
-      editForm: {},
+      slug: "",
       headers: [],
       items: [],
       tableLoading: true,
       dialog: false,
       isEdit: false,
+      itemIndex: "",
       dialogTitle: this.isEdit
         ? this.$t("heading.edit")
         : this.$t("heading.create")
@@ -91,9 +94,14 @@ export default {
     this.handleGetMembers();
   },
   methods: {
-    handleEdit(item) {
-      this.editForm = item;
-      console.log(this.editForm);
+    handleEditedMember(member) {
+      this.$set(this.items, this.itemIndex, member);
+    },
+    handleEdit({ slug }, index) {
+      console.log(index);
+      this.slug = slug;
+      this.itemIndex = index;
+
       this.dialog = true;
       this.isEdit = true;
     },

@@ -91,7 +91,12 @@ import {
   maxLength,
   numeric
 } from "vuelidate/lib/validators";
-import { StoreData, UpdateData } from "@/helpers/apiMethods";
+import {
+  StoreData,
+  UpdateData,
+  ShowData,
+  UpdateMedia
+} from "@/helpers/apiMethods";
 
 export default {
   name: "FormComponent",
@@ -101,9 +106,9 @@ export default {
       default: false,
       required: true
     },
-    editForm: {
-      type: Object,
-      default: () => {}
+    slug: {
+      type: String,
+      required: true
     }
   },
   data() {
@@ -116,12 +121,26 @@ export default {
         priority: "",
         main_image: ""
       },
+      imageFile: "",
       maxsize: 2.48,
-      btnLoading: false
+      btnLoading: false,
+      inputChange: false,
+      imageChange: false
     };
   },
 
   methods: {
+    showData() {
+      ShowData({ reqName: "members", id: this.slug })
+        .then(res => {
+          const { member } = res.data;
+          this.form = member;
+          console.log(member);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
     buildData() {
       const formDate = new FormData();
       Object.keys(this.form).map(key => {
@@ -148,15 +167,16 @@ export default {
         });
     },
     editMethod() {
-      const formDate = this.buildData();
+      const { name, position, bio, priority } = this.form;
 
       UpdateData({
         reqName: "members",
-        data: formDate,
-        id: this.editForm.slug
+        data: { name, position, bio, priority },
+        id: this.slug
       })
         .then(res => {
-          console.log(res);
+          const { member } = res.data;
+          this.$emit("set_edited_member", member);
         })
         .catch(err => {
           console.log(err);
@@ -166,26 +186,60 @@ export default {
           this.reset();
         });
     },
+    handleUpdateImage() {
+      const { id } = this.form.main_image;
+      const formData = new FormData();
+      formData.append("file", this.imageFile);
+      formData.append("_method", "put");
+      formData.append("locale", "en");
+      UpdateMedia({ id, data: formData })
+        .then(res => {
+          this.$emit("set_refresh");
+        })
+        .catch(err => {
+          console.log(err);
+        })
+        .finally(() => {
+          this.reset();
+        });
+    },
     handleSubmit() {
+      this.btnLoading = true;
       if (!this.isEdited) {
         // in case create
         this.createMethod();
-      } else {
+      } else if (this.isEdited) {
         // in case Edit
-        this.editMethod();
+        if (this.inputChange) {
+          this.editMethod();
+        }
+      }
+
+      if (this.imageChange) {
+        this.handleUpdateImage();
       }
     },
     handleImageSelect(photo) {
-      this.form.main_image = photo.file;
+      if (!this.isEdited) {
+        this.form.main_image = photo.file;
+      } else {
+        this.imageFile = photo.file;
+      }
+      this.imageChange = true;
     },
     hadleChange(name) {
       this.$v.form[name].$touch();
+      this.inputChange = true;
     },
     reset() {
       this.$emit("close_dialog");
       this.$v.form.$reset();
       this.form = {};
       this.resetImage = true;
+      this.imageChange = false;
+      this.inputChange = false;
+      this.btnLoading = false;
+      this.imageChange = false;
       this.$store.dispatch("ClearServerErrors");
     }
   },
@@ -233,7 +287,7 @@ export default {
     isEdited: {
       handler(value) {
         if (value) {
-          this.form = this.editForm;
+          this.showData();
         }
       },
       immediate: true
