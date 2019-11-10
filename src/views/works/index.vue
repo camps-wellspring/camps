@@ -28,6 +28,16 @@
             </v-avatar>
           </td>
           <td>{{ item.name }}</td>
+          <td class="toggle-adjust">
+            <toggle-service
+              :is-edit="true"
+              model-name="works"
+              :model-id="item.id"
+              field="app_visibility"
+              v-model="item.visible"
+              :validate="true"
+            />
+          </td>
         </tr>
       </template>
 
