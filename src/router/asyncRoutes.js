@@ -88,6 +88,28 @@ export const asyncRouterMap = [
     ]
   },
   {
+    path: "/platforms",
+    component: Layout,
+    // redirect: "/",
+    meta: {
+      title: "Platforms",
+      icon: "mdi-account-circle"
+    },
+    children: [
+      {
+        path: "list",
+        component: () => import("@/views/platforms"),
+        name: "Platforms",
+        // hidden: true,
+
+        meta: {
+          title: "platforms_list",
+          icon: "mdi-account-circle"
+        }
+      }
+    ]
+  },
+  {
     path: "/services",
     component: Layout,
     redirect: "/services/list",

@@ -55,7 +55,9 @@
     "technologies": "Technologies",
     "edit": "Edit",
     "sub_services": "Sub Services",
-    "works": "Works"
+    "works": "Works",
+    "platforms": "Platforms",
+    "visible": "Visible"
   },
   "table": {
     "name": "Name",
