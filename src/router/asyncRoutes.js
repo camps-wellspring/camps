@@ -54,9 +54,20 @@ export const asyncRouterMap = [
     children: [
       {
         path: "list",
-        component: () => import("@/views/works/index"),
+        component: () => import("@/views/works"),
         name: "WorksList",
         // hidden: true,
+
+        meta: {
+          title: "work_list",
+          icon: "mdi-account-circle"
+        }
+      },
+      {
+        path: "create",
+        component: () => import("@/views/works/action"),
+        name: "create_work",
+        hidden: true,
 
         meta: {
           title: "work_list",
