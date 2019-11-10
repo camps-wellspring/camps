@@ -23,7 +23,8 @@
     "email": "%{attribute} is not valid Email Address"
   },
   "message": {
-    "no_results": "No results found."
+    "no_results": "No results found.",
+    "delete": "Are you sure that you want to delete this item?"
   },
   "labels": {
     "hoss": "Hoss",
@@ -37,7 +38,10 @@
     "edit": "Edit",
     "save": "Save",
     "back": "Back",
-    "create": "Create"
+    "create": "Create",
+    "yes": "Yes",
+    "cancel": "Cancel",
+    "submit": "Submit"
   },
   "heading": {
     "members": "Members",
@@ -47,6 +51,7 @@
     "close": "Close",
     "got_it": "Got It",
     "technologies": "Technologies",
+    "edit": "Edit",
     "sub_services": "Sub Services"
   },
   "table": {
@@ -78,6 +83,7 @@
     "description": "Description",
     "position": "Position",
     "bio": "Bio",
+    "url": "URL",
     "sub_services": "Sub Services",
     "sub_service_icon": "Sub Service Icon"
   },

@@ -3,6 +3,10 @@
     <v-card>
       <v-card-title class="headline grey lighten-2 mb-5" primary-title>
         <slot name="heading"></slot>
+        <v-spacer />
+        <v-btn icon>
+          <v-icon @click="showDialog = false">mdi-close</v-icon>
+        </v-btn>
       </v-card-title>
 
       <v-card-text>

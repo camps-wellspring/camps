@@ -1,7 +1,7 @@
 <template>
   <div class="technologies">
-    <global-toolbar title="technologies" actions-type="filter" filter-mode />
     <v-container>
+      <global-toolbar title="technologies" actions-type="filter" filter-mode />
       <v-data-table
         :headers="headers"
         :items="items"
@@ -11,7 +11,7 @@
         <template v-slot:item="{ item, index }">
           <tr>
             <td>{{ item.name }}</td>
-            <td>
+            <td class="table-logo">
               <v-avatar class="square">
                 <img :src="item.icon.path" :alt="item.icon.description"
               /></v-avatar>
@@ -39,7 +39,9 @@
         <template #heading>
           <v-card-title>{{ dialogTitle }}</v-card-title>
         </template>
-        <template #body> </template>
+        <template #body>
+          <create-item />
+        </template>
       </DialogComponent>
     </v-container>
   </div>
@@ -51,6 +53,10 @@ import { IndexData, DeleteData } from "@/helpers/apiMethods";
 
 export default {
   name: "Technologies",
+
+  components: {
+    createItem: () => import("./components/create")
+  },
   data() {
     return {
       headerValues: ["name", "logo", "url", "actions"],
@@ -94,9 +100,9 @@ export default {
     },
 
     handleDelete(id, index) {
-      this.popUp().then(value => {
+      this.popUp(this.$t("message.delete")).then(value => {
         if (!value.dismiss) {
-          DeleteData(id)
+          DeleteData({ reqName: "technologies", id })
             .then(() => {
               this.items.splice(index, 1);
             })

@@ -3,6 +3,9 @@
     <form-wrapper :validator="$v.form">
       <form @submit.prevent="handleSubmit">
         <v-row>
+          <v-col cols="12" v-if="isEdited">
+            <locale-select @change="fireLocaleChange" />
+          </v-col>
           <v-col cols="12" md="6">
             <new-image-upload
               class="file-upload__image"
@@ -91,13 +94,31 @@ import {
   maxLength,
   numeric
 } from "vuelidate/lib/validators";
-import { StoreData } from "@/helpers/apiMethods";
+import {
+  StoreData,
+  UpdateData,
+  ShowData,
+  UpdateMedia
+} from "@/helpers/apiMethods";
+import Cookies from "js-cookie";
 
 export default {
   name: "FormComponent",
+  props: {
+    isEdited: {
+      type: Boolean,
+      default: false,
+      required: true
+    },
+    slug: {
+      type: String,
+      required: true
+    }
+  },
   data() {
     return {
       resetImage: false,
+      locale: Cookies.get("language"),
       form: {
         name: "",
         bio: "",
@@ -105,23 +126,44 @@ export default {
         priority: "",
         main_image: ""
       },
+      imageFile: "",
       maxsize: 2.48,
-      isEdited: false,
-      btnLoading: false
+      btnLoading: false,
+      inputChange: false,
+      imageChange: false
     };
   },
 
   methods: {
-    createMethod() {
-      this.btnLoading = true;
+    fireLocaleChange(locale) {
+      this.locale = locale;
+      this.showData(locale);
+    },
+    showData(locale) {
+      ShowData({ reqName: "members", id: this.slug, locale })
+        .then(res => {
+          const { member } = res.data;
+          this.form = member;
+          console.log(member);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    buildData() {
       const formDate = new FormData();
       Object.keys(this.form).map(key => {
         formDate.append(key, this.form[key]);
       });
+      formDate.append("locale", this.locale);
+      return formDate;
+    },
+    createMethod() {
+      this.btnLoading = true;
+      const formDate = this.buildData();
 
       StoreData({ reqName: "members", data: formDate })
         .then(res => {
-          console.log(res);
           const { member } = res.data;
           this.$emit("set_memeber", member);
         })
@@ -133,27 +175,81 @@ export default {
           this.reset();
         });
     },
-    editMethod() {},
+    editMethod() {
+      const { name, position, bio, priority } = this.form;
+
+      UpdateData({
+        reqName: "members",
+        data: { name, position, bio, priority, locale: this.locale },
+        id: this.slug
+        // locale: Cookies.get("language")
+      })
+        .then(res => {
+          const { member } = res.data;
+          this.$emit("set_edited_member", member);
+        })
+        .catch(err => {
+          console.log(err);
+        })
+        .finally(() => {
+          this.btnLoading = false;
+          this.reset();
+        });
+    },
+    handleUpdateImage() {
+      const { id } = this.form.main_image;
+      const formData = new FormData();
+      formData.append("file", this.imageFile);
+      formData.append("_method", "put");
+      formData.append("locale", this.locale);
+      UpdateMedia({ id, data: formData })
+        .then(() => {
+          this.$emit("set_refresh");
+        })
+        .catch(err => {
+          console.log(err);
+        })
+        .finally(() => {
+          this.reset();
+        });
+    },
     handleSubmit() {
+      this.btnLoading = true;
       if (!this.isEdited) {
         // in case create
         this.createMethod();
-      } else {
+      } else if (this.isEdited) {
         // in case Edit
-        this.editMethod();
+        if (this.inputChange) {
+          this.editMethod();
+        }
+      }
+
+      if (this.imageChange) {
+        this.handleUpdateImage();
       }
     },
     handleImageSelect(photo) {
-      this.form.main_image = photo.file;
+      if (!this.isEdited) {
+        this.form.main_image = photo.file;
+      } else {
+        this.imageFile = photo.file;
+      }
+      this.imageChange = true;
     },
     hadleChange(name) {
       this.$v.form[name].$touch();
+      this.inputChange = true;
     },
     reset() {
       this.$emit("close_dialog");
       this.$v.form.$reset();
       this.form = {};
       this.resetImage = true;
+      this.imageChange = false;
+      this.inputChange = false;
+      this.btnLoading = false;
+      this.imageChange = false;
       this.$store.dispatch("ClearServerErrors");
     }
   },
@@ -161,8 +257,13 @@ export default {
     window.eventBus.$on("SET_DIALOG", value => {
       if (!value) {
         this.reset();
+        this.$emit("toggleEdit");
       }
     });
+
+    // if (this.isEdited) {
+    //   this.form = this.editForm;
+    // }
   },
 
   validations() {
@@ -191,6 +292,16 @@ export default {
         }
       }
     };
+  },
+  watch: {
+    isEdited: {
+      handler(value) {
+        if (value) {
+          this.showData();
+        }
+      },
+      immediate: true
+    }
   }
 };
 </script>

@@ -8,7 +8,7 @@
   >
     <span class="snack"> {{ snackbar.text }}</span>
     <v-btn text dark right @click="closeNotification">{{
-      $t("buttons.close")
+      $t("button.close")
     }}</v-btn>
   </v-snackbar>
 </template>

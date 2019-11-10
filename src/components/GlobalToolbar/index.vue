@@ -1,5 +1,5 @@
 <template>
-  <v-toolbar flat color="white" class="main-header mx-5 py-2 px-4">
+  <v-toolbar flat color="white" class="main-header">
     <v-toolbar-title class="main-header__title">
       <a class="main-header__title__back-link" @click="$router.go(-1)">
         &lt; {{ $t("button.back") }}

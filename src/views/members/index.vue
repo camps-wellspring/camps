@@ -34,7 +34,9 @@
             </v-avatar>
           </td>
           <td>
-            <v-icon medium title="edit"> mdi-pencil</v-icon>
+            <v-icon medium title="edit" @click="handleEdit(item, index)">
+              mdi-pencil</v-icon
+            >
             <v-icon medium title="delete" @click="handleDelete(item, index)">
               mdi-delete</v-icon
             >
@@ -53,6 +55,11 @@
           @click="dialog = false"
           @close_dialog="dialog = false"
           @set_memeber="handleSetMember"
+          @set_edited_member="handleEditedMember"
+          @toggleEdit="isEdit = false"
+          @set_refresh="handleGetMembers"
+          :isEdited="isEdit"
+          :slug="slug"
         />
       </template>
     </DialogComponent>
@@ -70,29 +77,52 @@ export default {
   },
   data() {
     return {
+      slug: "",
       headers: [],
       items: [],
       tableLoading: true,
       dialog: false,
       isEdit: false,
-      dialogTitle: this.isEdit
-        ? this.$t("heading.edit")
-        : this.$t("heading.create")
+      itemIndex: ""
     };
+  },
+  computed: {
+    dialogTitle() {
+      if (this.isEdit) {
+        return this.$t("heading.edit");
+      } else {
+        return this.$t("heading.create");
+      }
+    }
   },
   mounted() {
     this.createTableHeaders();
     this.handleGetMembers();
   },
   methods: {
+    handleEditedMember(member) {
+      this.$set(this.items, this.itemIndex, member);
+    },
+    handleEdit({ slug }, index) {
+      console.log(index);
+      this.slug = slug;
+      this.itemIndex = index;
+
+      this.dialog = true;
+      this.isEdit = true;
+    },
     handleDelete({ slug }, index) {
-      DeleteData({ reqName: "members", id: slug })
-        .then(res => {
-          console.log(res);
-        })
-        .catch(err => {
-          console.log(err);
-        });
+      this.popUp().then(value => {
+        if (!value.dismiss) {
+          DeleteData({ reqName: "members", id: slug })
+            .then(() => {
+              this.$delete(this.items, index);
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        }
+      });
     },
     handleSetMember(item) {
       console.log(item);
@@ -107,7 +137,6 @@ export default {
         .then(res => {
           const { data } = res.data;
           this.items = data;
-          console.log(data);
         })
         .catch(err => {
           console.log(err);
