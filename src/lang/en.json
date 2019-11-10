@@ -71,7 +71,9 @@
     "priority": "Priority",
     "icon": "Icon",
     "visible": "Visible",
-    "color": "Color"
+    "color": "Color",
+    "services": "Services",
+    "sub_services": "Sub Services"
   },
   "label": {
     "hoss": "Hoss",
@@ -92,7 +94,9 @@
     "bio": "Bio",
     "url": "URL",
     "sub_services": "Sub Services",
-    "sub_service_icon": "Sub Service Icon"
+    "sub_service_icon": "Sub Service Icon",
+    "edit_sub_service": "Edit Sub Service",
+    "create_sub_service": "Create Sub Service"
   },
   "title": {
     "edit_service": "Edit Service",
