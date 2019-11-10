@@ -2,6 +2,13 @@
   "form_box": {
     "login": "Login"
   },
+  "route": {
+    "service_list": "Services"
+  },
+  "fields": {
+    "password": "Password",
+    "email": "Email"
+  },
   "validation": {
     "required": "%{attribute} is required",
     "maxLength": "%{attribute} must be at most %{max} characters long",
@@ -44,7 +51,8 @@
     "close": "Close",
     "got_it": "Got It",
     "technologies": "Technologies",
-    "edit": "Edit"
+    "edit": "Edit",
+    "sub_services": "Sub Services"
   },
   "table": {
     "name": "Name",
@@ -55,7 +63,8 @@
     "actions": "Actions",
     "url": "URL",
     "logo": "Logo",
-    "description": "Description"
+    "description": "Description",
+    "icon": "Icon"
   },
   "label": {
     "hoss": "Hoss",
@@ -74,7 +83,9 @@
     "description": "Description",
     "position": "Position",
     "bio": "Bio",
-    "url": "URL"
+    "url": "URL",
+    "sub_services": "Sub Services",
+    "sub_service_icon": "Sub Service Icon"
   },
   "title": {
     "edit_service": "Edit Service",

@@ -3,3 +3,39 @@
         cursor: pointer;
     }
 }
+
+// copied ---------------------------------------------
+.close_icon {
+  text-align: center;
+  font-size: 10px;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+
+  background: $color-accent;
+  color: #fff !important;
+  //   font-size: 18px !important;
+  border-radius: 50%;
+  position: absolute;
+  top: -5px;
+  transition: all 0.2s ease;
+  transform: translateY(15px);
+
+  visibility: hidden;
+}
+
+.img_pointer,
+.video_pointer {
+  position: relative;
+}
+.img_pointer:hover .close_icon {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+.video_pointer:hover .close_icon {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+// copied ---------------------------------------------

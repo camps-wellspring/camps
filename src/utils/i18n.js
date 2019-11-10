@@ -1,11 +1,11 @@
 import i18n from "@/lang";
 
 export function generateTitle(title) {
-  const hasKey = this.$te("routes." + title);
+  const hasKey = this.$te("route." + title);
 
   if (hasKey) {
     // $t :this method from vue-i18n, inject in @/lang/index.js
-    const translatedTitle = this.$t("routes." + title);
+    const translatedTitle = this.$t("route." + title);
 
     return translatedTitle;
   }
