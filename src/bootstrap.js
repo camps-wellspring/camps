@@ -49,7 +49,7 @@ Vue.component("multi-image-upload", multiImageUpload);
 Vue.component("global-image-preview", GlobalImagePreview);
 Vue.component("NoData", NoData);
 Vue.component("DialogComponent", DialogComponent);
-Vue.component("ToggleService", ToggleService);
+Vue.component("toggle-service", ToggleService);
 
 Vue.filter("truncate", function(value, strCount = 50) {
   if (!value) {
