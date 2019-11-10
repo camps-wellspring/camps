@@ -4,7 +4,7 @@
       <v-toolbar-title>{{ $t("heading.works") }}</v-toolbar-title>
       <v-divider class="mx-2" inset vertical></v-divider>
       <v-spacer></v-spacer>
-      <v-btn color="primary">
+      <v-btn color="primary" @click="$router.push({ name: 'create_work' })">
         {{ $t("button.create") }}
       </v-btn>
     </v-toolbar>

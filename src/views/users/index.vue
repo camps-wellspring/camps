@@ -5,12 +5,9 @@
       <v-card-title>
         <global-toolbar
           title="hoss"
-          actionsType="filter"
-          :filterMode="filterMode"
-          :filterValidation="filterValidation"
-          :stopLoading="!filterLoading"
-          @Filter="filter"
-          @ClearFilter="clearFilter"
+          actionButtonText="create"
+          :actionButton="true"
+          @ButtonClicked="buttonClicked"
         />
       </v-card-title>
       <v-card-text>
@@ -84,8 +81,8 @@ export default {
       this.form.lat = markers.lat;
       this.form.lng = markers.lng;
     },
-    filter() {
-      console.log("Filter");
+    buttonClicked() {
+      console.log("Button Clicked");
     },
     clearFilter() {
       console.log("Clear Filter");

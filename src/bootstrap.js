@@ -56,7 +56,9 @@ Vue.filter("truncate", function(value, strCount = 50) {
     return "";
   }
 
-  return value.substring(0, strCount) + "...";
+  return value.length > strCount
+    ? value.substring(0, strCount) + "..."
+    : value.substring(0, strCount);
 });
 
 window.eventBus = new Vue();
