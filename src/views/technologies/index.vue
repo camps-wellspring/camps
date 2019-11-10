@@ -39,7 +39,9 @@
         <template #heading>
           <v-card-title>{{ dialogTitle }}</v-card-title>
         </template>
-        <template #body> </template>
+        <template #body>
+          <create-item />
+        </template>
       </DialogComponent>
     </v-container>
   </div>
@@ -51,6 +53,10 @@ import { IndexData, DeleteData } from "@/helpers/apiMethods";
 
 export default {
   name: "Technologies",
+
+  components: {
+    createItem: () => import("./components/create")
+  },
   data() {
     return {
       headerValues: ["name", "logo", "url", "actions"],
@@ -96,7 +102,7 @@ export default {
     handleDelete(id, index) {
       this.popUp(this.$t("message.delete")).then(value => {
         if (!value.dismiss) {
-          DeleteData(id)
+          DeleteData({ reqName: "technologies", id })
             .then(() => {
               this.items.splice(index, 1);
             })
