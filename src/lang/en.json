@@ -2,10 +2,6 @@
   "form_box": {
     "login": "Login"
   },
-  "fields": {
-    "password": "Password",
-    "email": "Email"
-  },
   "validation": {
     "required": "%{attribute} is required",
     "maxLength": "%{attribute} must be at most %{max} characters long",
