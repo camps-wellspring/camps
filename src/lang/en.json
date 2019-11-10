@@ -24,7 +24,8 @@
   },
   "message": {
     "no_results": "No results found.",
-    "delete": "Are you sure that you want to delete this item?"
+    "delete": "Are you sure that you want to delete this item?",
+    "warning": "Are You Sure?"
   },
   "labels": {
     "hoss": "Hoss",
@@ -53,7 +54,8 @@
     "got_it": "Got It",
     "technologies": "Technologies",
     "edit": "Edit",
-    "sub_services": "Sub Services"
+    "sub_services": "Sub Services",
+    "works": "Works"
   },
   "table": {
     "name": "Name",
@@ -65,7 +67,9 @@
     "url": "URL",
     "logo": "Logo",
     "description": "Description",
-    "icon": "Icon"
+    "priority": "Priority",
+    "icon": "Icon",
+    "visible":"Visible"
   },
   "label": {
     "hoss": "Hoss",
