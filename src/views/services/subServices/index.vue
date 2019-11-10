@@ -1,16 +1,11 @@
 <template>
   <main>
     <!-- Toolbar -->
-    <v-toolbar flat color="white" class="mb-4">
-      <v-toolbar-title>{{ $t("heading.sub_services") }}</v-toolbar-title>
-
-      <v-divider class="mx-2" inset vertical></v-divider>
-      <v-spacer></v-spacer>
-
-      <v-btn color="primary" @click="showSubServiceDialog = true">
-        {{ $t("button.create") }}
-      </v-btn>
-    </v-toolbar>
+    <global-toolbar
+      title="sub_services"
+      :actionButton="true"
+      @ButtonClicked="showSubServiceDialog = true"
+    />
     <!-- Toolbar -->
 
     <!-- Table -->
