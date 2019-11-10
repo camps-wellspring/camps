@@ -34,7 +34,7 @@
           <v-col cols="12" md="6">
             <new-image-upload
               class="file-upload__image"
-              @fileSelected="hadnleImg"
+              @fileSelected="handleImg"
             />
           </v-col>
 
@@ -80,14 +80,18 @@ export default {
           maxLength: maxLength(20)
         },
         url: {
+          required,
           url
+        },
+        icon: {
+          required
         }
       }
     };
   },
 
   methods: {
-    hadnleImg(img) {
+    handleImg(img) {
       this.form.icon = img.file;
     },
 

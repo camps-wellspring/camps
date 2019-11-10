@@ -21,26 +21,40 @@
           </v-col>
 
           <v-col cols="12" md="6">
-            <form-group name="url">
-              <template slot-scope="{ attrs }">
-                <v-text-field
-                  v-bind="attrs"
-                  :value="item && item.url ? item.url : curItem.url"
-                  outlined
-                  :label="$t('label.url')"
-                  @blur="$v.form.url.$touch()"
-                  @input="form.url = $event"
-                ></v-text-field>
-              </template>
-            </form-group>
-          </v-col>
-
-          <v-col cols="12" md="6">
             <new-image-upload
               class="file-upload__image"
               :imgUrl="curItem.icon.path"
-              @fileSelected="hadnleImg"
+              @fileSelected="handleImg"
             />
+          </v-col>
+
+          <v-col cols="12" md="6">
+            <div class="d-flex align-center">
+              <span class="color-label">Color: </span>
+              <!-- <v-spacer /> -->
+              <v-menu
+                bottom
+                origin="center center"
+                transition="scale-transition"
+                :close-on-content-click="false"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    x-large
+                    depressed
+                    :value="item && item.color ? item.color : curItem.color"
+                    :color="item && item.color ? item.color : curItem.color"
+                    v-on="on"
+                  />
+                </template>
+                <v-color-picker
+                  :value="selectColor"
+                  @input="form.color = $event"
+                  mode="hexa"
+                  hide-mode-switch
+                />
+              </v-menu>
+            </div>
           </v-col>
 
           <v-col cols="12">
@@ -59,7 +73,7 @@
 </template>
 
 <script>
-import { minLength, maxLength, url } from "vuelidate/lib/validators";
+import { minLength, maxLength } from "vuelidate/lib/validators";
 import { UpdateData, UpdateMedia, ShowData } from "@/helpers/apiMethods";
 
 export default {
@@ -83,22 +97,27 @@ export default {
     };
   },
 
+  computed: {
+    selectColor() {
+      return this.form && this.form.color
+        ? this.form.color
+        : this.curItem.color;
+    }
+  },
+
   validations() {
     return {
       form: {
         name: {
           minLength: minLength(3),
           maxLength: maxLength(20)
-        },
-        url: {
-          url
         }
       }
     };
   },
 
   methods: {
-    hadnleImg(img) {
+    handleImg(img) {
       this.icon = img.file;
     },
 
@@ -144,3 +163,10 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+.color-label {
+  font-size: 20px;
+  padding: 0 1rem;
+}
+</style>

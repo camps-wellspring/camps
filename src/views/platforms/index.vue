@@ -25,16 +25,7 @@
             </td>
 
             <td>
-              <v-menu
-                bottom
-                origin="center center"
-                transition="scale-transition"
-              >
-                <template v-slot:activator="{ on }">
-                  <v-btn depressed :color="item.color" v-on="on" />
-                </template>
-                <v-color-picker :value="item.color" mode="hexa" />
-              </v-menu>
+              <v-btn small depressed :color="item.color" />
             </td>
 
             <td class="text-center">

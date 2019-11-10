@@ -39,7 +39,7 @@
             <new-image-upload
               class="file-upload__image"
               :imgUrl="curItem.icon.path"
-              @fileSelected="hadnleImg"
+              @fileSelected="handleImg"
             />
           </v-col>
 
@@ -98,7 +98,7 @@ export default {
   },
 
   methods: {
-    hadnleImg(img) {
+    handleImg(img) {
       this.icon = img.file;
     },
 
