@@ -56,8 +56,7 @@
     "edit": "Edit",
     "sub_services": "Sub Services",
     "works": "Works",
-    "platforms": "Platforms",
-    "visible": "Visible"
+    "platforms": "Platforms"
   },
   "table": {
     "name": "Name",
@@ -71,7 +70,8 @@
     "description": "Description",
     "priority": "Priority",
     "icon": "Icon",
-    "visible":"Visible"
+    "visible": "Visible",
+    "color": "Color"
   },
   "label": {
     "hoss": "Hoss",
