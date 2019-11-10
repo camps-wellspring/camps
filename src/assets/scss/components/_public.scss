@@ -39,3 +39,12 @@
   transform: translateY(0);
 }
 // copied ---------------------------------------------
+
+.toggle-adjust {
+    .v-input__control {
+      margin: auto;
+      .v-input--selection-controls__input {
+        margin: 0;
+      }
+    }
+  }
