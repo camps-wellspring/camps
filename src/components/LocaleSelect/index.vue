@@ -24,11 +24,12 @@ export default {
     }
   },
   beforeDestroy() {
-    // this.$store.commit("RESET_LOCALE");
+    this.$store.commit("RESET_LOCALE");
   },
   methods: {
     handleChange(value) {
       this.$store.commit("SET_LOCALE", value);
+
       this.$emit("change", value);
     }
   }

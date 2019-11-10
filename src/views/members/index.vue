@@ -83,15 +83,21 @@ export default {
       tableLoading: true,
       dialog: false,
       isEdit: false,
-      itemIndex: "",
-      dialogTitle: this.isEdit
-        ? this.$t("heading.edit")
-        : this.$t("heading.create")
+      itemIndex: ""
     };
+  },
+  computed: {
+    dialogTitle() {
+      if (this.isEdit) {
+        return this.$t("heading.edit");
+      } else {
+        return this.$t("heading.create");
+      }
+    }
   },
   mounted() {
     this.createTableHeaders();
-    this.handleGetMembers();
+    this.handleGetMembers(this.$store.getters.locale);
   },
   methods: {
     handleEditedMember(member) {
@@ -126,8 +132,8 @@ export default {
       const headersList = ["name", "position", "bio", "image", "configs"];
       this.headers = TableHeaders(headersList);
     },
-    handleGetMembers() {
-      IndexData({ reqName: "members" })
+    handleGetMembers(locale) {
+      IndexData({ reqName: "members", locale })
         .then(res => {
           const { data } = res.data;
           this.items = data;

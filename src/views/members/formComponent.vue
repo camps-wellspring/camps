@@ -3,6 +3,9 @@
     <form-wrapper :validator="$v.form">
       <form @submit.prevent="handleSubmit">
         <v-row>
+          <v-col cols="12" v-if="isEdited">
+            <locale-select @change="fireLocaleChange" />
+          </v-col>
           <v-col cols="12" md="6">
             <new-image-upload
               class="file-upload__image"
@@ -97,6 +100,7 @@ import {
   ShowData,
   UpdateMedia
 } from "@/helpers/apiMethods";
+import Cookies from "js-cookie";
 
 export default {
   name: "FormComponent",
@@ -114,6 +118,7 @@ export default {
   data() {
     return {
       resetImage: false,
+      locale: Cookies.get("language"),
       form: {
         name: "",
         bio: "",
@@ -130,8 +135,12 @@ export default {
   },
 
   methods: {
-    showData() {
-      ShowData({ reqName: "members", id: this.slug })
+    fireLocaleChange(locale) {
+      this.locale = locale;
+      this.showData(locale);
+    },
+    showData(locale) {
+      ShowData({ reqName: "members", id: this.slug, locale })
         .then(res => {
           const { member } = res.data;
           this.form = member;
@@ -146,7 +155,7 @@ export default {
       Object.keys(this.form).map(key => {
         formDate.append(key, this.form[key]);
       });
-      formDate.append("locale", "en");
+      formDate.append("locale", this.locale);
       return formDate;
     },
     createMethod() {
@@ -171,8 +180,9 @@ export default {
 
       UpdateData({
         reqName: "members",
-        data: { name, position, bio, priority },
+        data: { name, position, bio, priority, locale: this.locale },
         id: this.slug
+        // locale: Cookies.get("language")
       })
         .then(res => {
           const { member } = res.data;
@@ -191,9 +201,9 @@ export default {
       const formData = new FormData();
       formData.append("file", this.imageFile);
       formData.append("_method", "put");
-      formData.append("locale", "en");
+      formData.append("locale", this.locale);
       UpdateMedia({ id, data: formData })
-        .then(res => {
+        .then(() => {
           this.$emit("set_refresh");
         })
         .catch(err => {
