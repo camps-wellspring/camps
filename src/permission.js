@@ -10,7 +10,6 @@ NProgress.configure({ showSpinner: false, speed: 700 });
 const whiteList = ["/login"]; // no redirect whitelist
 
 router.beforeEach((to, from, next) => {
-  console.log("hani");
   NProgress.start(); // start progress bar
   if (getToken()) {
     //* Has Token
