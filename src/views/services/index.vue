@@ -48,8 +48,8 @@
             <v-icon
               class="edit"
               small
-              :title="$t('label.add_sub_service')"
-              @click="handleAddSub(item, index)"
+              :title="$t('label.sub_services')"
+              @click="handleSubs(item)"
               >mdi-plus</v-icon
             >
             <v-icon
@@ -127,7 +127,9 @@ export default {
         this.imageOverlay = true;
       }
     },
-    handleAddSub() {},
+    handleSubs({ id }) {
+      this.$router.push({ name: "SubServices", params: { id: id } });
+    },
     handleEdit({ slug }) {
       this.$router.push({ name: "HandleService", params: { slug: slug } });
     },

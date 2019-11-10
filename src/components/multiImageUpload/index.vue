@@ -38,11 +38,21 @@
         class="img_pointer my-2 mt-4 px-2"
       >
         <v-img aspect-ratio="1.5" :src="showImg" alt class=" ml-2 show-photo" />
-        <i
+        <!-- <i
           class="icon-close close_icon"
           @click="deleteIamge($event, index, ShowImgs)"
           title="delete photo"
-        ></i>
+        ></i> -->
+
+        <!-- temporarely ----------------------------->
+        <v-icon
+          class="close_icon"
+          @click="deleteIamge($event, index, ShowImgs)"
+          :title="$t('label.delete')"
+        >
+          mdi-close
+        </v-icon>
+        <!-- temporarely ----------------------------->
       </v-col>
     </v-row>
 
