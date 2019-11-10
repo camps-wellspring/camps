@@ -97,7 +97,7 @@ export default {
   },
   mounted() {
     this.createTableHeaders();
-    this.handleGetMembers(this.$store.getters.locale);
+    this.handleGetMembers();
   },
   methods: {
     handleEditedMember(member) {
@@ -132,8 +132,8 @@ export default {
       const headersList = ["name", "position", "bio", "image", "configs"];
       this.headers = TableHeaders(headersList);
     },
-    handleGetMembers(locale) {
-      IndexData({ reqName: "members", locale })
+    handleGetMembers() {
+      IndexData({ reqName: "members" })
         .then(res => {
           const { data } = res.data;
           this.items = data;
