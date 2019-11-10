@@ -33,27 +33,41 @@
               :is-edit="true"
               model-name="works"
               :model-id="item.id"
-              field="app_visibility"
+              field="visible"
               v-model="item.visible"
               :validate="true"
             />
+          </td>
+          <td>{{ item.priority }}</td>
+          <td>{{ item.description | truncate }}</td>
+          <td>
+            <v-icon medium title="edit" @click="handleEdit(item, index)">
+              mdi-pencil</v-icon
+            >
+            <v-icon medium title="delete" @click="handleDelete(item, index)">
+              mdi-delete</v-icon
+            >
           </td>
         </tr>
       </template>
 
       <!-- expand item/row -->
       <template v-slot:expanded-item="{ headers, item }">
-        <tr>
-          <td>{{ item.name }}</td>
-
-          <!-- <td v-for="(header, index) in headers" :key="index">
-            {{ header.text }}
-          </td> -->
-        </tr>
-
-        <!-- <td :colspan="headers.length">
-          <pre>{{ item }}</pre>
-        </td> -->
+        <v-simple-table>
+          <template v-slot:default>
+            <thead>
+              <tr>
+                <th class="text-left">Name</th>
+                <th class="text-left">Calories</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{ item }}</td>
+              </tr>
+            </tbody>
+          </template>
+        </v-simple-table>
       </template>
     </v-data-table>
     <!-- table -->
@@ -80,6 +94,8 @@ export default {
     this.handleGetWorks();
   },
   methods: {
+    handleEdit() {},
+    handleDelete() {},
     handleExpand(props) {
       props.isExpanded = !props.isExpanded;
       console.log(props);
