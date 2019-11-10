@@ -12,28 +12,38 @@
     <v-data-table
       :headers="headers"
       :items="items"
-      :expanded.sync="expanded"
-      :show-expand="true"
       hide-default-footer
       :items-per-page="20"
       :loading="tableLoading"
     >
-      <template v-slot:item="{ isExpanded }">
-        <tr>
-          <td @click="isExpanded = !isExpanded">
-            {{ isExpanded }}
-            <!-- {{ item.name }} -->
-            <!-- <v-avatar size="50">
+      <!-- expand column -->
+      <template v-slot:item="{ item, isExpanded, expand }">
+        <tr @click="expand((isExpanded = !isExpanded))">
+          <td>
+            <v-avatar size="50">
               <v-img
                 aspect-ratio="1"
                 :src="item.logo ? item.logo.path : '@/assets/imgs/user.jpg'"
               ></v-img>
-            </v-avatar> -->
+            </v-avatar>
           </td>
+          <td>{{ item.name }}</td>
         </tr>
       </template>
-      <template v-slot:expanded-item="{ item }">
-        <td>{{ item }}</td>
+
+      <!-- expand item/row -->
+      <template v-slot:expanded-item="{ headers, item }">
+        <tr>
+          <td>{{ item.name }}</td>
+
+          <!-- <td v-for="(header, index) in headers" :key="index">
+            {{ header.text }}
+          </td> -->
+        </tr>
+
+        <!-- <td :colspan="headers.length">
+          <pre>{{ item }}</pre>
+        </td> -->
       </template>
     </v-data-table>
     <!-- table -->
@@ -60,6 +70,10 @@ export default {
     this.handleGetWorks();
   },
   methods: {
+    handleExpand(props) {
+      props.isExpanded = !props.isExpanded;
+      console.log(props);
+    },
     handleGetWorks() {
       IndexData({ reqName: "works" })
         .then(res => {
