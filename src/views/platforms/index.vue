@@ -1,5 +1,5 @@
 <template>
-  <div class="technologies">
+  <div class="platforms">
     <v-container>
       <div>
         <v-spacer />
@@ -7,7 +7,7 @@
           $t("button.create")
         }}</v-btn>
       </div>
-      <global-toolbar title="technologies" />
+      <global-toolbar title="platforms" />
       <v-data-table
         :headers="headers"
         :items="items"
@@ -17,12 +17,37 @@
         <template v-slot:item="{ item, index }">
           <tr>
             <td>{{ item.name }}</td>
+
             <td class="table-logo">
               <v-avatar class="square">
                 <img :src="item.icon.path" :alt="item.icon.description"
               /></v-avatar>
             </td>
-            <td>{{ item.url }}</td>
+
+            <td>
+              <v-menu
+                bottom
+                origin="center center"
+                transition="scale-transition"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-btn depressed :color="item.color" v-on="on" />
+                </template>
+                <v-color-picker :value="item.color" mode="hexa" />
+              </v-menu>
+            </td>
+
+            <td class="text-center">
+              <toggle-service
+                :is-edit="true"
+                model-name="platforms"
+                :model-id="item.id"
+                field="visible"
+                v-model="item.visible"
+                :validate="true"
+              />
+            </td>
+
             <td>
               <v-btn icon @click="initDialog(true, item)">
                 <v-icon medium title="edit">mdi-pencil</v-icon>
@@ -61,15 +86,16 @@ import generateTableHeaders from "@/helpers/TableHeaders";
 import { IndexData, DeleteData } from "@/helpers/apiMethods";
 
 export default {
-  name: "Technologies",
+  name: "Platforms",
 
   components: {
     createItem: () => import("./components/create"),
     editItem: () => import("./components/edit")
   },
+
   data() {
     return {
-      headerValues: ["name", "logo", "url", "actions"],
+      headerValues: ["name", "logo", "color", "visible", "actions"],
       items: [],
       isEdit: false,
       editingItem: {},
@@ -98,7 +124,7 @@ export default {
   methods: {
     fetchItems() {
       this.loading.table = true;
-      IndexData({ reqName: "technologies" }).then(res => {
+      IndexData({ reqName: "platforms" }).then(res => {
         this.items = res.data.data;
         this.loading.table = false;
       });
@@ -113,7 +139,7 @@ export default {
     handleDelete(id, index) {
       this.popUp(this.$t("message.delete")).then(value => {
         if (!value.dismiss) {
-          DeleteData({ reqName: "technologies", id })
+          DeleteData({ reqName: "platforms", id })
             .then(() => {
               this.items.splice(index, 1);
             })

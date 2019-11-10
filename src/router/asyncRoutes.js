@@ -44,6 +44,28 @@ export const asyncRouterMap = [
     ]
   },
   {
+    path: "/works",
+    component: Layout,
+    redirect: "/works/list",
+    meta: {
+      title: "Works",
+      icon: "mdi-account-circle"
+    },
+    children: [
+      {
+        path: "list",
+        component: () => import("@/views/works/index"),
+        name: "WorksList",
+        // hidden: true,
+
+        meta: {
+          title: "work_list",
+          icon: "mdi-account-circle"
+        }
+      }
+    ]
+  },
+  {
     path: "/technologies",
     component: Layout,
     // redirect: "/",
@@ -60,6 +82,28 @@ export const asyncRouterMap = [
 
         meta: {
           title: "technologies_list",
+          icon: "mdi-account-circle"
+        }
+      }
+    ]
+  },
+  {
+    path: "/platforms",
+    component: Layout,
+    // redirect: "/",
+    meta: {
+      title: "Platforms",
+      icon: "mdi-account-circle"
+    },
+    children: [
+      {
+        path: "list",
+        component: () => import("@/views/platforms"),
+        name: "Platforms",
+        // hidden: true,
+
+        meta: {
+          title: "platforms_list",
           icon: "mdi-account-circle"
         }
       }

@@ -108,7 +108,7 @@ export default {
         this.loading.submit = true;
 
         UpdateData({
-          reqName: "technologies",
+          reqName: "platforms",
           data: this.form,
           id: this.curItem.id
         })
@@ -134,9 +134,9 @@ export default {
     handleLocaleChange(locale) {
       this.loading.fetch = true;
       this.locale = locale;
-      ShowData({ reqName: "technologies", id: this.curItem.id, locale }).then(
+      ShowData({ reqName: "platforms", id: this.curItem.id, locale }).then(
         res => {
-          this.item = res.data.technology;
+          this.item = res.data.platform;
           this.loading.fetch = false;
         }
       );

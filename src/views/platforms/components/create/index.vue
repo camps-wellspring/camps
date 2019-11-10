@@ -1,7 +1,5 @@
 <template>
   <v-container>
-    <locale-select :loading="loading.fetch" @change="handleLocaleChange" />
-
     <form-wrapper :validator="$v.form">
       <form @submit.prevent="submit">
         <v-row>
@@ -10,11 +8,10 @@
               <template slot-scope="{ attrs }">
                 <v-text-field
                   v-bind="attrs"
-                  :value="item && item.name ? item.name : curItem.name"
+                  v-model="form.name"
                   outlined
                   :label="$t('label.name')"
                   @blur="$v.form.name.$touch()"
-                  @input="form.name = $event"
                 ></v-text-field>
               </template>
             </form-group>
@@ -25,11 +22,10 @@
               <template slot-scope="{ attrs }">
                 <v-text-field
                   v-bind="attrs"
-                  :value="item && item.url ? item.url : curItem.url"
+                  v-model="form.url"
                   outlined
                   :label="$t('label.url')"
                   @blur="$v.form.url.$touch()"
-                  @input="form.url = $event"
                 ></v-text-field>
               </template>
             </form-group>
@@ -38,7 +34,6 @@
           <v-col cols="12" md="6">
             <new-image-upload
               class="file-upload__image"
-              :imgUrl="curItem.icon.path"
               @fileSelected="hadnleImg"
             />
           </v-col>
@@ -59,26 +54,19 @@
 </template>
 
 <script>
-import { minLength, maxLength, url } from "vuelidate/lib/validators";
-import { UpdateData, UpdateMedia, ShowData } from "@/helpers/apiMethods";
+import { required, minLength, maxLength, url } from "vuelidate/lib/validators";
+import { StoreData } from "@/helpers/apiMethods";
 
 export default {
-  props: {
-    curItem: {
-      type: Object,
-      default: () => {}
-    }
-  },
-
   data() {
     return {
-      form: {},
-      item: {},
-      icon: null,
-      locale: "",
+      form: {
+        name: "",
+        url: "",
+        icon: null
+      },
       loading: {
-        submit: false,
-        fetch: false
+        submit: false
       }
     };
   },
@@ -87,6 +75,7 @@ export default {
     return {
       form: {
         name: {
+          required,
           minLength: minLength(3),
           maxLength: maxLength(20)
         },
@@ -99,47 +88,22 @@ export default {
 
   methods: {
     hadnleImg(img) {
-      this.icon = img.file;
+      this.form.icon = img.file;
     },
 
     submit() {
-      if (!this.$v.form.$invalid && Object.entries(this.form).length > 0) {
-        console.log(this.form);
+      if (!this.$v.form.$invalid) {
         this.loading.submit = true;
-
-        UpdateData({
-          reqName: "technologies",
-          data: this.form,
-          id: this.curItem.id
-        })
+        let payload = new FormData();
+        for (const el in this.form) {
+          payload.append(el, this.form[el]);
+        }
+        StoreData({ reqName: "platforms", data: payload })
           .then(() => {
             this.loading.submit = false;
           })
           .catch(() => (this.loading.submit = false));
       }
-      if (this.icon) {
-        let payload = new FormData();
-        payload.append("file", this.icon);
-        payload.append("_method", "put");
-        payload.append(
-          "locale",
-          this.locale ? this.locale : this.$store.getters.locale
-        );
-        UpdateMedia({ id: this.curItem.icon.id, data: payload }).then(res => {
-          console.log(res);
-        });
-      }
-    },
-
-    handleLocaleChange(locale) {
-      this.loading.fetch = true;
-      this.locale = locale;
-      ShowData({ reqName: "technologies", id: this.curItem.id, locale }).then(
-        res => {
-          this.item = res.data.technology;
-          this.loading.fetch = false;
-        }
-      );
     }
   }
 };

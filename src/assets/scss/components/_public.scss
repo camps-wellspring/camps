@@ -1,7 +1,7 @@
 .hover-pointer {
-    &:hover {
-        cursor: pointer;
-    }
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 // copied ---------------------------------------------
@@ -39,3 +39,22 @@
   transform: translateY(0);
 }
 // copied ---------------------------------------------
+
+.toggle-adjust {
+  .v-input__control {
+    margin: auto;
+    .v-input--selection-controls__input {
+      margin: 0;
+    }
+  }
+}
+
+.v-input {
+  &--switch {
+    .v-input {
+      &__control {
+        margin: auto;
+      }
+    }
+  }
+}

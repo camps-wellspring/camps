@@ -21,6 +21,7 @@
           <td>{{ item.name }}</td>
           <td>{{ item.position }}</td>
           <td :title="item.bio">{{ item.bio | truncate }}</td>
+          <td>{{ item.priority }}</td>
           <td>
             <v-avatar size="50">
               <v-img
@@ -129,7 +130,14 @@ export default {
       this.items.push(item);
     },
     createTableHeaders() {
-      const headersList = ["name", "position", "bio", "image", "configs"];
+      const headersList = [
+        "name",
+        "position",
+        "bio",
+        "priority",
+        "image",
+        "configs"
+      ];
       this.headers = TableHeaders(headersList);
     },
     handleGetMembers() {
