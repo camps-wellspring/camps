@@ -8,7 +8,6 @@ export const asyncRouterMap = [
       title: "users",
       icon: "mdi-account-circle"
     },
-    alwaysShow: true,
     children: [
       {
         path: "list",
@@ -16,7 +15,7 @@ export const asyncRouterMap = [
         name: "UsersList",
 
         meta: {
-          title: "list",
+          title: "users_list",
           icon: "mdi-account-circle"
         }
       }
@@ -30,7 +29,6 @@ export const asyncRouterMap = [
       title: "Members",
       icon: "mdi-account-circle"
     },
-    alwaysShow: true,
     children: [
       {
         path: "list",
@@ -39,7 +37,7 @@ export const asyncRouterMap = [
         // hidden: true,
 
         meta: {
-          title: "list",
+          title: "members_list",
           icon: "mdi-account-circle"
         }
       }
@@ -53,7 +51,6 @@ export const asyncRouterMap = [
       title: "Technologies",
       icon: "mdi-account-circle"
     },
-    alwaysShow: true,
     children: [
       {
         path: "list",
@@ -62,7 +59,7 @@ export const asyncRouterMap = [
         // hidden: true,
 
         meta: {
-          title: "list",
+          title: "technologies_list",
           icon: "mdi-account-circle"
         }
       }
@@ -76,7 +73,6 @@ export const asyncRouterMap = [
       title: "services",
       icon: "mdi-account-circle"
     },
-    alwaysShow: true,
     children: [
       {
         path: "list",
@@ -84,7 +80,7 @@ export const asyncRouterMap = [
         name: "ServicesList",
 
         meta: {
-          title: "list",
+          title: "services_list",
           icon: "mdi-account-circle"
         }
       },
@@ -92,6 +88,12 @@ export const asyncRouterMap = [
         path: "handleService/:slug",
         component: () => import("@/views/services/handleService/index"),
         name: "HandleService",
+        hidden: true
+      },
+      {
+        path: ":id/subServices",
+        component: () => import("@/views/services/subServices/index"),
+        name: "SubServices",
         hidden: true
       }
     ]

@@ -95,7 +95,7 @@
                   :maxSize="photosMaxSize"
                   :imgsUrl="getPhotos()"
                   @fileSelected="setPhotos"
-                  @handle_delete_image="handleDelete"
+                  @handle_delete_image="handleDeletePhoto"
                 />
               </v-col>
             </v-row>
@@ -103,13 +103,28 @@
         </v-form>
         <!-- Form -->
       </v-card-text>
+
+      <v-divider class="mx-4"></v-divider>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn
+          class="mt-2 mb-1"
+          color="primary"
+          :disabled="$v.$invalid"
+          :loading="loading.save"
+          @click="save"
+        >
+          {{ $t("button.save") }}
+        </v-btn>
+        <v-spacer></v-spacer>
+      </v-card-actions>
     </v-card>
   </section>
 </template>
 
 <script>
 import { required, minLength, maxLength } from "vuelidate/lib/validators";
-import { ShowData } from "@/helpers/apiMethods";
+import { ShowData, StoreData, UpdateData } from "@/helpers/apiMethods";
 import Cookies from "js-cookie";
 
 export default {
@@ -117,12 +132,13 @@ export default {
 
   mounted() {
     if (this.$route.params.slug !== "new") {
+      this.editMode = true;
       this.getServiceData();
     }
   },
   data() {
     return {
-      editMode: this.$route.params.slug !== "new",
+      editMode: false,
       service: {
         name: "",
         priority: null,
@@ -131,6 +147,9 @@ export default {
         main_image: {}
       },
       locale: Cookies.get("language"),
+      loading: {
+        save: false
+      },
 
       photos: [],
       media: [],
@@ -158,6 +177,7 @@ export default {
     },
     fireLocaleChange(locale) {
       this.locale = locale;
+      this.getServiceData();
     },
     handleUploadMainImage(photoFile) {
       this.service.main_image = photoFile.file;
@@ -170,8 +190,63 @@ export default {
         return this.media;
       }
     },
-    handleDelete(index) {
+    handleDeletePhoto(index) {
       this.media.splice(index, 1);
+    },
+    save() {
+      this.loading.save = true;
+
+      // handle requests
+      if (!this.editMode) {
+        this.StoreService();
+      } else {
+        this.UpdateService();
+      }
+    },
+    StoreService() {
+      // set the request data
+      let formData = new FormData();
+      Object.keys(this.service).forEach(key => {
+        formData.append(key, this.service[key]);
+      });
+
+      // handle photos
+      if (this.photos.length) {
+        this.photos.forEach((photo, index) => {
+          formData.append(`photos[${index}]`, photo);
+        });
+      }
+
+      // Create serveice
+      StoreData({
+        reqName: "services",
+        data: formData
+      })
+        .then(() => {
+          this.$router.push({ name: "ServicesList" });
+          this.loading.save = false;
+        })
+        .catch(err => {
+          console.log(err);
+          this.loading.save = false;
+        });
+    },
+    UpdateService() {
+      // Edit serveice
+      UpdateData({
+        reqName: "services",
+        id: this.$route.params.slug,
+        data: { ...this.service },
+        locale: this.locale
+      })
+        .then(() => {
+          this.$router.push({ name: "ServicesList" });
+          this.loading.save = false;
+        })
+        .catch(err => {
+          console.log(err);
+          this.loading.save = false;
+        });
     }
   },
   validations() {
