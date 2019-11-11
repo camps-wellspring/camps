@@ -1,13 +1,12 @@
 <template>
   <div class="platforms">
     <v-container>
-      <div>
-        <v-spacer />
-        <v-btn class="primary" @click="initDialog(false)">{{
-          $t("button.create")
-        }}</v-btn>
-      </div>
-      <global-toolbar title="platforms" />
+      <global-toolbar
+        title="platforms"
+        action-button
+        action-button-text="create"
+        @ButtonClicked="initDialog(false)"
+      />
       <v-data-table
         :headers="headers"
         :items="items"
@@ -57,13 +56,14 @@
         </template>
       </v-data-table>
 
-      <DialogComponent v-model="dialog.edit">
+      <DialogComponent v-model="dialog">
         <template #heading>
           <v-card-title>{{ dialogTitle }}</v-card-title>
         </template>
-        <template #body v-if="dialog.edit">
+        <template #body v-if="dialog">
           <component
             :cur-item="editingItem"
+            @closed="dialog = false"
             :is="isEdit ? 'editItem' : 'createItem'"
           />
         </template>
@@ -93,9 +93,7 @@ export default {
       loading: {
         table: false
       },
-      dialog: {
-        edit: false
-      }
+      dialog: false
     };
   },
 
@@ -124,7 +122,7 @@ export default {
     initDialog(state, curItem) {
       this.isEdit = state;
       state && (this.editingItem = curItem);
-      this.dialog.edit = true;
+      this.dialog = true;
     },
 
     handleDelete(id, index) {
