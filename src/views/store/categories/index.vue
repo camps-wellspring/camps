@@ -64,8 +64,8 @@
 
     <global-image-preview
       :image-path="currImg"
-      :show-dialog="imgPreview"
-      @closePreview="imgPreview = false"
+      :show-dialog="imgPreviewDialog"
+      @closePreview="closePreview"
     />
   </div>
 </template>
@@ -73,9 +73,12 @@
 <script>
 import generateTableHeaders from "@/helpers/TableHeaders";
 import { IndexData, DeleteData } from "@/helpers/apiMethods";
+import imgPreviewMixin from "@/mixins/imgPreview";
 
 export default {
   name: "Store_Categories",
+
+  mixins: [imgPreviewMixin],
 
   components: {
     createItem: () => import("./components/create"),
@@ -88,12 +91,10 @@ export default {
       items: [],
       isEdit: false,
       editingItem: {},
-      currImg: "",
       loading: {
         table: false
       },
-      dialog: false,
-      imgPreview: false
+      dialog: false
     };
   },
 
@@ -130,11 +131,6 @@ export default {
     handleDialogClose() {
       this.dialog = false;
       this.fetchItems();
-    },
-
-    handleImgPreview(path) {
-      this.currImg = path;
-      this.imgPreview = true;
     },
 
     handleDelete(slug, index) {
