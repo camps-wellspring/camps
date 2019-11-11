@@ -15,7 +15,14 @@
       >
         <template v-slot:item="{ item, index }">
           <tr>
-            <td>{{ item.name }}</td>
+            <td>
+              <read-more
+                class="read-more"
+                :text="item.name"
+                :max-chars="5"
+                less-str="read less"
+              />
+            </td>
 
             <td class="table-logo">
               <v-avatar
