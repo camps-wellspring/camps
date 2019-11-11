@@ -63,7 +63,7 @@
         <template #body v-if="dialog">
           <component
             :cur-item="editingItem"
-            @closed="dialog = false"
+            @closed="handleDialogClose"
             :is="isEdit ? 'editItem' : 'createItem'"
           />
         </template>
@@ -113,10 +113,12 @@ export default {
   methods: {
     fetchItems() {
       this.loading.table = true;
-      IndexData({ reqName: "platforms" }).then(res => {
-        this.items = res.data.data;
-        this.loading.table = false;
-      });
+      IndexData({ reqName: "platforms" })
+        .then(res => {
+          this.items = res.data.data;
+          this.loading.table = false;
+        })
+        .catch(() => (this.loading.table = false));
     },
 
     initDialog(state, curItem) {
@@ -125,14 +127,23 @@ export default {
       this.dialog = true;
     },
 
+    handleDialogClose() {
+      this.dialog = false;
+      this.fetchItems();
+    },
+
     handleDelete(id, index) {
       this.popUp(this.$t("message.delete")).then(value => {
         if (!value.dismiss) {
+          this.loading.table = true;
           DeleteData({ reqName: "platforms", id })
             .then(() => {
               this.items.splice(index, 1);
+              this.loading.table = false;
             })
-            .catch(err => console.log(err));
+            .catch(() => {
+              this.loading.table = false;
+            });
         }
       });
     }

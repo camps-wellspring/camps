@@ -38,11 +38,17 @@
                 :close-on-content-click="false"
               >
                 <template v-slot:activator="{ on }">
-                  <v-btn x-large depressed :color="currColor" v-on="on" />
+                  <v-btn
+                    class="color-button"
+                    x-large
+                    depressed
+                    :color="currColor"
+                    v-on="on"
+                  />
                 </template>
                 <v-color-picker
                   :value="currColor"
-                  @update:color="form.color = $event.hexa"
+                  @update:color="form.color = $event.hex"
                   mode="hexa"
                   hide-mode-switch
                 />
@@ -177,10 +183,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-.color-label {
-  font-size: 20px;
-  padding: 0 1rem;
-}
-</style>
