@@ -56,6 +56,12 @@
         </template>
       </DialogComponent>
     </v-container>
+
+    <global-image-preview
+      :image-path="currImg"
+      :show-dialog="imgPreview"
+      @closePreview="imgPreview = false"
+    />
   </div>
 </template>
 
