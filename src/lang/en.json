@@ -54,6 +54,7 @@
     "got_it": "Got It",
     "technologies": "Technologies",
     "edit": "Edit",
+    "services": "Services",
     "sub_services": "Sub Services",
     "works": "Works",
     "platforms": "Platforms"
@@ -73,7 +74,9 @@
     "visible": "Visible",
     "color": "Color",
     "services": "Services",
-    "sub_services": "Sub Services"
+    "sub_services": "Sub Services",
+    "features": "Features",
+    "visibility": "Visibility"
   },
   "label": {
     "hoss": "Hoss",
@@ -96,7 +99,8 @@
     "sub_services": "Sub Services",
     "sub_service_icon": "Sub Service Icon",
     "edit_sub_service": "Edit Sub Service",
-    "create_sub_service": "Create Sub Service"
+    "create_sub_service": "Create Sub Service",
+    "features": "Features"
   },
   "title": {
     "edit_service": "Edit Service",

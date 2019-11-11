@@ -49,6 +49,25 @@
           <td :title="item.short_description">
             {{ item.short_description | truncate }}
           </td>
+          <td class="toggle-adjust">
+            <toggle-service
+              :is-edit="true"
+              model-name="service"
+              :model-id="item.id"
+              field="visible"
+              v-model="item.visible"
+              :validate="true"
+            />
+          </td>
+          <td>
+            <v-btn
+              :title="$t('label.features')"
+              @click="handleFeatures(item)"
+              color="primary"
+            >
+              <v-icon class="edit">mdi-plus</v-icon>
+            </v-btn>
+          </td>
           <td>
             <v-btn
               :title="$t('label.sub_services')"
@@ -105,12 +124,23 @@
       @closePreview="imageOverlay = false"
     />
     <!-- Image Preview -->
+
+    <!-- Dialog -->
+    <v-dialog v-model="showFeaturesDialog" max-width="700px">
+      <global-features
+        v-if="showFeaturesDialog"
+        :FeaturedItemId="currentFeaturedItemId"
+        @closeFeatures="closeFeatures"
+      ></global-features>
+    </v-dialog>
+    <!-- Dialog -->
   </main>
 </template>
 
 <script>
 import TableHeaders from "@/helpers/TableHeaders";
 import { IndexData, DeleteData } from "@/helpers/apiMethods";
+import GlobalFeatures from "@/components/GlobalFeatures";
 
 export default {
   name: "services",
@@ -120,6 +150,8 @@ export default {
       headers: [],
       services: [],
       tableLoading: true,
+      showFeaturesDialog: false,
+      currentFeaturedItemId: null,
 
       imageOverlay: false,
       currentPreviewImage: "",
@@ -131,6 +163,9 @@ export default {
   mounted() {
     this.createTableHeaders();
     this.getServices();
+  },
+  components: {
+    GlobalFeatures
   },
   //   watch: {
   //     $route: {
@@ -149,6 +184,8 @@ export default {
         "image",
         "name",
         "description",
+        "visibility",
+        "features",
         "sub_services",
         "actions"
       ];
@@ -177,6 +214,10 @@ export default {
         this.imageOverlay = true;
       }
     },
+    handleFeatures({ id }) {
+      this.showFeaturesDialog = true;
+      this.currentFeaturedItemId = id;
+    },
     handleSubs({ id }) {
       this.$router.push({ name: "SubServices", params: { id: id } });
     },
@@ -197,6 +238,9 @@ export default {
     handlePagination(value) {
       this.queries.page = value;
       this.$router.push({ query: this.queries });
+    },
+    closeFeatures() {
+      this.showFeaturesDialog = false;
     }
   }
 };
