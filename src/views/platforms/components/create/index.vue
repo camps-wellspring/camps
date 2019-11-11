@@ -111,23 +111,21 @@ export default {
     },
 
     submit() {
-      if (!this.$v.form.$invalid) {
-        this.loading.submit = true;
-        let payload = new FormData();
-        for (const el in this.form) {
-          payload.append(el, this.form[el]);
-        }
-        StoreData({
-          reqName: "platforms",
-          data: payload
-        })
-          .then(() => {
-            this.loading.submit = false;
-            this.reset();
-            this.$emit("closed");
-          })
-          .catch(() => (this.loading.submit = false));
+      this.loading.submit = true;
+      let payload = new FormData();
+      for (const el in this.form) {
+        payload.append(el, this.form[el]);
       }
+      StoreData({
+        reqName: "platforms",
+        data: payload
+      })
+        .then(() => {
+          this.loading.submit = false;
+          this.reset();
+          this.$emit("closed");
+        })
+        .catch(() => (this.loading.submit = false));
     },
 
     reset() {

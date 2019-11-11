@@ -131,9 +131,9 @@ export default {
       payload.locale = this.currLocale;
 
       UpdateData({
-        reqName: "platforms",
+        reqName: "store-categories",
         data: payload,
-        id: this.curItem.id
+        id: this.curItem.slug
       })
         .then(() => {
           this.loading.submit = false;
@@ -162,10 +162,10 @@ export default {
 
     handleLocaleChange(locale) {
       this.loading.fetch = true;
-      ShowData({ reqName: "platforms", id: this.curItem.id, locale })
+      ShowData({ reqName: "store-categories", id: this.curItem.id, locale })
         .then(res => {
           this.locale = locale;
-          this.form = res.data.platform;
+          this.form = res.data.store_category;
           this.loading.fetch = false;
         })
         .catch(() => (this.loading.fetch = false));

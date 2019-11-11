@@ -108,28 +108,26 @@ export default {
     },
 
     submit() {
-      if (!this.$v.form.$invalid && Object.entries(this.form).length > 0) {
-        this.loading.submit = true;
-        let payload = {};
-        for (const el in this.form) {
-          this.form[el] && (payload[el] = this.form[el]);
-          console.log("TCL: submit -> this.form[el]", this.form[el]);
-        }
-        payload.locale = this.currLocale;
-        UpdateData({
-          reqName: "technologies",
-          data: payload,
-          id: this.curItem.id
-        })
-          .then(() => {
-            this.loading.submit = false;
-            if (!this.icon) {
-              this.reset();
-              this.$emit("closed");
-            }
-          })
-          .catch(() => (this.loading.submit = false));
+      this.loading.submit = true;
+      let payload = {};
+      for (const el in this.form) {
+        this.form[el] && (payload[el] = this.form[el]);
+        console.log("TCL: submit -> this.form[el]", this.form[el]);
       }
+      payload.locale = this.currLocale;
+      UpdateData({
+        reqName: "technologies",
+        data: payload,
+        id: this.curItem.id
+      })
+        .then(() => {
+          this.loading.submit = false;
+          if (!this.icon) {
+            this.reset();
+            this.$emit("closed");
+          }
+        })
+        .catch(() => (this.loading.submit = false));
 
       if (this.icon) {
         this.loading.submit = true;
