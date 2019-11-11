@@ -1,7 +1,5 @@
 <template>
   <v-container>
-    <locale-select :loading="loading.fetch" @change="handleLocaleChange" />
-
     <form-wrapper :validator="$v.form">
       <form @submit.prevent="submit">
         <v-row>
@@ -9,49 +7,49 @@
             <form-group name="name">
               <template slot-scope="{ attrs }">
                 <v-text-field
+                  v-model="form.name"
                   v-bind="attrs"
-                  :value="item && item.name ? item.name : curItem.name"
                   outlined
                   :label="$t('label.name')"
                   @blur="$v.form.name.$touch()"
-                  @input="form.name = $event"
                 ></v-text-field>
               </template>
             </form-group>
           </v-col>
 
           <v-col cols="12" md="6">
-            <div class="d-flex align-center justify-center">
+            <new-image-upload
+              class="file-upload__image"
+              @fileSelected="handleImg"
+            />
+          </v-col>
+
+          <v-col cols="12" md="6">
+            <div class="d-flex align-center">
               <span class="color-label">Color: </span>
-              <!-- <v-spacer /> -->
               <v-menu
                 bottom
                 origin="center center"
                 transition="scale-transition"
+                :close-on-content-click="false"
               >
                 <template v-slot:activator="{ on }">
                   <v-btn
+                    class="color-button"
                     x-large
                     depressed
-                    :value="item && item.color ? item.color : curItem.color"
-                    :color="item && item.color ? item.color : curItem.color"
+                    :color="form.color"
                     v-on="on"
                   />
                 </template>
                 <v-color-picker
-                  :value="item && item.color ? item.color : curItem.color"
+                  v-model="form.color"
                   mode="hexa"
+                  hide-mode-switch
+                  @update:color="handleColorChange($event.hex)"
                 />
               </v-menu>
             </div>
-          </v-col>
-
-          <v-col cols="12" md="6">
-            <new-image-upload
-              class="file-upload__image"
-              :imgUrl="curItem.icon.path"
-              @fileSelected="handleImg"
-            />
           </v-col>
 
           <v-col cols="12">
@@ -70,26 +68,15 @@
 </template>
 
 <script>
-import { minLength, maxLength, required } from "vuelidate/lib/validators";
-import { UpdateData, UpdateMedia, ShowData } from "@/helpers/apiMethods";
+import { required, minLength, maxLength } from "vuelidate/lib/validators";
+import { StoreData } from "@/helpers/apiMethods";
 
 export default {
-  props: {
-    curItem: {
-      type: Object,
-      default: () => {}
-    }
-  },
-
   data() {
     return {
       form: {},
-      item: {},
-      icon: null,
-      locale: "",
       loading: {
-        submit: false,
-        fetch: false
+        submit: false
       }
     };
   },
@@ -98,6 +85,7 @@ export default {
     return {
       form: {
         name: {
+          required,
           minLength: minLength(3),
           maxLength: maxLength(20)
         },
@@ -113,55 +101,36 @@ export default {
 
   methods: {
     handleImg(img) {
-      this.icon = img.file;
+      this.form.icon = img.file;
+      this.$v.form.icon.$touch();
+    },
+
+    handleColorChange(color) {
+      this.form.color = color;
+      this.$v.form.color.$touch();
     },
 
     submit() {
-      if (!this.$v.form.$invalid && Object.entries(this.form).length > 0) {
-        console.log(this.form);
-        this.loading.submit = true;
-
-        UpdateData({
-          reqName: "platforms",
-          data: this.form,
-          id: this.curItem.id
+      this.loading.submit = true;
+      let payload = new FormData();
+      for (const el in this.form) {
+        payload.append(el, this.form[el]);
+      }
+      StoreData({
+        reqName: "platforms",
+        data: payload
+      })
+        .then(() => {
+          this.loading.submit = false;
+          this.reset();
+          this.$emit("closed");
         })
-          .then(() => {
-            this.loading.submit = false;
-          })
-          .catch(() => (this.loading.submit = false));
-      }
-      if (this.icon) {
-        let payload = new FormData();
-        payload.append("file", this.icon);
-        payload.append("_method", "put");
-        payload.append(
-          "locale",
-          this.locale ? this.locale : this.$store.getters.locale
-        );
-        UpdateMedia({ id: this.curItem.icon.id, data: payload }).then(res => {
-          console.log(res);
-        });
-      }
+        .catch(() => (this.loading.submit = false));
     },
 
-    handleLocaleChange(locale) {
-      this.loading.fetch = true;
-      this.locale = locale;
-      ShowData({ reqName: "platforms", id: this.curItem.id, locale }).then(
-        res => {
-          this.item = res.data.platform;
-          this.loading.fetch = false;
-        }
-      );
+    reset() {
+      this.form = {};
     }
   }
 };
 </script>
-
-<style lang="scss" scoped>
-.color-label {
-  font-size: 20px;
-  padding: 0 1rem;
-}
-</style>

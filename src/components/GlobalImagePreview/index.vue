@@ -1,6 +1,6 @@
 <template>
   <!-- Image Preview -->
-  <v-dialog v-model="showDialog" max-width="500" persistent>
+  <v-dialog v-model="showDialog" max-width="500" @click:outside="closePreview">
     <section class="img-preview-overlay">
       <!-- <i
         class="icon-close img-preview-close hover-pointer"

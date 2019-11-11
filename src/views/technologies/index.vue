@@ -1,13 +1,12 @@
 <template>
   <div class="technologies">
     <v-container>
-      <div>
-        <v-spacer />
-        <v-btn class="primary" @click="initDialog(false)">{{
-          $t("button.create")
-        }}</v-btn>
-      </div>
-      <global-toolbar title="technologies" />
+      <global-toolbar
+        title="technologies"
+        action-button
+        action-button-text="create"
+        @ButtonClicked="initDialog(false)"
+      />
       <v-data-table
         :headers="headers"
         :items="items"
@@ -17,12 +16,15 @@
         <template v-slot:item="{ item, index }">
           <tr>
             <td>{{ item.name }}</td>
+
             <td class="table-logo">
               <v-avatar class="square">
                 <img :src="item.icon.path" :alt="item.icon.description"
               /></v-avatar>
             </td>
+
             <td>{{ item.url }}</td>
+
             <td>
               <v-btn icon @click="initDialog(true, item)">
                 <v-icon medium title="edit">mdi-pencil</v-icon>
@@ -41,18 +43,25 @@
         </template>
       </v-data-table>
 
-      <DialogComponent v-model="dialog.edit">
+      <DialogComponent v-model="dialog">
         <template #heading>
           <v-card-title>{{ dialogTitle }}</v-card-title>
         </template>
-        <template #body v-if="dialog.edit">
+        <template #body v-if="dialog">
           <component
             :cur-item="editingItem"
+            @closed="handleDialogClose"
             :is="isEdit ? 'editItem' : 'createItem'"
           />
         </template>
       </DialogComponent>
     </v-container>
+
+    <global-image-preview
+      :image-path="currImg"
+      :show-dialog="imgPreview"
+      @closePreview="imgPreview = false"
+    />
   </div>
 </template>
 
@@ -67,18 +76,17 @@ export default {
     createItem: () => import("./components/create"),
     editItem: () => import("./components/edit")
   },
+
   data() {
     return {
-      headerValues: ["name", "logo", "url", "actions"],
+      headerValues: ["name", "icon", "url", "actions"],
       items: [],
       isEdit: false,
       editingItem: {},
       loading: {
         table: false
       },
-      dialog: {
-        edit: false
-      }
+      dialog: false
     };
   },
 
@@ -98,26 +106,37 @@ export default {
   methods: {
     fetchItems() {
       this.loading.table = true;
-      IndexData({ reqName: "technologies" }).then(res => {
-        this.items = res.data.data;
-        this.loading.table = false;
-      });
+      IndexData({ reqName: "technologies" })
+        .then(res => {
+          this.items = res.data.data;
+          this.loading.table = false;
+        })
+        .catch(() => (this.loading.table = false));
     },
 
     initDialog(state, curItem) {
       this.isEdit = state;
       state && (this.editingItem = curItem);
-      this.dialog.edit = true;
+      this.dialog = true;
+    },
+
+    handleDialogClose() {
+      this.dialog = false;
+      this.fetchItems();
     },
 
     handleDelete(id, index) {
       this.popUp(this.$t("message.delete")).then(value => {
         if (!value.dismiss) {
+          this.loading.table = true;
           DeleteData({ reqName: "technologies", id })
             .then(() => {
               this.items.splice(index, 1);
+              this.loading.table = false;
             })
-            .catch(err => console.log(err));
+            .catch(() => {
+              this.loading.table = false;
+            });
         }
       });
     }

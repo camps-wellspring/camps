@@ -7,14 +7,21 @@
             <form-group name="name">
               <template slot-scope="{ attrs }">
                 <v-text-field
-                  v-bind="attrs"
                   v-model="form.name"
+                  v-bind="attrs"
                   outlined
                   :label="$t('label.name')"
                   @blur="$v.form.name.$touch()"
                 ></v-text-field>
               </template>
             </form-group>
+          </v-col>
+
+          <v-col cols="12" md="6">
+            <new-image-upload
+              class="file-upload__image"
+              @fileSelected="handleImg"
+            />
           </v-col>
 
           <v-col cols="12" md="6">
@@ -29,13 +36,6 @@
                 ></v-text-field>
               </template>
             </form-group>
-          </v-col>
-
-          <v-col cols="12" md="6">
-            <new-image-upload
-              class="file-upload__image"
-              @fileSelected="handleImg"
-            />
           </v-col>
 
           <v-col cols="12">
@@ -54,17 +54,13 @@
 </template>
 
 <script>
-import { required, minLength, maxLength, url } from "vuelidate/lib/validators";
+import { url, required, minLength, maxLength } from "vuelidate/lib/validators";
 import { StoreData } from "@/helpers/apiMethods";
 
 export default {
   data() {
     return {
-      form: {
-        name: "",
-        url: "",
-        icon: null
-      },
+      form: {},
       loading: {
         submit: false
       }
@@ -93,21 +89,34 @@ export default {
   methods: {
     handleImg(img) {
       this.form.icon = img.file;
+      this.$v.form.icon.$touch();
+    },
+
+    handleColorChange(color) {
+      this.form.color = color;
+      this.$v.form.color.$touch();
     },
 
     submit() {
-      if (!this.$v.form.$invalid) {
-        this.loading.submit = true;
-        let payload = new FormData();
-        for (const el in this.form) {
-          payload.append(el, this.form[el]);
-        }
-        StoreData({ reqName: "technologies", data: payload })
-          .then(() => {
-            this.loading.submit = false;
-          })
-          .catch(() => (this.loading.submit = false));
+      this.loading.submit = true;
+      let payload = new FormData();
+      for (const el in this.form) {
+        payload.append(el, this.form[el]);
       }
+      StoreData({
+        reqName: "technologies",
+        data: payload
+      })
+        .then(() => {
+          this.loading.submit = false;
+          this.reset();
+          this.$emit("closed");
+        })
+        .catch(() => (this.loading.submit = false));
+    },
+
+    reset() {
+      this.form = {};
     }
   }
 };

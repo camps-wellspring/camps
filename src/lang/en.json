@@ -3,7 +3,14 @@
     "login": "Login"
   },
   "route": {
-    "service_list": "Services"
+    "services_list": "Services",
+    "store": "Store",
+    "store_categories": "Store Categories",
+    "store_projects": "Store Projects",
+    "platforms_list": "Platforms",
+    "platforms": "Platforms",
+    "technologies_list": "Technologies",
+    "technologies": "Technologies"
   },
   "fields": {
     "password": "Password",
@@ -59,7 +66,8 @@
     "edit": "Edit",
     "sub_services": "Sub Services",
     "works": "Works",
-    "platforms": "Platforms"
+    "platforms": "Platforms",
+    "store-categories": "Store Categories"
   },
   "table": {
     "name": "Name",

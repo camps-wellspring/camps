@@ -79,3 +79,11 @@
 //     right: 0;
 //     top:0;
 //   }
+.color {
+  &-label {
+    font-size: 20px;
+  }
+  &-button {
+    margin: 0 1rem;
+  }
+}
