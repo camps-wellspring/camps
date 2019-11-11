@@ -59,3 +59,23 @@
     }
   }
 }
+
+
+.fadeIn-enter-active,
+.fadeIn-leave-active {
+  transition: opacity 0.5s;
+}
+.fadeIn-enter,
+.fadeIn-leave-to {
+  opacity: 0;
+}
+
+
+.input_wrpper {
+    position: relative;
+  }
+//   .input_wrpper .btn {
+//     position: absolute;
+//     right: 0;
+//     top:0;
+//   }

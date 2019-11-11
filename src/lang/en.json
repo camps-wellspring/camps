@@ -20,7 +20,8 @@
     "signout": "Sign Out",
     "password_min": "must be 6 numbers",
     "numeric": "must be numbers",
-    "email": "%{attribute} is not valid Email Address"
+    "email": "%{attribute} is not valid Email Address",
+    "url": " not valid Url"
   },
   "message": {
     "no_results": "No results found.",
@@ -43,7 +44,9 @@
     "yes": "Yes",
     "cancel": "Cancel",
     "submit": "Submit",
-    "close": "Close"
+    "close": "Close",
+    "add": "Add",
+    "got_it": "Got It"
   },
   "heading": {
     "members": "Members",
@@ -96,7 +99,10 @@
     "sub_services": "Sub Services",
     "sub_service_icon": "Sub Service Icon",
     "edit_sub_service": "Edit Sub Service",
-    "create_sub_service": "Create Sub Service"
+    "create_sub_service": "Create Sub Service",
+    "video_url": "Video Url",
+    "main_video": "Video Url",
+    "platforms": "Platforms"
   },
   "title": {
     "edit_service": "Edit Service",

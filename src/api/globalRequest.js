@@ -33,7 +33,7 @@ export const updateData = (reqName, data, id, locale = "en") => {
     url: `api/admin/${reqName}/${id}`,
     method: "post",
     headers: { "X-locale": locale ? locale : cookies.get("language") },
-    data: { ...data, _method: "put" }
+    data
   });
 };
 export function deleteData(reqName, id) {

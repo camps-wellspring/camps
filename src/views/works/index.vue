@@ -4,9 +4,9 @@
       <v-toolbar-title>{{ $t("heading.works") }}</v-toolbar-title>
       <v-divider class="mx-2" inset vertical></v-divider>
       <v-spacer></v-spacer>
-      <v-btn color="primary" @click="$router.push({ name: 'create_work' })">
-        {{ $t("button.create") }}
-      </v-btn>
+      <v-btn color="primary" @click="$router.push({ name: 'create_work' })">{{
+        $t("button.create")
+      }}</v-btn>
     </v-toolbar>
     <!-- table -->
     <v-data-table
@@ -16,9 +16,8 @@
       :items-per-page="20"
       :loading="tableLoading"
     >
-      <!-- expand column -->
-      <template v-slot:item="{ item, isExpanded, expand }">
-        <tr @click="expand((isExpanded = !isExpanded))">
+      <template v-slot:item="{ item, index }">
+        <tr>
           <td>
             <v-avatar size="50">
               <v-img
@@ -41,42 +40,33 @@
           <td>{{ item.priority }}</td>
           <td>{{ item.description | truncate }}</td>
           <td>
-            <v-icon medium title="edit" @click="handleEdit(item, index)">
-              mdi-pencil</v-icon
+            <v-icon medium title="edit" @click="handleEdit(item, index)"
+              >mdi-pencil</v-icon
             >
-            <v-icon medium title="delete" @click="handleDelete(item, index)">
-              mdi-delete</v-icon
+            <v-icon medium title="delete" @click="handleDelete(item, index)"
+              >mdi-delete</v-icon
             >
           </td>
         </tr>
       </template>
-
-      <!-- expand item/row -->
-      <template v-slot:expanded-item="{ headers, item }">
-        <v-simple-table>
-          <template v-slot:default>
-            <thead>
-              <tr>
-                <th class="text-left">Name</th>
-                <th class="text-left">Calories</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{{ item }}</td>
-              </tr>
-            </tbody>
-          </template>
-        </v-simple-table>
-      </template>
     </v-data-table>
     <!-- table -->
+    <div class="text-xs-center mt-4">
+      <v-pagination
+        v-if="items.length > 0 && pagination.last_page > 1"
+        v-model="pagination.current_page"
+        :length="pagination.last_page"
+        :total-visible="10"
+        @input="handlePagination"
+      ></v-pagination>
+    </div>
   </main>
 </template>
 
 <script>
 import TableHeaders from "@/helpers/TableHeaders";
 import { IndexData, DeleteData } from "@/helpers/apiMethods";
+import { isEqual } from "lodash";
 export default {
   name: "Works",
   data() {
@@ -86,22 +76,42 @@ export default {
       expanded: [],
       pagination: {},
       singleExpand: false,
-      tableLoading: true
+      tableLoading: true,
+      queries: {}
     };
   },
   mounted() {
     this.createTableHeaders();
-    this.handleGetWorks();
   },
   methods: {
-    handleEdit() {},
-    handleDelete() {},
+    handlePagination(page) {
+      this.queries = { ...this.queries, page };
+      if (!isEqual(this.queries, this.$route.query)) {
+        this.$router.push({ query: this.queries });
+      }
+    },
+    handleEdit({ slug }, index) {
+      console.log(index);
+      this.$router.push({ name: "edit_work", params: { slug } });
+    },
+    handleDelete({ slug }, index) {
+      this.popUp().then(value => {
+        if (!value.dismiss) {
+          DeleteData({ reqName: "works", id: slug })
+            .then(res => {
+              console.log(res);
+              this.$delete(this.items, index);
+            })
+            .catch(err => console.log(err));
+        }
+      });
+    },
     handleExpand(props) {
       props.isExpanded = !props.isExpanded;
       console.log(props);
     },
-    handleGetWorks() {
-      IndexData({ reqName: "works" })
+    handleGetWorks(query) {
+      IndexData({ reqName: "works", query })
         .then(res => {
           const { data, meta } = res.data;
           this.items = data;
@@ -125,6 +135,16 @@ export default {
         "configs"
       ];
       this.headers = TableHeaders(headersList);
+    }
+  },
+  watch: {
+    $route: {
+      handler(route) {
+        const { query } = route;
+        this.queries = query;
+        this.handleGetWorks(query);
+      },
+      immediate: true
     }
   }
 };
