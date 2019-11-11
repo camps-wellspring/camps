@@ -19,7 +19,7 @@
               <read-more
                 class="read-more"
                 :text="item.name"
-                :max-chars="5"
+                :max-chars="20"
                 less-str="read less"
               />
             </td>
