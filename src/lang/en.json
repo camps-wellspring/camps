@@ -64,6 +64,7 @@
     "got_it": "Got It",
     "technologies": "Technologies",
     "edit": "Edit",
+    "services": "Services",
     "sub_services": "Sub Services",
     "works": "Works",
     "platforms": "Platforms",
@@ -84,7 +85,9 @@
     "visible": "Visible",
     "color": "Color",
     "services": "Services",
-    "sub_services": "Sub Services"
+    "sub_services": "Sub Services",
+    "features": "Features",
+    "visibility": "Visibility"
   },
   "label": {
     "hoss": "Hoss",
@@ -110,7 +113,8 @@
     "create_sub_service": "Create Sub Service",
     "video_url": "Video Url",
     "main_video": "Video Url",
-    "platforms": "Platforms"
+    "platforms": "Platforms",
+    "features": "Features"
   },
   "title": {
     "edit_service": "Edit Service",
