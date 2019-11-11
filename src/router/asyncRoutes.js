@@ -73,6 +73,17 @@ export const asyncRouterMap = [
           title: "work_list",
           icon: "mdi-account-circle"
         }
+      },
+      {
+        path: "edit/:slug",
+        component: () => import("@/views/works/action"),
+        name: "edit_work",
+        hidden: true,
+
+        meta: {
+          title: "work_list",
+          icon: "mdi-account-circle"
+        }
       }
     ]
   },
