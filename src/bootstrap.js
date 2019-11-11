@@ -16,6 +16,7 @@ import ToggleService from "@/components/ToggleService";
 import { SweetAlert } from "@/helpers/mixins/SweetAlert.js";
 import VueSweetalert2 from "vue-sweetalert2";
 import NoData from "@/components/NoData";
+import ReadMore from "vue-read-more";
 
 import { messages } from "@/lang";
 
@@ -32,6 +33,7 @@ Vue.use(vuelidateErrorExtractor, {
   messages,
   i18n: "validation"
 });
+Vue.use(ReadMore);
 
 // Mixins -----------------------------------------------
 Vue.mixin(SweetAlert);

@@ -73,6 +73,17 @@ export const asyncRouterMap = [
           title: "work_list",
           icon: "mdi-account-circle"
         }
+      },
+      {
+        path: "edit/:slug",
+        component: () => import("@/views/works/action"),
+        name: "edit_work",
+        hidden: true,
+
+        meta: {
+          title: "work_list",
+          icon: "mdi-account-circle"
+        }
       }
     ]
   },
@@ -81,7 +92,7 @@ export const asyncRouterMap = [
     component: Layout,
     // redirect: "/",
     meta: {
-      title: "Technologies",
+      title: "technologies",
       icon: "mdi-account-circle"
     },
     children: [
@@ -103,7 +114,7 @@ export const asyncRouterMap = [
     component: Layout,
     // redirect: "/",
     meta: {
-      title: "Platforms",
+      title: "platforms",
       icon: "mdi-account-circle"
     },
     children: [
@@ -115,6 +126,37 @@ export const asyncRouterMap = [
 
         meta: {
           title: "platforms_list",
+          icon: "mdi-account-circle"
+        }
+      }
+    ]
+  },
+  {
+    path: "/store",
+    component: Layout,
+    // redirect: "/",
+    meta: {
+      title: "store",
+      icon: "mdi-account-circle"
+    },
+    children: [
+      {
+        path: "categories",
+        component: () => import("@/views/store/categories"),
+        name: "StoreCategories",
+        // hidden: true,
+        meta: {
+          title: "store_categories",
+          icon: "mdi-account-circle"
+        }
+      },
+      {
+        path: "projects",
+        component: () => import("@/views/store/projects"),
+        name: "StoreProjects",
+        // hidden: true,
+        meta: {
+          title: "store_projects",
           icon: "mdi-account-circle"
         }
       }
