@@ -86,7 +86,7 @@
       <!-- Table -->
     </v-card-text>
 
-    <v-divider></v-divider>
+    <v-divider class="mx-5"></v-divider>
     <v-card-actions class="py-4 mx-2">
       <v-spacer></v-spacer>
       <v-btn color="secondary" large @click="closeFeatures">{{
