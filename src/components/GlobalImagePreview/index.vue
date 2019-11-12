@@ -12,7 +12,11 @@
         @click="closePreview"
         :title="$t('label.close')"
       ></i> -->
-      <v-icon class="img-preview-close" @click="closePreview" :title="$t('label.close')">
+      <v-icon
+        class="img-preview-close"
+        @click="closePreview"
+        :title="$t('label.close')"
+      >
         mdi-close
       </v-icon>
       <!-- <span class="img-preview-close" @click="closePreview">{{
@@ -20,7 +24,7 @@
       }}</span> -->
 
       <div class="img-preview-container">
-        <img class="img-preview-img" :src="imagePath" />
+        <img class="img-preview-img" fluid :src="imagePath" />
       </div>
     </section>
   </v-dialog>

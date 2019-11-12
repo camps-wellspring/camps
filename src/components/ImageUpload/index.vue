@@ -6,11 +6,18 @@
         :max-height="maxHeight"
         :min-height="minHeight"
         :error-messages="
-          $store.getters.getServerErrors ? $store.getters.getServerErrors['main_image'] : ''
+          $store.getters.getServerErrors
+            ? $store.getters.getServerErrors['main_image']
+            : ''
         "
       />
       <!-- <v-img :src="ImageUrl || ''" max-height="300" /> -->
-      <input type="file" ref="file" @change="onFileChange" style="display:none" />
+      <input
+        type="file"
+        ref="file"
+        @change="onFileChange"
+        style="display:none"
+      />
       <div class="text-xs-center mt-3 mb-3">
         <v-btn small @click="$refs.file.click()">
           <span class="mx-2"> {{ $t("buttons.choose") }}</span>

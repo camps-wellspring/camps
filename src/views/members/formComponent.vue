@@ -77,7 +77,9 @@
               :loading="btnLoading"
               >{{ $t("button.save") }}</v-btn
             >
-            <v-btn class="warning mx-2" v-on="$listeners">{{ $t("button.close") }}</v-btn>
+            <v-btn class="warning mx-2" v-on="$listeners">{{
+              $t("button.close")
+            }}</v-btn>
           </v-col>
         </v-row>
       </form>
@@ -86,8 +88,18 @@
 </template>
 
 <script>
-import { required, minLength, maxLength, numeric } from "vuelidate/lib/validators";
-import { StoreData, UpdateData, ShowData, UpdateMedia } from "@/helpers/apiMethods";
+import {
+  required,
+  minLength,
+  maxLength,
+  numeric
+} from "vuelidate/lib/validators";
+import {
+  StoreData,
+  UpdateData,
+  ShowData,
+  UpdateMedia
+} from "@/helpers/apiMethods";
 import Cookies from "js-cookie";
 
 export default {
