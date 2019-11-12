@@ -70,9 +70,12 @@
             <v-btn
               :title="$t('label.features')"
               @click="handleFeatures(item)"
-              color="primary"
+              :color="item.features.length > 0 ? 'primary' : 'red'"
+              icon
+              fab
+              small
             >
-              <v-icon class="edit">mdi-plus</v-icon>
+              <v-icon class="edit">mdi-star-circle-outline</v-icon>
             </v-btn>
           </td>
           <td>
@@ -80,9 +83,12 @@
               :title="$t('label.sub_services')"
               @click="handleSubs(item)"
               :color="item.sub_services.length > 0 ? 'primary' : 'red'"
-              dark
+              icon
+              fab
+              small
+              outlined
             >
-              <v-icon class="edit">mdi-plus</v-icon>
+              <v-icon class="edit">mdi-file-tree</v-icon>
             </v-btn>
           </td>
           <td>

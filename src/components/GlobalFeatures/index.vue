@@ -70,7 +70,7 @@
                 small
                 :title="$t('label.edit')"
                 @click="handleEdit(item)"
-                >mdi-mouse</v-icon
+                >mdi-pencil</v-icon
               >
               <v-icon
                 class="delete"
