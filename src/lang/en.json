@@ -3,14 +3,13 @@
     "login": "Login"
   },
   "route": {
-    "services_list": "Services",
+    "services": "Services",
     "store": "Store",
-    "store_categories": "Store Categories",
-    "store_projects": "Store Projects",
-    "platforms_list": "Platforms",
+    "categories": "Categories",
+    "projects": "Projects",
     "platforms": "Platforms",
-    "technologies_list": "Technologies",
-    "technologies": "Technologies"
+    "technologies": "Technologies",
+    "demo_types": "Demo Types"
   },
   "fields": {
     "password": "Password",
@@ -69,7 +68,8 @@
     "sub_services": "Sub Services",
     "works": "Works",
     "platforms": "Platforms",
-    "store-categories": "Store Categories"
+    "store-categories": "Store Categories",
+    "demo_types":"Demo Types"
   },
   "table": {
     "name": "Name",
@@ -88,7 +88,8 @@
     "services": "Services",
     "sub_services": "Sub Services",
     "features": "Features",
-    "visibility": "Visibility"
+    "visibility": "Visibility",
+    "template": "Template"
   },
   "label": {
     "hoss": "Hoss",

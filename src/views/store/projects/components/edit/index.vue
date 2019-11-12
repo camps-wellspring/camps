@@ -23,24 +23,31 @@
           <v-col cols="12" md="6">
             <new-image-upload
               class="file-upload__image"
-              :imgUrl="curItem.icon ? curItem.icon.path : ''"
+              :imgUrl="curItem.icon.path"
               @fileSelected="handleImg"
             />
           </v-col>
 
           <v-col cols="12" md="6">
-            <form-group name="url">
-              <template slot-scope="{ attrs }">
-                <v-text-field
-                  v-bind="attrs"
-                  :value="form && form.url ? form.url : curItem.url"
-                  outlined
-                  :label="$t('label.url')"
-                  @blur="$v.form.url.$touch()"
-                  @input="form.url = $event"
-                ></v-text-field>
-              </template>
-            </form-group>
+            <div class="d-flex align-center">
+              <span class="color-label">Color: </span>
+              <v-menu
+                bottom
+                origin="center center"
+                transition="scale-transition"
+                :close-on-content-click="false"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-btn class="color-button" x-large depressed :color="currColor" v-on="on" />
+                </template>
+                <v-color-picker
+                  :value="currColor"
+                  @update:color="form.color = $event.hex"
+                  mode="hexa"
+                  hide-mode-switch
+                />
+              </v-menu>
+            </div>
           </v-col>
 
           <v-col cols="12">
@@ -59,7 +66,7 @@
 </template>
 
 <script>
-import { url, minLength, maxLength } from "vuelidate/lib/validators";
+import { minLength, maxLength } from "vuelidate/lib/validators";
 import { UpdateData, UpdateMedia, ShowData } from "@/helpers/apiMethods";
 
 export default {
@@ -72,7 +79,9 @@ export default {
 
   data() {
     return {
-      form: {},
+      form: {
+        color: null
+      },
       icon: null,
       locale: "",
       loading: {
@@ -83,6 +92,9 @@ export default {
   },
 
   computed: {
+    currColor() {
+      return this.form.color ? this.form.color : this.curItem.color;
+    },
     curLocale() {
       return this.locale ? this.locale : this.$store.getters.locale;
     }
@@ -94,9 +106,6 @@ export default {
         name: {
           minLength: minLength(3),
           maxLength: maxLength(20)
-        },
-        url: {
-          url
         }
       }
     };
@@ -112,15 +121,14 @@ export default {
       let payload = {};
       for (const el in this.form) {
         this.form[el] && (payload[el] = this.form[el]);
-        console.log("TCL: submit -> this.form[el]", this.form[el]);
       }
       payload.locale = this.curLocale;
       payload._method = "put";
 
       UpdateData({
-        reqName: "technologies",
+        reqName: "store-categories",
         data: payload,
-        id: this.curItem.id
+        id: this.curItem.slug
       })
         .then(() => {
           this.loading.submit = false;
@@ -149,17 +157,19 @@ export default {
 
     handleLocaleChange(locale) {
       this.loading.fetch = true;
-      ShowData({ reqName: "technologies", id: this.curItem.id, locale })
+      ShowData({ reqName: "store-categories", id: this.curItem.id, locale })
         .then(res => {
           this.locale = locale;
-          this.form = res.data.technology;
+          this.form = res.data.store_category;
           this.loading.fetch = false;
         })
         .catch(() => (this.loading.fetch = false));
     },
 
     reset() {
-      this.form = {};
+      this.form = {
+        color: null
+      };
       this.icon = null;
       this.locale = this.$store.getters.locale;
     }
