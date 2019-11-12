@@ -103,7 +103,7 @@ export const asyncRouterMap = [
         // hidden: true,
 
         meta: {
-          title: "technologies_list",
+          title: "technologies",
           icon: "mdi-account-circle"
         }
       }
@@ -125,7 +125,29 @@ export const asyncRouterMap = [
         // hidden: true,
 
         meta: {
-          title: "platforms_list",
+          title: "platforms",
+          icon: "mdi-account-circle"
+        }
+      }
+    ]
+  },
+  {
+    path: "/demo-types",
+    component: Layout,
+    // redirect: "/",
+    meta: {
+      title: "demo_types",
+      icon: "mdi-account-circle"
+    },
+    children: [
+      {
+        path: "list",
+        component: () => import("@/views/demo-types"),
+        name: "DemoTypes",
+        // hidden: true,
+
+        meta: {
+          title: "demo_types",
           icon: "mdi-account-circle"
         }
       }
@@ -143,20 +165,20 @@ export const asyncRouterMap = [
       {
         path: "categories",
         component: () => import("@/views/store/categories"),
-        name: "StoreCategories",
+        name: "Categories",
         // hidden: true,
         meta: {
-          title: "store_categories",
+          title: "categories",
           icon: "mdi-account-circle"
         }
       },
       {
         path: "projects",
         component: () => import("@/views/store/projects"),
-        name: "StoreProjects",
+        name: "Projects",
         // hidden: true,
         meta: {
-          title: "store_projects",
+          title: "projects",
           icon: "mdi-account-circle"
         }
       }
@@ -177,7 +199,7 @@ export const asyncRouterMap = [
         name: "ServicesList",
 
         meta: {
-          title: "services_list",
+          title: "services",
           icon: "mdi-account-circle"
         }
       },
@@ -192,6 +214,27 @@ export const asyncRouterMap = [
         component: () => import("@/views/services/subServices/index"),
         name: "SubServices",
         hidden: true
+      }
+    ]
+  },
+  {
+    path: "/extra-services",
+    component: Layout,
+    redirect: "/extra-services/list",
+    meta: {
+      title: "extra_services",
+      icon: "mdi-account-circle"
+    },
+    children: [
+      {
+        path: "list",
+        component: () => import("@/views/extraServices/index"),
+        name: "ExtraServicesList",
+
+        meta: {
+          title: "extra_services_list",
+          icon: "mdi-account-circle"
+        }
       }
     ]
   },

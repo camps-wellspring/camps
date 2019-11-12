@@ -23,24 +23,9 @@
           <v-col cols="12" md="6">
             <new-image-upload
               class="file-upload__image"
-              :imgUrl="curItem.icon ? curItem.icon.path : ''"
+              :imgUrl="curItem.template ? curItem.template.path : ''"
               @fileSelected="handleImg"
             />
-          </v-col>
-
-          <v-col cols="12" md="6">
-            <form-group name="url">
-              <template slot-scope="{ attrs }">
-                <v-text-field
-                  v-bind="attrs"
-                  :value="form && form.url ? form.url : curItem.url"
-                  outlined
-                  :label="$t('label.url')"
-                  @blur="$v.form.url.$touch()"
-                  @input="form.url = $event"
-                ></v-text-field>
-              </template>
-            </form-group>
           </v-col>
 
           <v-col cols="12">
@@ -59,7 +44,7 @@
 </template>
 
 <script>
-import { url, minLength, maxLength } from "vuelidate/lib/validators";
+import { minLength, maxLength } from "vuelidate/lib/validators";
 import { UpdateData, UpdateMedia, ShowData } from "@/helpers/apiMethods";
 
 export default {
@@ -73,7 +58,7 @@ export default {
   data() {
     return {
       form: {},
-      icon: null,
+      template: null,
       locale: "",
       loading: {
         submit: false,
@@ -93,10 +78,7 @@ export default {
       form: {
         name: {
           minLength: minLength(3),
-          maxLength: maxLength(20)
-        },
-        url: {
-          url
+          maxLength: maxLength(40)
         }
       }
     };
@@ -104,7 +86,7 @@ export default {
 
   methods: {
     handleImg(img) {
-      this.icon = img.file;
+      this.template = img.file;
     },
 
     submit() {
@@ -112,32 +94,31 @@ export default {
       let payload = {};
       for (const el in this.form) {
         this.form[el] && (payload[el] = this.form[el]);
-        console.log("TCL: submit -> this.form[el]", this.form[el]);
       }
       payload.locale = this.curLocale;
       payload._method = "put";
 
       UpdateData({
-        reqName: "technologies",
+        reqName: "demo-types",
         data: payload,
         id: this.curItem.id
       })
         .then(() => {
           this.loading.submit = false;
-          if (!this.icon) {
+          if (!this.template) {
             this.reset();
             this.$emit("closed");
           }
         })
         .catch(() => (this.loading.submit = false));
 
-      if (this.icon) {
+      if (this.template) {
         this.loading.submit = true;
         let payload = new FormData();
-        payload.append("file", this.icon);
+        payload.append("file", this.template);
         payload.append("_method", "put");
         payload.append("locale", this.curLocale);
-        UpdateMedia({ id: this.curItem.icon.id, data: payload })
+        UpdateMedia({ id: this.curItem.template.id, data: payload })
           .then(() => {
             this.reset();
             this.$emit("closed");
@@ -149,10 +130,10 @@ export default {
 
     handleLocaleChange(locale) {
       this.loading.fetch = true;
-      ShowData({ reqName: "technologies", id: this.curItem.id, locale })
+      ShowData({ reqName: "demo-types", id: this.curItem.id, locale })
         .then(res => {
           this.locale = locale;
-          this.form = res.data.technology;
+          this.form = res.data.demo_types;
           this.loading.fetch = false;
         })
         .catch(() => (this.loading.fetch = false));
@@ -160,7 +141,7 @@ export default {
 
     reset() {
       this.form = {};
-      this.icon = null;
+      this.template = null;
       this.locale = this.$store.getters.locale;
     }
   }
