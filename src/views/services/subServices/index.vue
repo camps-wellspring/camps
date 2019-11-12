@@ -37,7 +37,23 @@
           </td>
           <td>{{ item.name }}</td>
           <td :title="item.short_description">
-            {{ item.short_description | truncate }}
+            <!-- {{ item.short_description | truncate }} -->
+            <read-more
+              class="read-more"
+              :text="item.short_description"
+              :max-chars="20"
+              less-str="read less"
+            />
+          </td>
+          <td class="toggle-adjust">
+            <toggle-service
+              :is-edit="true"
+              model-name="sub_service"
+              :model-id="item.id"
+              field="visible"
+              v-model="item.visible"
+              :validate="true"
+            />
           </td>
           <td>
             <v-icon
@@ -228,7 +244,13 @@ export default {
   },
   methods: {
     createTableHeaders() {
-      const headersList = ["icon", "name", "description", "actions"];
+      const headersList = [
+        "icon",
+        "name",
+        "description",
+        "visibility",
+        "actions"
+      ];
       this.headers = TableHeaders(headersList);
     },
     getSubServices() {

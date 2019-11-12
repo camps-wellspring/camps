@@ -12,7 +12,7 @@ export const SweetAlert = {
 
         showCancelButton: !singleButton,
         showConfirmButton: true,
-        confirmButtonText: `${this.$t("button.yes")}`,
+        confirmButtonText: `${this.$t("button.ok")}`,
         cancelButtonText: `${this.$t("button.cancel")}`
       });
       return swal;

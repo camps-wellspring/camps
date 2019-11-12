@@ -47,8 +47,15 @@
           </td>
           <td>{{ item.name }}</td>
           <td :title="item.short_description">
-            {{ item.short_description | truncate }}
+            <!-- {{ item.short_description | truncate }} -->
+            <read-more
+              class="read-more"
+              :text="item.short_description"
+              :max-chars="20"
+              less-str="read less"
+            />
           </td>
+          <td>{{ item.priority }}</td>
           <td class="toggle-adjust">
             <toggle-service
               :is-edit="true"
@@ -72,7 +79,8 @@
             <v-btn
               :title="$t('label.sub_services')"
               @click="handleSubs(item)"
-              color="primary"
+              :color="item.sub_services.length > 0 ? 'primary' : 'red'"
+              dark
             >
               <v-icon class="edit">mdi-plus</v-icon>
             </v-btn>
@@ -184,6 +192,7 @@ export default {
         "image",
         "name",
         "description",
+        "priority",
         "visibility",
         "features",
         "sub_services",
