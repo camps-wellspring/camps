@@ -241,10 +241,13 @@ export default {
     },
     UpdateService() {
       // Edit serveice
+      let reqData = { ...this.service };
+      delete reqData.main_image;
+
       UpdateData({
         reqName: "services",
         id: this.$route.params.slug,
-        data: { ...this.service, locale: this.locale, _method: "PUT" }
+        data: { ...reqData, locale: this.locale, _method: "PUT" }
       })
         .then(() => {
           this.$router.push({ name: "ServicesList" });
