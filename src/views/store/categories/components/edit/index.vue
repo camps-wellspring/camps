@@ -13,8 +13,10 @@
                   :value="form && form.name ? form.name : curItem.name"
                   outlined
                   :label="$t('label.name')"
-                  @blur="$v.form.name.$touch()"
-                  @input="form.name = $event"
+                  @input="
+                    form.name = $event;
+                    $v.form.name.$touch();
+                  "
                 ></v-text-field>
               </template>
             </form-group>
@@ -79,8 +81,10 @@ export default {
 
   data() {
     return {
+      // TODO assign initial value for validation
       form: {
-        color: null
+        color: null,
+        name: ""
       },
       icon: null,
       locale: "",
@@ -95,7 +99,7 @@ export default {
     currColor() {
       return this.form.color ? this.form.color : this.curItem.color;
     },
-    currLocale() {
+    curLocale() {
       return this.locale ? this.locale : this.$store.getters.locale;
     }
   },
@@ -122,7 +126,7 @@ export default {
       for (const el in this.form) {
         this.form[el] && (payload[el] = this.form[el]);
       }
-      payload.locale = this.currLocale;
+      payload.locale = this.curLocale;
       payload._method = "put";
 
       UpdateData({
@@ -144,7 +148,7 @@ export default {
         let payload = new FormData();
         payload.append("file", this.icon);
         payload.append("_method", "put");
-        payload.append("locale", this.currLocale);
+        payload.append("locale", this.curLocale);
         UpdateMedia({ id: this.curItem.icon.id, data: payload })
           .then(() => {
             this.reset();
@@ -157,7 +161,7 @@ export default {
 
     handleLocaleChange(locale) {
       this.loading.fetch = true;
-      ShowData({ reqName: "store-categories", id: this.curItem.id, locale })
+      ShowData({ reqName: "store-categories", id: this.curItem.slug, locale })
         .then(res => {
           this.locale = locale;
           this.form = res.data.store_category;
