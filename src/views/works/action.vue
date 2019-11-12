@@ -7,7 +7,7 @@
     <v-container>
       <form-wrapper :validator="$v.form">
         <form @submit.prevent="handleSubmit">
-          <v-card class="pa-0" flat>
+          <v-card class="pa-0">
             <v-card-title>main Info</v-card-title>
             <v-divider></v-divider>
             <v-card-text>
@@ -74,7 +74,7 @@
                   <v-subheader>Main Image</v-subheader>
                   <new-image-upload
                     class="file-upload__image"
-                    :imgUrl="form.logo ? form.logo.path : ''"
+                    :imgUrl="form.main_media ? form.main_media.path : ''"
                     :resetToggle="resetImage"
                     @fileSelected="handleSelectMainImage"
                     :maxSize="mainImageSize"
@@ -110,11 +110,11 @@
                           <v-col
                             cols="12"
                             md="6"
-                            v-for="(video, index) in videos"
+                            v-for="(video, index) in form.videos"
                             :key="index"
                             class="video_pointer mb-2"
                           >
-                            <div v-if="videos.length > 0">
+                            <div v-if="form.videos.length > 0">
                               <iframe
                                 class="ml-2"
                                 width="100%"
@@ -125,7 +125,7 @@
                                 allowfullscreen
                               ></iframe>
                               <v-icon
-                                @click="deleteVideo(index)"
+                                @click="deleteVideo(video, index)"
                                 class="close_icon"
                                 medium
                                 color="#fff"
@@ -239,10 +239,22 @@
 </template>
 
 <script>
-import { required, minLength, maxLength, numeric, url, requiredIf } from "vuelidate/lib/validators";
+import {
+  required,
+  minLength,
+  maxLength,
+  numeric,
+  url,
+  requiredIf
+} from "vuelidate/lib/validators";
 import TableHeaders from "@/helpers/TableHeaders";
-import { IndexData, StoreData, ShowData, UpdateData } from "../../helpers/apiMethods";
-
+import {
+  IndexData,
+  StoreData,
+  ShowData,
+  UpdateData
+} from "../../helpers/apiMethods";
+import { deleteMedia } from "@/api/media";
 export default {
   name: "CreateAndEdit",
   data() {
@@ -253,22 +265,26 @@ export default {
         priority: "",
         logo: "",
         video: "",
-        media: [],
+        photos: [],
         platforms_ids: "",
-        work_url: ""
+        work_url: "",
+        main_media: "",
+        videos: []
       },
-      videos: [],
-      media: [],
+      updatedVideos: [],
+      mediaPhotos: [],
       items: [],
       myPlatforms: [],
       headers: [],
       logoSize: 1.24,
-      mainImageSize: 2,
+      mainImageSize: 2.48,
       photosMaxSize: 1.24,
       resetImage: false,
       btnLoading: false,
       selectLoading: true,
-      logoChange: false
+      logoChange: false,
+      mainMediaChanged: false,
+      multiImageChanged: false
     };
   },
   mounted() {
@@ -277,16 +293,30 @@ export default {
     this.showWorkData();
   },
   methods: {
-    deleteVideo(index) {
-      this.videos.splice(index, 1);
+    deleteVideo(video, index) {
+      if (this.updatedVideos[index]) {
+        if (this.updatedVideos[index].path === video) {
+          // there is video id
+          const { id } = this.updatedVideos[index];
+          this.popUp().then(value => {
+            if (!value.dismiss) {
+              deleteMedia(id).then(() => {
+                this.form.videos.splice(index, 1);
+              });
+            }
+          });
+        }
+      } else {
+        this.form.videos.splice(index, 1);
+      }
     },
     addVedios() {
       //   this.updatedData.vedios.push(this.form.vedio);
       if (this.form.vedio !== "") {
-        if (this.videos.includes(this.form.video)) {
+        if (this.form.videos.includes(this.form.video)) {
           return;
         }
-        this.videos.push(this.form.video);
+        this.form.videos.push(this.form.video);
         this.form.video = "";
         this.$v.form.$reset();
       }
@@ -305,21 +335,39 @@ export default {
         ShowData({ reqName: "works", id: slug })
           .then(res => {
             const { work } = res.data;
-            const { name, priority, description, main_video, logo, media, platforms } = work;
-            this.form = {
+            const {
               name,
-              priority,
               description,
               logo,
-              media: [],
-              main_video: main_video.path,
+              media,
+              platforms,
+              main_media,
+              priority
+            } = work;
+            this.form = {
+              name,
+              description,
+              logo,
+              main_media,
+              priority,
+              video: "",
               platforms_ids: "",
-              work_url: ""
+              work_url: "",
+              videos: []
             };
-
-            this.media = media;
             this.myPlatforms = platforms;
-            console.log(work, "show");
+
+            media.map(el => {
+              if (el.type === "photo") {
+                this.mediaPhotos.push(el);
+              } else {
+                if (this.form.videos.includes(el.path)) {
+                  return;
+                }
+                this.updatedVideos.push(el);
+                this.form.videos.push(el.path);
+              }
+            });
           })
           .catch(err => console.log(err));
       }
@@ -329,11 +377,15 @@ export default {
       this.form = {};
     },
     handleValidPlatforms() {
-      return this.$v.form.platforms_ids.$invalid || this.$v.form.work_url.$invalid;
+      return (
+        this.$v.form.platforms_ids.$invalid || this.$v.form.work_url.$invalid
+      );
     },
     handleAddPlatforms() {
       const { work_url, platforms_ids } = this.form;
-      const platFormObject = this.items.filter(el => el.id === platforms_ids)[0];
+      const platFormObject = this.items.filter(
+        el => el.id === platforms_ids
+      )[0];
       platFormObject.url = work_url;
 
       if (work_url !== "" && platforms_ids !== "") {
@@ -368,13 +420,13 @@ export default {
       this.form.media.splice(index, 1);
     },
     getPhotos() {
-      if (this.media) {
-        return this.media;
+      if (this.mediaPhotos) {
+        return this.mediaPhotos;
       }
     },
     setPhotos(photo) {
-      console.log(photo);
-      this.form.media = photo;
+      this.form.photos = photo;
+      this.multiImageChanged = true;
     },
     handleSubmit() {
       this.btnLoading = true;
@@ -390,7 +442,8 @@ export default {
       this.$v.form[name].$touch();
     },
     handleSelectMainImage(photo) {
-      this.form.main_image = photo.file;
+      this.form.main_media = photo.file;
+      this.mainMediaChanged = true;
     },
     handleselectLogo(photo) {
       this.form.logo = photo.file;
@@ -398,17 +451,29 @@ export default {
     },
     buildData() {
       const formData = new FormData();
-      const { name, description, main_video, media, priority, logo } = this.form;
+      const {
+        name,
+        description,
+        main_media,
+        photos,
+        priority,
+        logo,
+        videos
+      } = this.form;
+
+      this.mainMediaChanged && formData.append("main_media", main_media);
       formData.append("name", name);
       description && formData.append("description", description);
-      formData.append("main_video", main_video);
       formData.append("priority", priority);
       this.logoChange && formData.append("logo", logo);
-      media.length && media.map(el => formData.append("media[]", el));
+
+      this.multiImageChanged &&
+        photos.map(el => formData.append("photos[]", el));
+      videos.length && videos.map(el => formData.append("videos[]", el));
       this.myPlatforms.length &&
-        this.myPlatforms.map(el => {
-          formData.append("platforms.id", el.id);
-          formData.append("platforms.url", el.url);
+        this.myPlatforms.map((el, index) => {
+          formData.append(`platforms[${index}][id]`, el.id);
+          formData.append(`platforms[${index}][url]`, el.url);
         });
       formData.append("visible", true);
       formData.append("locale", "en");
@@ -420,11 +485,11 @@ export default {
       StoreData({ reqName: "works", data: formData })
         .then(res => {
           console.log(res);
+          this.$router.go(-1);
         })
         .catch(err => console.log(err))
         .finally(() => {
           this.btnLoading = false;
-          this.$router.go(-1);
         });
     },
     updateWork() {
@@ -463,7 +528,6 @@ export default {
           required
         },
         video: {
-          required,
           url
         },
         platforms_ids: {
