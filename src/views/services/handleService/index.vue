@@ -223,8 +223,12 @@ export default {
         data: formData
       })
         .then(() => {
-          this.$router.push({ name: "ServicesList" });
-          this.loading.save = false;
+          this.popUp(this.$t("message.services_should_have_subs"), "info", true).then(value => {
+            if (!value.dismiss) {
+              this.$router.push({ name: "ServicesList" });
+              this.loading.save = false;
+            }
+          });
         })
         .catch(err => {
           console.log(err);
@@ -233,10 +237,13 @@ export default {
     },
     UpdateService() {
       // Edit serveice
+      let reqData = { ...this.service };
+      delete reqData.main_image;
+
       UpdateData({
         reqName: "services",
         id: this.$route.params.slug,
-        data: { ...this.service, locale: this.locale }
+        data: { ...reqData, locale: this.locale, _method: "PUT" }
       })
         .then(() => {
           this.$router.push({ name: "ServicesList" });

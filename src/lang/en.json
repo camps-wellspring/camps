@@ -33,7 +33,8 @@
   "message": {
     "no_results": "No results found.",
     "delete": "Are you sure that you want to delete this item?",
-    "warning": "Are You Sure?"
+    "warning": "Are You Sure?",
+    "services_should_have_subs": "Main Service must have at least a Sub Service to be shown in User Area."
   },
   "labels": {
     "hoss": "Hoss",
@@ -64,6 +65,7 @@
     "got_it": "Got It",
     "technologies": "Technologies",
     "edit": "Edit",
+    "services": "Services",
     "sub_services": "Sub Services",
     "works": "Works",
     "platforms": "Platforms",
@@ -84,7 +86,9 @@
     "visible": "Visible",
     "color": "Color",
     "services": "Services",
-    "sub_services": "Sub Services"
+    "sub_services": "Sub Services",
+    "features": "Features",
+    "visibility": "Visibility"
   },
   "label": {
     "hoss": "Hoss",
@@ -110,7 +114,8 @@
     "create_sub_service": "Create Sub Service",
     "video_url": "Video Url",
     "main_video": "Video Url",
-    "platforms": "Platforms"
+    "platforms": "Platforms",
+    "features": "Features"
   },
   "title": {
     "edit_service": "Edit Service",

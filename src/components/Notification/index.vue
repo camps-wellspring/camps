@@ -7,9 +7,7 @@
     :color="snackbar.color"
   >
     <span class="snack"> {{ snackbar.text }}</span>
-    <v-btn text dark right @click="closeNotification">{{
-      $t("button.close")
-    }}</v-btn>
+    <v-btn text dark right @click="closeNotification">{{ $t("button.close") }}</v-btn>
   </v-snackbar>
 </template>
 

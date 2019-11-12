@@ -10,11 +10,7 @@
               </v-toolbar>
               <v-card-text>
                 <v-form>
-                  <form-group
-                    name="email"
-                    :validator="$v.email"
-                    attribute="fields.email"
-                  >
+                  <form-group name="email" :validator="$v.email" attribute="fields.email">
                     <template slot-scope="{ attrs }">
                       <v-text-field
                         v-bind="attrs"
@@ -26,11 +22,7 @@
                     </template>
                   </form-group>
 
-                  <form-group
-                    name="password"
-                    :validator="$v.password"
-                    attribute="fields.password"
-                  >
+                  <form-group name="password" :validator="$v.password" attribute="fields.password">
                     <template slot-scope="{ attrs }">
                       <v-text-field
                         v-bind="attrs"
@@ -45,9 +37,7 @@
               </v-card-text>
               <v-card-actions>
                 <div class="flex-grow-1"></div>
-                <v-btn color="primary" @click="handleLogin">
-                  {{ $t("form_box.login") }}</v-btn
-                >
+                <v-btn color="primary" @click="handleLogin"> {{ $t("form_box.login") }}</v-btn>
               </v-card-actions>
             </v-card>
           </v-col>

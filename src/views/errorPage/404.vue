@@ -6,9 +6,7 @@
           <h1>404</h1>
           <h2 class="my-3 headline ">{{ $t("messages.404") }}</h2>
           <div>
-            <v-btn color="primary" @click="goHome">{{
-              $t("buttons.go_home")
-            }}</v-btn>
+            <v-btn color="primary" @click="goHome">{{ $t("buttons.go_home") }}</v-btn>
           </div>
         </div>
       </v-layout>

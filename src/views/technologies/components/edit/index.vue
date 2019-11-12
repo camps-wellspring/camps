@@ -23,7 +23,7 @@
           <v-col cols="12" md="6">
             <new-image-upload
               class="file-upload__image"
-              :imgUrl="curItem.icon.path"
+              :imgUrl="curItem.icon ? curItem.icon.path : ''"
               @fileSelected="handleImg"
             />
           </v-col>
@@ -115,6 +115,8 @@ export default {
         console.log("TCL: submit -> this.form[el]", this.form[el]);
       }
       payload.locale = this.currLocale;
+      payload._method = "put";
+
       UpdateData({
         reqName: "technologies",
         data: payload,

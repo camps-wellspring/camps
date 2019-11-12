@@ -1,10 +1,6 @@
 export const SweetAlert = {
   methods: {
-    popUp(
-      title = this.$t("message.warning"),
-      type = "warning",
-      singleButton = false
-    ) {
+    popUp(title = this.$t("message.warning"), type = "warning", singleButton = false) {
       const swal = this.$swal.fire({
         title,
         type,
@@ -12,7 +8,7 @@ export const SweetAlert = {
 
         showCancelButton: !singleButton,
         showConfirmButton: true,
-        confirmButtonText: `${this.$t("button.yes")}`,
+        confirmButtonText: `${this.$t("button.ok")}`,
         cancelButtonText: `${this.$t("button.cancel")}`
       });
       return swal;

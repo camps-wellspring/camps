@@ -1,17 +1,18 @@
 <template>
   <!-- Image Preview -->
-  <v-dialog v-model="showDialog" max-width="500" @click:outside="closePreview">
+  <v-dialog
+    v-model="showDialog"
+    max-width="500"
+    @click:outside="closePreview"
+    @keydown.esc="closePreview"
+  >
     <section class="img-preview-overlay">
       <!-- <i
         class="icon-close img-preview-close hover-pointer"
         @click="closePreview"
         :title="$t('label.close')"
       ></i> -->
-      <v-icon
-        class="img-preview-close"
-        @click="closePreview"
-        :title="$t('label.close')"
-      >
+      <v-icon class="img-preview-close" @click="closePreview" :title="$t('label.close')">
         mdi-close
       </v-icon>
       <!-- <span class="img-preview-close" @click="closePreview">{{

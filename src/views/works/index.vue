@@ -40,12 +40,8 @@
           <td>{{ item.priority }}</td>
           <td>{{ item.description | truncate }}</td>
           <td>
-            <v-icon medium title="edit" @click="handleEdit(item, index)"
-              >mdi-pencil</v-icon
-            >
-            <v-icon medium title="delete" @click="handleDelete(item, index)"
-              >mdi-delete</v-icon
-            >
+            <v-icon medium title="edit" @click="handleEdit(item, index)">mdi-pencil</v-icon>
+            <v-icon medium title="delete" @click="handleDelete(item, index)">mdi-delete</v-icon>
           </td>
         </tr>
       </template>
@@ -126,14 +122,7 @@ export default {
         });
     },
     createTableHeaders() {
-      const headersList = [
-        "logo",
-        "name",
-        "visible",
-        "priority",
-        "description",
-        "configs"
-      ];
+      const headersList = ["logo", "name", "visible", "priority", "description", "configs"];
       this.headers = TableHeaders(headersList);
     }
   },

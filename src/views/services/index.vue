@@ -11,20 +11,11 @@
         {{ $t("button.create") }}
       </v-btn>
     </v-toolbar> -->
-    <global-toolbar
-      title="services"
-      :actionButton="true"
-      @ButtonClicked="createService"
-    />
+    <global-toolbar title="services" :actionButton="true" @ButtonClicked="createService" />
     <!-- Toolbar -->
 
     <!-- Table -->
-    <v-data-table
-      :headers="headers"
-      :items="services"
-      hide-default-footer
-      :loading="tableLoading"
-    >
+    <v-data-table :headers="headers" :items="services" hide-default-footer :loading="tableLoading">
       <template v-slot:item="{ item, index }">
         <tr>
           <td>
@@ -47,15 +38,48 @@
           </td>
           <td>{{ item.name }}</td>
           <td :title="item.short_description">
-            {{ item.short_description | truncate }}
+            <!-- {{ item.short_description | truncate }} -->
+            <read-more
+              class="read-more"
+              :text="item.short_description"
+              :max-chars="20"
+              less-str="read less"
+            />
+          </td>
+          <td>{{ item.priority }}</td>
+          <td class="toggle-adjust">
+            <toggle-service
+              :is-edit="true"
+              model-name="service"
+              :model-id="item.id"
+              field="visible"
+              v-model="item.visible"
+              :validate="true"
+            />
+          </td>
+          <td>
+            <v-btn
+              :title="$t('label.features')"
+              @click="handleFeatures(item)"
+              :color="item.features.length > 0 ? 'primary' : 'red'"
+              icon
+              fab
+              small
+            >
+              <v-icon class="edit">mdi-star-circle-outline</v-icon>
+            </v-btn>
           </td>
           <td>
             <v-btn
               :title="$t('label.sub_services')"
               @click="handleSubs(item)"
-              color="primary"
+              :color="item.sub_services.length > 0 ? 'primary' : 'red'"
+              icon
+              fab
+              small
+              outlined
             >
-              <v-icon class="edit">mdi-plus</v-icon>
+              <v-icon class="edit">mdi-file-tree</v-icon>
             </v-btn>
           </td>
           <td>
@@ -66,11 +90,7 @@
               @click="handleSubs(item)"
               >mdi-plus</v-icon
             > -->
-            <v-icon
-              class="edit"
-              small
-              :title="$t('label.edit')"
-              @click="handleEdit(item)"
+            <v-icon class="edit" small :title="$t('label.edit')" @click="handleEdit(item)"
               >mdi-pencil</v-icon
             >
             <v-icon
@@ -105,12 +125,23 @@
       @closePreview="imageOverlay = false"
     />
     <!-- Image Preview -->
+
+    <!-- Dialog -->
+    <v-dialog v-model="showFeaturesDialog" max-width="700px">
+      <global-features
+        v-if="showFeaturesDialog"
+        :FeaturedItemId="currentFeaturedItemId"
+        @closeFeatures="closeFeatures"
+      ></global-features>
+    </v-dialog>
+    <!-- Dialog -->
   </main>
 </template>
 
 <script>
 import TableHeaders from "@/helpers/TableHeaders";
 import { IndexData, DeleteData } from "@/helpers/apiMethods";
+import GlobalFeatures from "@/components/GlobalFeatures";
 
 export default {
   name: "services",
@@ -120,6 +151,8 @@ export default {
       headers: [],
       services: [],
       tableLoading: true,
+      showFeaturesDialog: false,
+      currentFeaturedItemId: null,
 
       imageOverlay: false,
       currentPreviewImage: "",
@@ -131,6 +164,9 @@ export default {
   mounted() {
     this.createTableHeaders();
     this.getServices();
+  },
+  components: {
+    GlobalFeatures
   },
   //   watch: {
   //     $route: {
@@ -149,6 +185,9 @@ export default {
         "image",
         "name",
         "description",
+        "priority",
+        "visibility",
+        "features",
         "sub_services",
         "actions"
       ];
@@ -177,6 +216,10 @@ export default {
         this.imageOverlay = true;
       }
     },
+    handleFeatures({ id }) {
+      this.showFeaturesDialog = true;
+      this.currentFeaturedItemId = id;
+    },
     handleSubs({ id }) {
       this.$router.push({ name: "SubServices", params: { id: id } });
     },
@@ -197,6 +240,9 @@ export default {
     handlePagination(value) {
       this.queries.page = value;
       this.$router.push({ query: this.queries });
+    },
+    closeFeatures() {
+      this.showFeaturesDialog = false;
     }
   }
 };

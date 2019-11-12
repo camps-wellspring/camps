@@ -7,21 +7,15 @@
         action-button-text="create"
         @ButtonClicked="initDialog(false)"
       />
-      <v-data-table
-        :headers="headers"
-        :items="items"
-        hide-default-footer
-        :loading="loading.table"
-      >
+      <v-data-table :headers="headers" :items="items" hide-default-footer :loading="loading.table">
         <template v-slot:item="{ item, index }">
           <tr>
-            <td>{{ item.name }}</td>
+            <td>
+              <read-more class="read-more" :text="item.name" :max-chars="20" less-str="read less" />
+            </td>
 
             <td class="table-logo">
-              <v-avatar
-                @click="handleImgPreview(item.icon.path)"
-                class="square"
-              >
+              <v-avatar @click="handleImgPreview(item.icon.path)" class="square">
                 <img :src="item.icon.path" :alt="item.icon.description"
               /></v-avatar>
             </td>
@@ -35,11 +29,7 @@
                 <v-icon medium title="edit">mdi-pencil</v-icon>
               </v-btn>
               <v-btn icon>
-                <v-icon
-                  medium
-                  title="delete"
-                  @click="handleDelete(item.slug, index)"
-                >
+                <v-icon medium title="delete" @click="handleDelete(item.slug, index)">
                   mdi-delete</v-icon
                 >
               </v-btn>

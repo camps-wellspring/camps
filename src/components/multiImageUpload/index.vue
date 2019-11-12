@@ -22,9 +22,7 @@
         <span class="upload_icon">Hoss</span>
       </v-btn>
       <div class="image__placeholder">
-        <span class="file-upload__image__placeholder "
-          >Upload Media Gallery</span
-        >
+        <span class="file-upload__image__placeholder ">Upload Media Gallery</span>
       </div>
     </section>
 

@@ -32,9 +32,7 @@
       >
         <v-list-item slot="activator">
           <v-list-item-content>
-            <v-list-item-title>{{
-              generateTitle(item.meta.title)
-            }}</v-list-item-title>
+            <v-list-item-title>{{ generateTitle(item.meta.title) }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
 
@@ -49,9 +47,7 @@
             </v-list-item-action>
 
             <v-list-item-content>
-              <v-list-item-title
-                v-text="generateTitle(subItem.meta.title)"
-              ></v-list-item-title>
+              <v-list-item-title v-text="generateTitle(subItem.meta.title)"></v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </template>
