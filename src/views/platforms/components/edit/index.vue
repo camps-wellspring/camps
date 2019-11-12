@@ -38,13 +38,7 @@
                 :close-on-content-click="false"
               >
                 <template v-slot:activator="{ on }">
-                  <v-btn
-                    class="color-button"
-                    x-large
-                    depressed
-                    :color="currColor"
-                    v-on="on"
-                  />
+                  <v-btn class="color-button" x-large depressed :color="currColor" v-on="on" />
                 </template>
                 <v-color-picker
                   :value="currColor"
@@ -129,6 +123,7 @@ export default {
         this.form[el] && (payload[el] = this.form[el]);
       }
       payload.locale = this.currLocale;
+      payload._method = "put";
 
       UpdateData({
         reqName: "platforms",

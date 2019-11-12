@@ -18,10 +18,7 @@
           </v-col>
 
           <v-col cols="12" md="6">
-            <new-image-upload
-              class="file-upload__image"
-              @fileSelected="handleImg"
-            />
+            <new-image-upload class="file-upload__image" @fileSelected="handleImg" />
           </v-col>
 
           <v-col cols="12" md="6">
@@ -34,13 +31,7 @@
                 :close-on-content-click="false"
               >
                 <template v-slot:activator="{ on }">
-                  <v-btn
-                    class="color-button"
-                    x-large
-                    depressed
-                    :color="form.color"
-                    v-on="on"
-                  />
+                  <v-btn class="color-button" x-large depressed :color="form.color" v-on="on" />
                 </template>
                 <v-color-picker
                   v-model="form.color"

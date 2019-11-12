@@ -45,9 +45,7 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="primary" :title="$t('labels.hoss')">{{
-          $t("labels.hoss")
-        }}</v-btn>
+        <v-btn color="primary" :title="$t('labels.hoss')">{{ $t("labels.hoss") }}</v-btn>
       </v-card-actions>
     </v-card>
   </main>

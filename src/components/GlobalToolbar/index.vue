@@ -12,11 +12,7 @@
     <v-spacer v-if="actionButton"></v-spacer>
     <v-toolbar-items v-if="actionButton" class="main-header__contents">
       <!-- Action Button Section -->
-      <v-btn
-        class="button btn-height--1 my-auto mx-1"
-        color="primary"
-        @click="fireButtonClick"
-      >
+      <v-btn class="button btn-height--1 my-auto mx-1" color="primary" @click="fireButtonClick">
         <span class="mx-2">{{ $t(`button.${actionButtonText}`) }}</span>
       </v-btn>
       <!-- Form Section -->

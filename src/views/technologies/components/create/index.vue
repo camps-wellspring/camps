@@ -18,10 +18,7 @@
           </v-col>
 
           <v-col cols="12" md="6">
-            <new-image-upload
-              class="file-upload__image"
-              @fileSelected="handleImg"
-            />
+            <new-image-upload class="file-upload__image" @fileSelected="handleImg" />
           </v-col>
 
           <v-col cols="12" md="6">

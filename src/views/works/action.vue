@@ -239,21 +239,9 @@
 </template>
 
 <script>
-import {
-  required,
-  minLength,
-  maxLength,
-  numeric,
-  url,
-  requiredIf
-} from "vuelidate/lib/validators";
+import { required, minLength, maxLength, numeric, url, requiredIf } from "vuelidate/lib/validators";
 import TableHeaders from "@/helpers/TableHeaders";
-import {
-  IndexData,
-  StoreData,
-  ShowData,
-  UpdateData
-} from "../../helpers/apiMethods";
+import { IndexData, StoreData, ShowData, UpdateData } from "../../helpers/apiMethods";
 
 export default {
   name: "CreateAndEdit",
@@ -317,15 +305,7 @@ export default {
         ShowData({ reqName: "works", id: slug })
           .then(res => {
             const { work } = res.data;
-            const {
-              name,
-              priority,
-              description,
-              main_video,
-              logo,
-              media,
-              platforms
-            } = work;
+            const { name, priority, description, main_video, logo, media, platforms } = work;
             this.form = {
               name,
               priority,
@@ -349,15 +329,11 @@ export default {
       this.form = {};
     },
     handleValidPlatforms() {
-      return (
-        this.$v.form.platforms_ids.$invalid || this.$v.form.work_url.$invalid
-      );
+      return this.$v.form.platforms_ids.$invalid || this.$v.form.work_url.$invalid;
     },
     handleAddPlatforms() {
       const { work_url, platforms_ids } = this.form;
-      const platFormObject = this.items.filter(
-        el => el.id === platforms_ids
-      )[0];
+      const platFormObject = this.items.filter(el => el.id === platforms_ids)[0];
       platFormObject.url = work_url;
 
       if (work_url !== "" && platforms_ids !== "") {
@@ -422,14 +398,7 @@ export default {
     },
     buildData() {
       const formData = new FormData();
-      const {
-        name,
-        description,
-        main_video,
-        media,
-        priority,
-        logo
-      } = this.form;
+      const { name, description, main_video, media, priority, logo } = this.form;
       formData.append("name", name);
       description && formData.append("description", description);
       formData.append("main_video", main_video);

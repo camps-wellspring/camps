@@ -26,21 +26,13 @@
             <v-avatar size="50">
               <v-img
                 aspect-ratio="1"
-                :src="
-                  item.main_image
-                    ? item.main_image.path
-                    : '@/assets/imgs/user.jpg'
-                "
+                :src="item.main_image ? item.main_image.path : '@/assets/imgs/user.jpg'"
               ></v-img>
             </v-avatar>
           </td>
           <td>
-            <v-icon medium title="edit" @click="handleEdit(item, index)">
-              mdi-pencil</v-icon
-            >
-            <v-icon medium title="delete" @click="handleDelete(item, index)">
-              mdi-delete</v-icon
-            >
+            <v-icon medium title="edit" @click="handleEdit(item, index)"> mdi-pencil</v-icon>
+            <v-icon medium title="delete" @click="handleDelete(item, index)"> mdi-delete</v-icon>
           </td>
         </tr>
       </template>
@@ -130,14 +122,7 @@ export default {
       this.items.push(item);
     },
     createTableHeaders() {
-      const headersList = [
-        "name",
-        "position",
-        "bio",
-        "priority",
-        "image",
-        "configs"
-      ];
+      const headersList = ["name", "position", "bio", "priority", "image", "configs"];
       this.headers = TableHeaders(headersList);
     },
     handleGetMembers() {
