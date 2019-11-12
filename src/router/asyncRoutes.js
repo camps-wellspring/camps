@@ -217,6 +217,27 @@ export const asyncRouterMap = [
       }
     ]
   },
+  {
+    path: "/extra-services",
+    component: Layout,
+    redirect: "/extra-services/list",
+    meta: {
+      title: "extra_services",
+      icon: "mdi-account-circle"
+    },
+    children: [
+      {
+        path: "list",
+        component: () => import("@/views/extraServices/index"),
+        name: "ExtraServicesList",
+
+        meta: {
+          title: "extra_services_list",
+          icon: "mdi-account-circle"
+        }
+      }
+    ]
+  },
 
   //   {
   //     path: "/members",
