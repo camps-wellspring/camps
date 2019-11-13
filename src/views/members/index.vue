@@ -18,21 +18,32 @@
     >
       <template v-slot:item="{ item, index }">
         <tr>
+          <td>
+            <v-avatar size="40">
+              <v-img
+                @click="showImagePreview(item.main_image)"
+                class="hover-pointer"
+                aspect-ratio="1"
+                :src="
+                  item.main_image
+                    ? item.main_image.path
+                    : '@/assets/imgs/user.jpg'
+                "
+              ></v-img>
+            </v-avatar>
+          </td>
           <td>{{ item.name }}</td>
           <td>{{ item.position }}</td>
           <td :title="item.bio">{{ item.bio | truncate }}</td>
           <td>{{ item.priority }}</td>
+
           <td>
-            <v-avatar size="50">
-              <v-img
-                aspect-ratio="1"
-                :src="item.main_image ? item.main_image.path : '@/assets/imgs/user.jpg'"
-              ></v-img>
-            </v-avatar>
-          </td>
-          <td>
-            <v-icon medium title="edit" @click="handleEdit(item, index)"> mdi-pencil</v-icon>
-            <v-icon medium title="delete" @click="handleDelete(item, index)"> mdi-delete</v-icon>
+            <v-icon small title="edit" @click="handleEdit(item, index)">
+              mdi-pencil</v-icon
+            >
+            <v-icon small title="delete" @click="handleDelete(item, index)">
+              mdi-delete</v-icon
+            >
           </td>
         </tr>
       </template>
@@ -57,6 +68,14 @@
       </template>
     </DialogComponent>
     <!-- dialog -->
+
+    <!-- Image Preview -->
+    <global-image-preview
+      :showDialog="imageOverlay"
+      :imagePath="currentPreviewImage"
+      @closePreview="imageOverlay = false"
+    />
+    <!-- Image Preview -->
   </div>
 </template>
 
@@ -76,6 +95,8 @@ export default {
       tableLoading: true,
       dialog: false,
       isEdit: false,
+      imageOverlay: false,
+      currentPreviewImage: "",
       itemIndex: ""
     };
   },
@@ -122,7 +143,14 @@ export default {
       this.items.push(item);
     },
     createTableHeaders() {
-      const headersList = ["name", "position", "bio", "priority", "image", "configs"];
+      const headersList = [
+        "profile",
+        "name",
+        "position",
+        "bio",
+        "priority",
+        "configs"
+      ];
       this.headers = TableHeaders(headersList);
     },
     handleGetMembers() {
@@ -140,6 +168,12 @@ export default {
     },
     showDialog() {
       this.dialog = !this.dialog;
+    },
+    showImagePreview(image) {
+      if (image) {
+        this.currentPreviewImage = image.path;
+        this.imageOverlay = true;
+      }
     }
   }
 };
