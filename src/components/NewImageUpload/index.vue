@@ -43,6 +43,8 @@
 
 <script>
 import { isValidImgType, isValidImgSize } from "@/utils/validate";
+import { UpdateMedia } from "@/helpers/apiMethods";
+
 export default {
   props: {
     maxSize: {
@@ -51,6 +53,10 @@ export default {
     },
     imgUrl: {
       type: String,
+      default: null
+    },
+    imgId: {
+      type: Number,
       default: null
     },
     width: {
@@ -177,8 +183,26 @@ export default {
           } else {
             this.$emit("fileSelected", dataObj);
           }
+
+          if (this.imgId) {
+            this.autoUpdate(dataObj.file);
+          }
         }
       }
+    },
+    autoUpdate(image) {
+      let formData = new FormData();
+      formData.append("file", image);
+      formData.append("_method", "PUT");
+      formData.append("locale", "en");
+
+      UpdateMedia({ id: this.imgId, data: formData })
+        .then(() => {
+          this.$emit("ImageUpdated");
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     validateDimentions(file) {
       return new Promise((resolve, reject) => {
