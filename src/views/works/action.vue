@@ -205,12 +205,17 @@
                       hide-default-footer
                       :items-per-page="20"
                     >
-                      <template v-slot:item="{ item }">
+                      <template v-slot:item="{ item, index }">
                         <tr>
                           <td>{{ item.name }}</td>
                           <td>{{ item.url }}</td>
                           <td>
-                            <v-icon medium title="delete">mdi-delete</v-icon>
+                            <v-icon
+                              medium
+                              title="delete"
+                              @click="handleDeletePlatForm(item, index)"
+                              >mdi-delete</v-icon
+                            >
                           </td>
                         </tr>
                       </template>
@@ -239,9 +244,21 @@
 </template>
 
 <script>
-import { required, minLength, maxLength, numeric, url, requiredIf } from "vuelidate/lib/validators";
+import {
+  required,
+  minLength,
+  maxLength,
+  numeric,
+  url,
+  requiredIf
+} from "vuelidate/lib/validators";
 import TableHeaders from "@/helpers/TableHeaders";
-import { IndexData, StoreData, ShowData, UpdateData } from "../../helpers/apiMethods";
+import {
+  IndexData,
+  StoreData,
+  ShowData,
+  UpdateData
+} from "../../helpers/apiMethods";
 import { deleteMedia } from "@/api/media";
 export default {
   name: "CreateAndEdit",
@@ -281,6 +298,10 @@ export default {
     this.showWorkData();
   },
   methods: {
+    handleDeletePlatForm(item, index) {
+      this.$delete(this.myPlatforms, index);
+      this.items.unshift(item);
+    },
     deleteVideo(video, index) {
       if (this.updatedVideos[index]) {
         if (this.updatedVideos[index].path === video) {
@@ -323,7 +344,15 @@ export default {
         ShowData({ reqName: "works", id: slug })
           .then(res => {
             const { work } = res.data;
-            const { name, description, logo, media, platforms, main_media, priority } = work;
+            const {
+              name,
+              description,
+              logo,
+              media,
+              platforms,
+              main_media,
+              priority
+            } = work;
             this.form = {
               name,
               description,
@@ -357,11 +386,15 @@ export default {
       this.form = {};
     },
     handleValidPlatforms() {
-      return this.$v.form.platforms_ids.$invalid || this.$v.form.work_url.$invalid;
+      return (
+        this.$v.form.platforms_ids.$invalid || this.$v.form.work_url.$invalid
+      );
     },
     handleAddPlatforms() {
       const { work_url, platforms_ids } = this.form;
-      const platFormObject = this.items.filter(el => el.id === platforms_ids)[0];
+      const platFormObject = this.items.filter(
+        el => el.id === platforms_ids
+      )[0];
       platFormObject.url = work_url;
 
       if (work_url !== "" && platforms_ids !== "") {
@@ -369,6 +402,9 @@ export default {
       }
       this.form.work_url = "";
       this.form.platforms_ids = "";
+      if (this.myPlatforms.includes(platFormObject)) {
+        this.items = this.items.filter(el => el.id !== platFormObject.id);
+      }
       this.$v.form.$reset();
     },
     createTableHeaders() {
@@ -427,7 +463,15 @@ export default {
     },
     buildData() {
       const formData = new FormData();
-      const { name, description, main_media, photos, priority, logo, videos } = this.form;
+      const {
+        name,
+        description,
+        main_media,
+        photos,
+        priority,
+        logo,
+        videos
+      } = this.form;
 
       this.mainMediaChanged && formData.append("main_media", main_media);
       formData.append("name", name);
@@ -435,7 +479,8 @@ export default {
       formData.append("priority", priority);
       this.logoChange && formData.append("logo", logo);
 
-      this.multiImageChanged && photos.map(el => formData.append("photos[]", el));
+      this.multiImageChanged &&
+        photos.map(el => formData.append("photos[]", el));
       videos.length && videos.map(el => formData.append("videos[]", el));
       this.myPlatforms.length &&
         this.myPlatforms.map((el, index) => {
@@ -466,8 +511,8 @@ export default {
         data: formData,
         id: this.$route.params.slug
       })
-        .then(res => {
-          console.log(res);
+        .then(() => {
+          this.$router.go(-1);
         })
         .catch(err => console.log(err))
         .finally(() => {
@@ -536,13 +581,18 @@ export default {
     }
   },
   watch: {
-    $route: {
-      handler(route) {},
-      immediate: true
-    },
+    // $route: {
+    //   handler(route) {},
+    //   immediate: true
+    // },
     myPlatforms: {
       handler(myPlatforms) {
-        console.log(myPlatforms);
+        if (myPlatforms && this.items) {
+          const platformsIds = [];
+          myPlatforms.forEach(el => platformsIds.push(el.id));
+          this.items = this.items.filter(el => !platformsIds.includes(el.id));
+        }
+        // console.log(myPlatforms);
       },
       immediate: true
     }
