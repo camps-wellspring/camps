@@ -20,7 +20,7 @@
       }}</span> -->
 
       <div class="img-preview-container">
-        <img class="img-preview-img" :src="imagePath" />
+        <img class="img-preview-img" fluid :src="imagePath" />
       </div>
     </section>
   </v-dialog>
