@@ -124,7 +124,12 @@
 
 <script>
 import { required, minLength, maxLength } from "vuelidate/lib/validators";
-import { ShowData, StoreData, UpdateData } from "@/helpers/apiMethods";
+import {
+  ShowData,
+  StoreData,
+  UpdateData,
+  UpdateMedia
+} from "@/helpers/apiMethods";
 import Cookies from "js-cookie";
 
 export default {
@@ -147,6 +152,7 @@ export default {
         main_image: {}
       },
       locale: Cookies.get("language"),
+      currentImageId: null,
       loading: {
         save: false
       },
@@ -168,6 +174,8 @@ export default {
           Object.keys(this.service).forEach(key => {
             this.service[key] = service[key];
           });
+
+          this.currentImageId = this.service.main_image.id;
 
           this.media = [...service.media];
         })
@@ -223,7 +231,11 @@ export default {
         data: formData
       })
         .then(() => {
-          this.popUp(this.$t("message.services_should_have_subs"), "info", true).then(value => {
+          this.popUp(
+            this.$t("message.services_should_have_subs"),
+            "info",
+            true
+          ).then(value => {
             if (!value.dismiss) {
               this.$router.push({ name: "ServicesList" });
               this.loading.save = false;
@@ -237,13 +249,35 @@ export default {
     },
     UpdateService() {
       // Edit serveice
-      let reqData = { ...this.service };
-      delete reqData.main_image;
+      let formData = new FormData();
+      Object.keys(this.service).forEach(key => {
+        if (key == "main_image") {
+          if (this.service[key] instanceof File) {
+            this.UpdateMainPhoto(this.service[key]);
+          }
+        } else {
+          formData.append(key, this.service[key]);
+        }
+      });
+
+      // handle photos
+      if (this.photos.length) {
+        this.photos.forEach((photo, index) => {
+          formData.append(`photos[${index}]`, photo);
+        });
+      }
+
+      // standards
+      formData.append("_method", "PUT");
+      formData.append("locale", this.locale);
+      //   let reqData = { ...this.service };
+
+      //   delete reqData.main_image;
 
       UpdateData({
         reqName: "services",
         id: this.$route.params.slug,
-        data: { ...reqData, locale: this.locale, _method: "PUT" }
+        data: formData
       })
         .then(() => {
           this.$router.push({ name: "ServicesList" });
@@ -252,6 +286,17 @@ export default {
         .catch(err => {
           console.log(err);
           this.loading.save = false;
+        });
+    },
+    UpdateMainPhoto(image) {
+      let formData = new FormData();
+      formData.append("file", image);
+      formData.append("_method", "PUT");
+      formData.append("locale", this.locale);
+      UpdateMedia({ id: this.currentImageId, data: formData })
+        .then(() => {})
+        .catch(err => {
+          console.log(err);
         });
     }
   },
