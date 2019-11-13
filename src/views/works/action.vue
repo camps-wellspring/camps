@@ -581,10 +581,6 @@ export default {
     }
   },
   watch: {
-    // $route: {
-    //   handler(route) {},
-    //   immediate: true
-    // },
     myPlatforms: {
       handler(myPlatforms) {
         if (myPlatforms && this.items) {
