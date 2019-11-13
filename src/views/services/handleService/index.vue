@@ -154,7 +154,9 @@ export default {
       locale: Cookies.get("language"),
       currentImageId: null,
       loading: {
-        save: false
+        save: false,
+        media: false,
+        main: false
       },
 
       photos: [],
@@ -270,18 +272,22 @@ export default {
       // standards
       formData.append("_method", "PUT");
       formData.append("locale", this.locale);
-      //   let reqData = { ...this.service };
 
-      //   delete reqData.main_image;
-
+      this.loading.main = true;
       UpdateData({
         reqName: "services",
         id: this.$route.params.slug,
         data: formData
       })
         .then(() => {
-          this.$router.push({ name: "ServicesList" });
-          this.loading.save = false;
+          //   this.$router.push({ name: "ServicesList" });
+          //   this.loading.save = false;
+
+          if (!this.loading.media) {
+            this.$router.push({ name: "ServicesList" });
+            this.loading.save = false;
+          }
+          this.loading.main = false;
         })
         .catch(err => {
           console.log(err);
@@ -293,10 +299,19 @@ export default {
       formData.append("file", image);
       formData.append("_method", "PUT");
       formData.append("locale", this.locale);
+
+      this.loading.media = true;
       UpdateMedia({ id: this.currentImageId, data: formData })
-        .then(() => {})
+        .then(() => {
+          if (!this.loading.main) {
+            this.$router.push({ name: "ServicesList" });
+            this.loading.save = false;
+          }
+          this.loading.media = false;
+        })
         .catch(err => {
           console.log(err);
+          this.loading.save = false;
         });
     }
   },
