@@ -4,7 +4,7 @@
       title="technologies"
       action-button
       action-button-text="create"
-      @ButtonClicked="initDialog(false)"
+      @ButtonClicked="initDialog('create')"
     />
     <v-data-table :headers="headers" :items="items" hide-default-footer :loading="loading.table">
       <template v-slot:item="{ item, index }">
@@ -23,7 +23,7 @@
           <td>{{ item.url }}</td>
 
           <td>
-            <v-btn icon @click="initDialog(true, item)">
+            <v-btn icon @click="initDialog('update', item)">
               <v-icon medium title="edit">mdi-pencil</v-icon>
             </v-btn>
             <v-btn icon>
@@ -42,9 +42,10 @@
       </template>
       <template #body v-if="dialog">
         <component
-          :cur-item="editingItem"
+          :curr-item="editingItem"
           @closed="handleDialogClose"
-          :is="isEdit ? 'editItem' : 'createItem'"
+          :is="'action'"
+          :action-type="actionType"
         />
       </template>
     </DialogComponent>
@@ -68,15 +69,14 @@ export default {
   mixins: [imgPreviewMixin],
 
   components: {
-    createItem: () => import("./components/create"),
-    editItem: () => import("./components/edit")
+    action: () => import("./components/action")
   },
 
   data() {
     return {
       headerValues: ["name", "icon", "url", "actions"],
       items: [],
-      isEdit: false,
+      actionType: "",
       editingItem: {},
       loading: {
         table: false
@@ -90,7 +90,7 @@ export default {
       return generateTableHeaders(this.headerValues);
     },
     dialogTitle() {
-      return this.isEdit ? this.$t("heading.edit") : this.$t("heading.create");
+      return this.actionType ? this.$t("heading.edit") : this.$t("heading.create");
     }
   },
 
@@ -109,9 +109,9 @@ export default {
         .catch(() => (this.loading.table = false));
     },
 
-    initDialog(state, curItem) {
-      this.isEdit = state;
-      state && (this.editingItem = curItem);
+    initDialog(type, currItem) {
+      this.actionType = type;
+      type === "update" && (this.editingItem = currItem);
       this.dialog = true;
     },
 

@@ -121,9 +121,9 @@ export default {
         .catch(() => (this.loading.table = false));
     },
 
-    initDialog(state, curItem) {
+    initDialog(state, currItem) {
       this.isEdit = state;
-      state && (this.editingItem = curItem);
+      state && (this.editingItem = currItem);
       this.dialog = true;
     },
 

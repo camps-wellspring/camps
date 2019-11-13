@@ -65,7 +65,11 @@ import { StoreData } from "@/helpers/apiMethods";
 export default {
   data() {
     return {
-      form: {},
+      form: {
+        name: "",
+        color: "",
+        icon: null
+      },
       loading: {
         submit: false
       }
