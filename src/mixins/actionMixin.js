@@ -14,7 +14,7 @@ export default {
 
   data() {
     return {
-      icon: null,
+      // [this.config.imgType]: null,
       locale: "",
       loading: {
         submit: false,
@@ -58,7 +58,7 @@ export default {
         payload.locale = this.currLocale;
         payload._method = "put";
         UpdateData({
-          reqName: this.modelName,
+          reqName: this.config.modelName,
           data: payload,
           id: this.currItem.id
         })
@@ -71,30 +71,38 @@ export default {
     },
 
     create() {
-      this.loading.submit = true;
-      let payload = new FormData();
-      for (const el in this.form) {
-        payload.append(el, this.form[el]);
-      }
-      StoreData({
-        reqName: this.modelName,
-        data: payload
-      })
-        .then(() => {
-          this.loading.submit = false;
+      return new Promise(resolve => {
+        this.loading.submit = true;
+        let payload = new FormData();
+        for (const el in this.form) {
+          payload.append(el, this.form[el]);
+        }
+        StoreData({
+          reqName: this.config.modelName,
+          data: payload
         })
-        .catch(() => (this.loading.submit = false));
+          .then(() => {
+            this.loading.submit = false;
+            resolve();
+          })
+          .catch(() => (this.loading.submit = false));
+      });
     },
 
     handleLocaleChange(locale) {
       this.loading.fetch = true;
-      ShowData({ reqName: this.modelName, id: this.currItem.id, locale })
+      ShowData({ reqName: this.config.modelName, id: this.currItem.id, locale })
         .then(res => {
           this.locale = locale;
           this.form = res.data[Object.keys(res.data)[0]];
           this.loading.fetch = false;
         })
         .catch(() => (this.loading.fetch = false));
+    },
+
+    handleImg(img) {
+      this.form[this.imgType] = img.file;
+      this.$v.form[this.imgType].$touch();
     },
 
     closeDialog() {
@@ -104,7 +112,7 @@ export default {
 
     reset() {
       this.form = {};
-      this.icon = null;
+      [this.imgType] = null;
       this.locale = this.$store.getters.locale;
     }
   }

@@ -1,6 +1,10 @@
 <template>
   <v-container>
-    <locale-select :loading="loading.fetch" @change="handleLocaleChange" />
+    <locale-select
+      v-if="actionType === 'update'"
+      :loading="loading.fetch"
+      @change="handleLocaleChange"
+    />
 
     <form-wrapper :validator="$v.form">
       <form @submit.prevent="onSubmit">
@@ -31,6 +35,15 @@
                 ></v-text-field>
               </template>
             </form-group>
+          </v-col>
+
+          <v-col cols="12" md="6">
+            <new-image-upload
+              class="file-upload__image"
+              :imgUrl="form[config.imgType] && form[config.imgType].path"
+              :imgId="form[config.imgType] && form[config.imgType].id"
+              @fileSelected="handleImg"
+            />
           </v-col>
 
           <v-col cols="12">
@@ -64,8 +77,16 @@ export default {
         url: "",
         icon: null
       },
-      modelName: "technologies"
+      icon: null,
+      config: {
+        modelName: "technologies"
+      }
     };
+  },
+  computed: {
+    imgType() {
+      return "icon";
+    }
   },
 
   validations() {
