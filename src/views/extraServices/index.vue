@@ -57,7 +57,11 @@
             />
           </td>
           <td>
-            <v-icon class="edit" small :title="$t('label.edit')" @click="handleEdit(item, index)"
+            <v-icon
+              class="edit"
+              small
+              :title="$t('label.edit')"
+              @click="handleEdit(item, index)"
               >mdi-pencil</v-icon
             >
             <v-icon
@@ -77,7 +81,9 @@
     <v-dialog v-model="showExtraServiceDialog" max-width="700px">
       <v-card>
         <v-card-title>{{
-          editMode ? this.$t("label.edit_extra_service") : this.$t("label.create_extra_service")
+          editMode
+            ? this.$t("label.edit_extra_service")
+            : this.$t("label.create_extra_service")
         }}</v-card-title>
         <v-divider></v-divider>
 
@@ -113,6 +119,7 @@
                   <new-image-upload
                     class="file-upload__image"
                     :imgUrl="extraService.icon ? extraService.icon.path : ''"
+                    :imgId="extraService.icon ? extraService.icon.id : null"
                     @fileSelected="handleUploadIcon"
                   />
                 </v-col>
@@ -154,7 +161,13 @@
 <script>
 import TableHeaders from "@/helpers/TableHeaders";
 import { required, minLength, maxLength } from "vuelidate/lib/validators";
-import { IndexData, ShowData, StoreData, UpdateData, DeleteData } from "@/helpers/apiMethods";
+import {
+  IndexData,
+  ShowData,
+  StoreData,
+  UpdateData,
+  DeleteData
+} from "@/helpers/apiMethods";
 import Cookies from "js-cookie";
 
 export default {
@@ -173,12 +186,15 @@ export default {
 
       currentExtraServiceId: null,
       currentExtraServiceIndex: null,
+      //   currentImageId: null,
       editMode: false,
 
       showExtraServiceDialog: false,
       locale: Cookies.get("language"),
       loading: {
-        save: false
+        save: false,
+        media: false,
+        main: false
       },
 
       imageOverlay: false,
@@ -191,7 +207,13 @@ export default {
   },
   methods: {
     createTableHeaders() {
-      const headersList = ["icon", "name", "project_available", "service_available", "actions"];
+      const headersList = [
+        "icon",
+        "name",
+        "project_available",
+        "service_available",
+        "actions"
+      ];
       this.headers = TableHeaders(headersList);
     },
     getExtraServices() {
@@ -239,6 +261,8 @@ export default {
           Object.keys(this.extraService).forEach(key => {
             this.extraService[key] = extra_service[key];
           });
+
+          //   this.currentImageId = this.extraService.icon.id;
         })
         .catch(err => {
           console.log(err);
@@ -262,7 +286,7 @@ export default {
         formData.append(key, this.extraService[key]);
       });
 
-      // Create Sub Serveice
+      // Create Extra Serveice
       StoreData({
         reqName: "extra-services",
         data: formData
@@ -278,23 +302,70 @@ export default {
         });
     },
     UpdateExtraService() {
-      // Edit serveice
+      // Edit Sub serveice
+      let formData = new FormData();
+      Object.keys(this.extraService).forEach(key => {
+        if (!(key == "icon")) {
+          //   if (this.extraService[key] instanceof File) {
+          //     this.UpdateMainPhoto(this.extraService[key]);
+          //   }
+          // } else {
+          formData.append(key, this.extraService[key]);
+        }
+      });
+
+      // standards
+      formData.append("_method", "PUT");
+      formData.append("locale", this.locale);
+
+      this.loading.main = true;
       UpdateData({
         reqName: "extra-services",
         id: this.currentExtraServiceId,
-        data: { ...this.extraService, locale: this.locale, _method: "PUT" }
+        data: formData
       })
         .then(res => {
-          this.extraServices.splice(this.currentExtraServiceIndex, 1, res.data.extra_service);
+          this.extraServices.splice(
+            this.currentExtraServiceIndex,
+            1,
+            res.data.extra_service
+          );
 
-          this.loading.save = false;
-          this.closeExtraServiceDialog();
+          //   this.loading.save = false;
+          //   this.closeExtraServiceDialog();
+          if (!this.loading.media) {
+            this.loading.save = false;
+            this.getExtraServices();
+            this.closeExtraServiceDialog();
+          }
+          this.loading.main = false;
         })
         .catch(err => {
           console.log(err);
           this.loading.save = false;
         });
     },
+    // UpdateMainPhoto(image) {
+    //   let formData = new FormData();
+    //   formData.append("file", image);
+    //   formData.append("_method", "PUT");
+    //   formData.append("locale", this.locale);
+
+    //   this.loading.media = true;
+    //   UpdateMedia({ id: this.currentImageId, data: formData })
+    //     .then(() => {
+    //       if (!this.loading.main) {
+    //         this.loading.save = false;
+    //         this.getExtraServices();
+    //         this.closeExtraServiceDialog();
+    //       }
+    //       this.loading.media = false;
+    //     })
+    //     .catch(err => {
+    //       console.log(err);
+    //       this.loading.save = false;
+    //     });
+    // },
 
     handleDelete({ id }, index) {
       this.popUp().then(value => {

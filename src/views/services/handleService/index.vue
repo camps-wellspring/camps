@@ -54,6 +54,7 @@
                 <new-image-upload
                   class="file-upload__image"
                   :imgUrl="service.main_image ? service.main_image.path : ''"
+                  :imgId="service.main_image ? service.main_image.id : null"
                   @fileSelected="handleUploadMainImage"
                 />
               </v-col>
@@ -147,8 +148,11 @@ export default {
         main_image: {}
       },
       locale: Cookies.get("language"),
+      //   currentImageId: null,
       loading: {
-        save: false
+        save: false,
+        media: false,
+        main: false
       },
 
       photos: [],
@@ -168,6 +172,8 @@ export default {
           Object.keys(this.service).forEach(key => {
             this.service[key] = service[key];
           });
+
+          //   this.currentImageId = this.service.main_image.id;
 
           this.media = [...service.media];
         })
@@ -223,7 +229,11 @@ export default {
         data: formData
       })
         .then(() => {
-          this.popUp(this.$t("message.services_should_have_subs"), "info", true).then(value => {
+          this.popUp(
+            this.$t("message.services_should_have_subs"),
+            "info",
+            true
+          ).then(value => {
             if (!value.dismiss) {
               this.$router.push({ name: "ServicesList" });
               this.loading.save = false;
@@ -237,23 +247,69 @@ export default {
     },
     UpdateService() {
       // Edit serveice
-      let reqData = { ...this.service };
-      delete reqData.main_image;
+      let formData = new FormData();
+      Object.keys(this.service).forEach(key => {
+        if (!(key == "main_image")) {
+          //   if (this.service[key] instanceof File) {
+          //     this.UpdateMainPhoto(this.service[key]);
+          //   }
+          // } else {
+          formData.append(key, this.service[key]);
+        }
+      });
 
+      // handle photos
+      if (this.photos.length) {
+        this.photos.forEach((photo, index) => {
+          formData.append(`photos[${index}]`, photo);
+        });
+      }
+
+      // standards
+      formData.append("_method", "PUT");
+      formData.append("locale", this.locale);
+
+      this.loading.main = true;
       UpdateData({
         reqName: "services",
         id: this.$route.params.slug,
-        data: { ...reqData, locale: this.locale, _method: "PUT" }
+        data: formData
       })
         .then(() => {
-          this.$router.push({ name: "ServicesList" });
-          this.loading.save = false;
+          //   this.$router.push({ name: "ServicesList" });
+          //   this.loading.save = false;
+
+          if (!this.loading.media) {
+            this.$router.push({ name: "ServicesList" });
+            this.loading.save = false;
+          }
+          this.loading.main = false;
         })
         .catch(err => {
           console.log(err);
           this.loading.save = false;
         });
     }
+    // UpdateMainPhoto(image) {
+    //   let formData = new FormData();
+    //   formData.append("file", image);
+    //   formData.append("_method", "PUT");
+    //   formData.append("locale", this.locale);
+
+    //   this.loading.media = true;
+    //   UpdateMedia({ id: this.currentImageId, data: formData })
+    //     .then(() => {
+    //       if (!this.loading.main) {
+    //         this.$router.push({ name: "ServicesList" });
+    //         this.loading.save = false;
+    //       }
+    //       this.loading.media = false;
+    //     })
+    //     .catch(err => {
+    //       console.log(err);
+    //       this.loading.save = false;
+    //     });
+    // }
   },
   validations() {
     return {

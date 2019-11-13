@@ -3,6 +3,8 @@
     "login": "Login"
   },
   "route": {
+    "members": "Members",
+    "works": "Works",
     "services": "Services",
     "store": "Store",
     "categories": "Categories",
@@ -72,6 +74,7 @@
     "demo_types":"Demo Types"
   },
   "table": {
+    "profile": "Profile",
     "name": "Name",
     "position": "Position",
     "bio": "Bio",

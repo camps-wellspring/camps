@@ -18,7 +18,9 @@
 
     <v-app-bar :clipped-left="$vuetify.breakpoint.lgAndUp" app dark>
       <v-toolbar-title style="width: 300px" class="ml-0 pl-4">
-        <span class="hidden-sm-and-down">{{ $t("heading.solutionplus_store") }}</span>
+        <span class="hidden-sm-and-down">{{
+          $t("heading.solutionplus_store")
+        }}</span>
         <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       </v-toolbar-title>
       <!-- <v-text-field
