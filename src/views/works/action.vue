@@ -7,55 +7,10 @@
     <v-container>
       <form-wrapper :validator="$v.form">
         <form @submit.prevent="handleSubmit">
-          <v-card class="pa-0">
-            <v-card-title>main Info</v-card-title>
-            <v-divider></v-divider>
-            <v-card-text>
-              <v-row>
-                <v-col cols="12" md="6">
-                  <form-group name="name">
-                    <template slot-scope="{ attrs }">
-                      <v-text-field
-                        v-bind="attrs"
-                        v-model="form.name"
-                        outlined
-                        :label="$t('label.name')"
-                        @input="hadleChange('name')"
-                      ></v-text-field>
-                    </template>
-                  </form-group>
-                </v-col>
-                <v-col cols="12" md="6">
-                  <form-group name="priority">
-                    <template slot-scope="{ attrs }">
-                      <v-text-field
-                        v-bind="attrs"
-                        v-model="form.priority"
-                        outlined
-                        :label="$t('label.priority')"
-                        @input="hadleChange('priority')"
-                      ></v-text-field>
-                    </template>
-                  </form-group>
-                </v-col>
-                <v-col cols="12">
-                  <form-group name="description">
-                    <template slot-scope="{ attrs }">
-                      <v-textarea
-                        v-bind="attrs"
-                        v-model="form.description"
-                        outlined
-                        auto-grow
-                        row-height="40"
-                        :label="$t('label.description')"
-                        @input="hadleChange('description')"
-                      ></v-textarea>
-                    </template>
-                  </form-group>
-                </v-col>
-              </v-row>
-            </v-card-text>
-          </v-card>
+          <!-- main info componennt -->
+          <MainInfo :form="form" />
+          <!-- main info componennt -->
+
           <v-card>
             <v-card-title>Media</v-card-title>
             <v-card-text>
@@ -80,64 +35,11 @@
                     :maxSize="mainImageSize"
                   />
                 </v-col>
-                <v-col cols="12" md="6">
-                  <form-group name="video">
-                    <template slot-scope="{ attrs }">
-                      <div class="input_wrpper">
-                        <v-row>
-                          <v-col md="10">
-                            <v-text-field
-                              :label="$t('label.video_url')"
-                              outlined
-                              v-model="form.video"
-                              v-bind="attrs"
-                              @input="hadleChange('video')"
-                            ></v-text-field>
-                          </v-col>
-                          <v-col md="2">
-                            <v-btn
-                              @click="addVedios"
-                              v-show="form.video !== ''"
-                              large
-                              color="primary"
-                              :disabled="$v.form.video.$invalid"
-                              >{{ $t("button.add") }}
-                            </v-btn>
-                          </v-col>
-                        </v-row>
-
-                        <v-row>
-                          <v-col
-                            cols="12"
-                            md="6"
-                            v-for="(video, index) in form.videos"
-                            :key="index"
-                            class="video_pointer mb-2"
-                          >
-                            <div v-if="form.videos.length > 0">
-                              <iframe
-                                class="ml-2"
-                                width="100%"
-                                height="200"
-                                :src="convertVideo(video)"
-                                frameborder="0"
-                                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                                allowfullscreen
-                              ></iframe>
-                              <v-icon
-                                @click="deleteVideo(video, index)"
-                                class="close_icon"
-                                medium
-                                color="#fff"
-                                >mdi-close
-                              </v-icon>
-                            </div>
-                          </v-col>
-                        </v-row>
-                      </div>
-                    </template>
-                  </form-group>
-                </v-col>
+                <upload-video
+                  @set_videos="handleSetVideo"
+                  :videosFiles="videosFiles"
+                  :updatedVideos="form.videos"
+                />
 
                 <v-col cols="12" md="6" class="mt-3">
                   <multi-image-upload
@@ -259,9 +161,17 @@ import {
   ShowData,
   UpdateData
 } from "../../helpers/apiMethods";
-import { deleteMedia } from "@/api/media";
+
 export default {
   name: "CreateAndEdit",
+  components: {
+    MainInfo: () => import("./components/MainInfo")
+  },
+  provide() {
+    return {
+      hadleChange: this.hadleChange
+    };
+  },
   data() {
     return {
       form: {
@@ -269,14 +179,15 @@ export default {
         description: "",
         priority: "",
         logo: "",
-        video: "",
+
         photos: [],
         platforms_ids: "",
         work_url: "",
         main_media: "",
         videos: []
       },
-      updatedVideos: [],
+      updateData: {},
+      videosFiles: [],
       mediaPhotos: [],
       items: [],
       myPlatforms: [],
@@ -298,46 +209,14 @@ export default {
     this.showWorkData();
   },
   methods: {
+    handleSetVideo(videos) {
+      this.form.videos = videos;
+    },
     handleDeletePlatForm(item, index) {
       this.$delete(this.myPlatforms, index);
       this.items.unshift(item);
     },
-    deleteVideo(video, index) {
-      if (this.updatedVideos[index]) {
-        if (this.updatedVideos[index].path === video) {
-          // there is video id
-          const { id } = this.updatedVideos[index];
-          this.popUp().then(value => {
-            if (!value.dismiss) {
-              deleteMedia(id).then(() => {
-                this.form.videos.splice(index, 1);
-              });
-            }
-          });
-        }
-      } else {
-        this.form.videos.splice(index, 1);
-      }
-    },
-    addVedios() {
-      //   this.updatedData.vedios.push(this.form.vedio);
-      if (this.form.vedio !== "") {
-        if (this.form.videos.includes(this.form.video)) {
-          return;
-        }
-        this.form.videos.push(this.form.video);
-        this.form.video = "";
-        this.$v.form.$reset();
-      }
-    },
-    convertVideo(video) {
-      let url;
-      let key;
-      var regex = /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/ ]{11})/i;
-      key = video.match(regex)[1];
-      url = video.substring(0, 24) + "embed/" + key;
-      return url;
-    },
+
     showWorkData() {
       const { slug } = this.$route.params;
       if (this.$route.name === "edit_work") {
@@ -353,6 +232,7 @@ export default {
               main_media,
               priority
             } = work;
+            this.updateData = work;
             this.form = {
               name,
               description,
@@ -373,8 +253,8 @@ export default {
                 if (this.form.videos.includes(el.path)) {
                   return;
                 }
-                this.updatedVideos.push(el);
-                this.form.videos.push(el.path);
+                this.videosFiles.push(el);
+                this.form.videos.push(el);
               }
             });
           })
@@ -495,8 +375,7 @@ export default {
     createWork() {
       const formData = this.buildData();
       StoreData({ reqName: "works", data: formData })
-        .then(res => {
-          console.log(res);
+        .then(() => {
           this.$router.go(-1);
         })
         .catch(err => console.log(err))
@@ -539,9 +418,6 @@ export default {
         logo: {
           required
         },
-        video: {
-          url
-        },
         platforms_ids: {
           required: requiredIf(el => {
             return el.work_url !== "";
@@ -563,21 +439,6 @@ export default {
       } else {
         return this.$t("heading.edit");
       }
-    },
-    getVideoUrl: {
-      get() {
-        if (this.$route.name === "create_work") {
-          return this.form.main_video;
-        } else {
-          return this.form.main_video ? this.form.main_video.path : "";
-        }
-      },
-      set(value) {
-        if (value) {
-          this.form.main_video = value;
-        }
-        console.log(value);
-      }
     }
   },
   watch: {
@@ -589,6 +450,12 @@ export default {
           this.items = this.items.filter(el => !platformsIds.includes(el.id));
         }
         // console.log(myPlatforms);
+      },
+      immediate: true
+    },
+    form: {
+      handler(form) {
+        this.form = form;
       },
       immediate: true
     }
