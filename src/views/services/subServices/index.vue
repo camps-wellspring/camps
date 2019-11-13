@@ -56,7 +56,11 @@
             />
           </td>
           <td>
-            <v-icon class="edit" small :title="$t('label.edit')" @click="handleEdit(item, index)"
+            <v-icon
+              class="edit"
+              small
+              :title="$t('label.edit')"
+              @click="handleEdit(item, index)"
               >mdi-pencil</v-icon
             >
             <v-icon
@@ -88,7 +92,9 @@
     <v-dialog v-model="showSubServiceDialog" max-width="700px">
       <v-card>
         <v-card-title>{{
-          editMode ? this.$t("label.edit_sub_service") : this.$t("label.create_sub_service")
+          editMode
+            ? this.$t("label.edit_sub_service")
+            : this.$t("label.create_sub_service")
         }}</v-card-title>
         <v-divider></v-divider>
 
@@ -181,7 +187,14 @@
 <script>
 import TableHeaders from "@/helpers/TableHeaders";
 import { required, minLength, maxLength } from "vuelidate/lib/validators";
-import { IndexData, ShowData, StoreData, UpdateData, DeleteData } from "@/helpers/apiMethods";
+import {
+  IndexData,
+  ShowData,
+  StoreData,
+  UpdateData,
+  UpdateMedia,
+  DeleteData
+} from "@/helpers/apiMethods";
 import Cookies from "js-cookie";
 
 export default {
@@ -203,12 +216,15 @@ export default {
 
       currentSubServiceSlug: null,
       currentSubServiceIndex: null,
+      currentImageId: null,
       editMode: false,
 
       showSubServiceDialog: false,
       locale: Cookies.get("language"),
       loading: {
-        save: false
+        save: false,
+        media: false,
+        main: false
       },
 
       imageOverlay: false,
@@ -232,7 +248,13 @@ export default {
   },
   methods: {
     createTableHeaders() {
-      const headersList = ["icon", "name", "description", "visibility", "actions"];
+      const headersList = [
+        "icon",
+        "name",
+        "description",
+        "visibility",
+        "actions"
+      ];
       this.headers = TableHeaders(headersList);
     },
     getSubServices() {
@@ -281,6 +303,8 @@ export default {
           Object.keys(this.subService).forEach(key => {
             this.subService[key] = sub_service[key];
           });
+
+          this.currentImageId = this.subService.icon.id;
         })
         .catch(err => {
           console.log(err);
@@ -320,17 +344,62 @@ export default {
         });
     },
     UpdateSubService() {
-      // Edit serveice
+      // Edit Sub serveice
+      let formData = new FormData();
+      Object.keys(this.subService).forEach(key => {
+        if (key == "icon") {
+          if (this.subService[key] instanceof File) {
+            this.UpdateMainPhoto(this.subService[key]);
+          }
+        } else {
+          formData.append(key, this.subService[key]);
+        }
+      });
+
+      // standards
+      formData.append("_method", "PUT");
+      formData.append("locale", this.locale);
+
+      this.loading.main = true;
       UpdateData({
         reqName: "sub-services",
         id: this.currentSubServiceSlug,
-        data: { ...this.subService, locale: this.locale, _method: "PUT" }
+        data: formData
       })
         .then(res => {
-          this.subServices.splice(this.currentSubServiceIndex, 1, res.data.sub_service);
+          this.subServices.splice(
+            this.currentSubServiceIndex,
+            1,
+            res.data.sub_service
+          );
 
+          if (!this.loading.media) {
+            this.loading.save = false;
+            this.getSubServices();
+            this.closeSubServiceDialog();
+          }
+          this.loading.main = false;
+        })
+        .catch(err => {
+          console.log(err);
           this.loading.save = false;
-          this.closeSubServiceDialog();
+        });
+    },
+    UpdateMainPhoto(image) {
+      let formData = new FormData();
+      formData.append("file", image);
+      formData.append("_method", "PUT");
+      formData.append("locale", this.locale);
+
+      this.loading.media = true;
+      UpdateMedia({ id: this.currentImageId, data: formData })
+        .then(() => {
+          if (!this.loading.main) {
+            this.loading.save = false;
+            this.getSubServices();
+            this.closeSubServiceDialog();
+          }
+          this.loading.media = false;
         })
         .catch(err => {
           console.log(err);

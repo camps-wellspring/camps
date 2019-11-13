@@ -1,26 +1,26 @@
 import Layout from "@/Layout";
 export const asyncRouterMap = [
-  {
-    path: "/users",
-    component: Layout,
-    redirect: "/users/list",
-    meta: {
-      title: "users",
-      icon: "mdi-account-circle"
-    },
-    children: [
-      {
-        path: "list",
-        component: () => import("@/views/users/index"),
-        name: "UsersList",
+  // {
+  //   path: "/users",
+  //   component: Layout,
+  //   redirect: "/users/list",
+  //   meta: {
+  //     title: "users",
+  //     icon: "mdi-account-circle"
+  //   },
+  //   children: [
+  //     {
+  //       path: "list",
+  //       component: () => import("@/views/users/index"),
+  //       name: "UsersList",
 
-        meta: {
-          title: "users_list",
-          icon: "mdi-account-circle"
-        }
-      }
-    ]
-  },
+  //       meta: {
+  //         title: "users_list",
+  //         icon: "mdi-account-circle"
+  //       }
+  //     }
+  //   ]
+  // },
   {
     path: "/members",
     component: Layout,
@@ -37,7 +37,7 @@ export const asyncRouterMap = [
         // hidden: true,
 
         meta: {
-          title: "members_list",
+          title: "members",
           icon: "mdi-account-circle"
         }
       }
@@ -59,7 +59,7 @@ export const asyncRouterMap = [
         // hidden: true,
 
         meta: {
-          title: "work_list",
+          title: "works",
           icon: "mdi-account-circle"
         }
       },
