@@ -1,7 +1,9 @@
 <template>
   <v-container>
+    <locale-select :loading="loading.fetch" @change="handleLocaleChange" />
+
     <form-wrapper :validator="$v.form">
-      <form @submit.prevent="submit">
+      <form @submit.prevent="onSubmit">
         <v-row>
           <v-col cols="12" md="6">
             <form-group name="name">
@@ -18,15 +20,11 @@
           </v-col>
 
           <v-col cols="12" md="6">
-            <new-image-upload class="file-upload__image" @fileSelected="handleImg" />
-          </v-col>
-
-          <v-col cols="12" md="6">
             <form-group name="url">
               <template slot-scope="{ attrs }">
                 <v-text-field
-                  v-bind="attrs"
                   v-model="form.url"
+                  v-bind="attrs"
                   outlined
                   :label="$t('label.url')"
                   @blur="$v.form.url.$touch()"
@@ -51,16 +49,22 @@
 </template>
 
 <script>
-import { url, required, minLength, maxLength } from "vuelidate/lib/validators";
-import { StoreData } from "@/helpers/apiMethods";
+import { url, minLength, maxLength, required, requiredIf } from "vuelidate/lib/validators";
+import actionMixin from "@/mixins/actionMixin";
 
 export default {
+  name: "technologies",
+
+  mixins: [actionMixin],
+
   data() {
     return {
-      form: {},
-      loading: {
-        submit: false
-      }
+      form: {
+        name: "",
+        url: "",
+        icon: null
+      },
+      modelName: "technologies"
     };
   },
 
@@ -73,48 +77,13 @@ export default {
           maxLength: maxLength(20)
         },
         url: {
-          required,
           url
         },
         icon: {
-          required
+          required: requiredIf(() => this.actionType === "create")
         }
       }
     };
-  },
-
-  methods: {
-    handleImg(img) {
-      this.form.icon = img.file;
-      this.$v.form.icon.$touch();
-    },
-
-    handleColorChange(color) {
-      this.form.color = color;
-      this.$v.form.color.$touch();
-    },
-
-    submit() {
-      this.loading.submit = true;
-      let payload = new FormData();
-      for (const el in this.form) {
-        payload.append(el, this.form[el]);
-      }
-      StoreData({
-        reqName: "technologies",
-        data: payload
-      })
-        .then(() => {
-          this.loading.submit = false;
-          this.reset();
-          this.$emit("closed");
-        })
-        .catch(() => (this.loading.submit = false));
-    },
-
-    reset() {
-      this.form = {};
-    }
   }
 };
 </script>

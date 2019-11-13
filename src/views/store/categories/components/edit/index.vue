@@ -10,13 +10,10 @@
               <template slot-scope="{ attrs }">
                 <v-text-field
                   v-bind="attrs"
-                  :value="form && form.name ? form.name : curItem.name"
+                  v-model="form.name"
                   outlined
                   :label="$t('label.name')"
-                  @input="
-                    form.name = $event;
-                    $v.form.name.$touch();
-                  "
+                  @blue="$v.form.name.$touch()"
                 ></v-text-field>
               </template>
             </form-group>
@@ -25,7 +22,7 @@
           <v-col cols="12" md="6">
             <new-image-upload
               class="file-upload__image"
-              :imgUrl="curItem.icon.path"
+              :imgUrl="currItem.icon.path"
               @fileSelected="handleImg"
             />
           </v-col>
@@ -42,12 +39,7 @@
                 <template v-slot:activator="{ on }">
                   <v-btn class="color-button" x-large depressed :color="currColor" v-on="on" />
                 </template>
-                <v-color-picker
-                  :value="currColor"
-                  @update:color="form.color = $event.hex"
-                  mode="hexa"
-                  hide-mode-switch
-                />
+                <v-color-picker v-model="form.color" mode="hexa" hide-mode-switch />
               </v-menu>
             </div>
           </v-col>
@@ -73,7 +65,7 @@ import { UpdateData, UpdateMedia, ShowData } from "@/helpers/apiMethods";
 
 export default {
   props: {
-    curItem: {
+    currItem: {
       type: Object,
       default: () => {}
     }
@@ -81,7 +73,6 @@ export default {
 
   data() {
     return {
-      // TODO assign initial value for validation
       form: {
         color: null,
         name: ""
@@ -97,9 +88,9 @@ export default {
 
   computed: {
     currColor() {
-      return this.form.color ? this.form.color : this.curItem.color;
+      return this.form.color ? this.form.color : this.currItem.color;
     },
-    curLocale() {
+    currLocale() {
       return this.locale ? this.locale : this.$store.getters.locale;
     }
   },
@@ -115,6 +106,16 @@ export default {
     };
   },
 
+  watch: {
+    currItem: {
+      handler(value) {
+        this.form = { ...value };
+      },
+      immediate: true,
+      deep: true
+    }
+  },
+
   methods: {
     handleImg(img) {
       this.icon = img.file;
@@ -126,13 +127,13 @@ export default {
       for (const el in this.form) {
         this.form[el] && (payload[el] = this.form[el]);
       }
-      payload.locale = this.curLocale;
+      payload.locale = this.currLocale;
       payload._method = "put";
 
       UpdateData({
         reqName: "store-categories",
         data: payload,
-        id: this.curItem.slug
+        id: this.currItem.slug
       })
         .then(() => {
           this.loading.submit = false;
@@ -148,8 +149,8 @@ export default {
         let payload = new FormData();
         payload.append("file", this.icon);
         payload.append("_method", "put");
-        payload.append("locale", this.curLocale);
-        UpdateMedia({ id: this.curItem.icon.id, data: payload })
+        payload.append("locale", this.currLocale);
+        UpdateMedia({ id: this.currItem.icon.id, data: payload })
           .then(() => {
             this.reset();
             this.$emit("closed");
@@ -161,7 +162,7 @@ export default {
 
     handleLocaleChange(locale) {
       this.loading.fetch = true;
-      ShowData({ reqName: "store-categories", id: this.curItem.slug, locale })
+      ShowData({ reqName: "store-categories", id: this.currItem.slug, locale })
         .then(res => {
           this.locale = locale;
           this.form = res.data.store_category;
