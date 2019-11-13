@@ -119,6 +119,7 @@
                   <new-image-upload
                     class="file-upload__image"
                     :imgUrl="extraService.icon ? extraService.icon.path : ''"
+                    :imgId="extraService.icon ? extraService.icon.id : null"
                     @fileSelected="handleUploadIcon"
                   />
                 </v-col>
@@ -165,7 +166,6 @@ import {
   ShowData,
   StoreData,
   UpdateData,
-  UpdateMedia,
   DeleteData
 } from "@/helpers/apiMethods";
 import Cookies from "js-cookie";
@@ -186,7 +186,7 @@ export default {
 
       currentExtraServiceId: null,
       currentExtraServiceIndex: null,
-      currentImageId: null,
+      //   currentImageId: null,
       editMode: false,
 
       showExtraServiceDialog: false,
@@ -262,7 +262,7 @@ export default {
             this.extraService[key] = extra_service[key];
           });
 
-          this.currentImageId = this.extraService.icon.id;
+          //   this.currentImageId = this.extraService.icon.id;
         })
         .catch(err => {
           console.log(err);
@@ -305,11 +305,11 @@ export default {
       // Edit Sub serveice
       let formData = new FormData();
       Object.keys(this.extraService).forEach(key => {
-        if (key == "icon") {
-          if (this.extraService[key] instanceof File) {
-            this.UpdateMainPhoto(this.extraService[key]);
-          }
-        } else {
+        if (!(key == "icon")) {
+          //   if (this.extraService[key] instanceof File) {
+          //     this.UpdateMainPhoto(this.extraService[key]);
+          //   }
+          // } else {
           formData.append(key, this.extraService[key]);
         }
       });
@@ -345,27 +345,27 @@ export default {
           this.loading.save = false;
         });
     },
-    UpdateMainPhoto(image) {
-      let formData = new FormData();
-      formData.append("file", image);
-      formData.append("_method", "PUT");
-      formData.append("locale", this.locale);
+    // UpdateMainPhoto(image) {
+    //   let formData = new FormData();
+    //   formData.append("file", image);
+    //   formData.append("_method", "PUT");
+    //   formData.append("locale", this.locale);
 
-      this.loading.media = true;
-      UpdateMedia({ id: this.currentImageId, data: formData })
-        .then(() => {
-          if (!this.loading.main) {
-            this.loading.save = false;
-            this.getExtraServices();
-            this.closeExtraServiceDialog();
-          }
-          this.loading.media = false;
-        })
-        .catch(err => {
-          console.log(err);
-          this.loading.save = false;
-        });
-    },
+    //   this.loading.media = true;
+    //   UpdateMedia({ id: this.currentImageId, data: formData })
+    //     .then(() => {
+    //       if (!this.loading.main) {
+    //         this.loading.save = false;
+    //         this.getExtraServices();
+    //         this.closeExtraServiceDialog();
+    //       }
+    //       this.loading.media = false;
+    //     })
+    //     .catch(err => {
+    //       console.log(err);
+    //       this.loading.save = false;
+    //     });
+    // },
 
     handleDelete({ id }, index) {
       this.popUp().then(value => {

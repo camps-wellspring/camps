@@ -130,6 +130,7 @@
                   <new-image-upload
                     class="file-upload__image"
                     :imgUrl="subService.icon ? subService.icon.path : ''"
+                    :imgId="subService.icon ? subService.icon.id : null"
                     @fileSelected="handleUploadIcon"
                   />
                 </v-col>
@@ -192,7 +193,6 @@ import {
   ShowData,
   StoreData,
   UpdateData,
-  UpdateMedia,
   DeleteData
 } from "@/helpers/apiMethods";
 import Cookies from "js-cookie";
@@ -216,7 +216,7 @@ export default {
 
       currentSubServiceSlug: null,
       currentSubServiceIndex: null,
-      currentImageId: null,
+      //   currentImageId: null,
       editMode: false,
 
       showSubServiceDialog: false,
@@ -304,7 +304,7 @@ export default {
             this.subService[key] = sub_service[key];
           });
 
-          this.currentImageId = this.subService.icon.id;
+          //   this.currentImageId = this.subService.icon.id;
         })
         .catch(err => {
           console.log(err);
@@ -347,11 +347,11 @@ export default {
       // Edit Sub serveice
       let formData = new FormData();
       Object.keys(this.subService).forEach(key => {
-        if (key == "icon") {
-          if (this.subService[key] instanceof File) {
-            this.UpdateMainPhoto(this.subService[key]);
-          }
-        } else {
+        if (!(key == "icon")) {
+          //   if (this.subService[key] instanceof File) {
+          //     this.UpdateMainPhoto(this.subService[key]);
+          //   }
+          // } else {
           formData.append(key, this.subService[key]);
         }
       });
@@ -385,27 +385,27 @@ export default {
           this.loading.save = false;
         });
     },
-    UpdateMainPhoto(image) {
-      let formData = new FormData();
-      formData.append("file", image);
-      formData.append("_method", "PUT");
-      formData.append("locale", this.locale);
+    // UpdateMainPhoto(image) {
+    //   let formData = new FormData();
+    //   formData.append("file", image);
+    //   formData.append("_method", "PUT");
+    //   formData.append("locale", this.locale);
 
-      this.loading.media = true;
-      UpdateMedia({ id: this.currentImageId, data: formData })
-        .then(() => {
-          if (!this.loading.main) {
-            this.loading.save = false;
-            this.getSubServices();
-            this.closeSubServiceDialog();
-          }
-          this.loading.media = false;
-        })
-        .catch(err => {
-          console.log(err);
-          this.loading.save = false;
-        });
-    },
+    //   this.loading.media = true;
+    //   UpdateMedia({ id: this.currentImageId, data: formData })
+    //     .then(() => {
+    //       if (!this.loading.main) {
+    //         this.loading.save = false;
+    //         this.getSubServices();
+    //         this.closeSubServiceDialog();
+    //       }
+    //       this.loading.media = false;
+    //     })
+    //     .catch(err => {
+    //       console.log(err);
+    //       this.loading.save = false;
+    //     });
+    // },
 
     handleDelete({ slug }, index) {
       this.popUp().then(value => {

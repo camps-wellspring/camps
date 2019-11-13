@@ -54,6 +54,7 @@
                 <new-image-upload
                   class="file-upload__image"
                   :imgUrl="service.main_image ? service.main_image.path : ''"
+                  :imgId="service.main_image ? service.main_image.id : null"
                   @fileSelected="handleUploadMainImage"
                 />
               </v-col>
@@ -124,12 +125,7 @@
 
 <script>
 import { required, minLength, maxLength } from "vuelidate/lib/validators";
-import {
-  ShowData,
-  StoreData,
-  UpdateData,
-  UpdateMedia
-} from "@/helpers/apiMethods";
+import { ShowData, StoreData, UpdateData } from "@/helpers/apiMethods";
 import Cookies from "js-cookie";
 
 export default {
@@ -152,7 +148,7 @@ export default {
         main_image: {}
       },
       locale: Cookies.get("language"),
-      currentImageId: null,
+      //   currentImageId: null,
       loading: {
         save: false,
         media: false,
@@ -177,7 +173,7 @@ export default {
             this.service[key] = service[key];
           });
 
-          this.currentImageId = this.service.main_image.id;
+          //   this.currentImageId = this.service.main_image.id;
 
           this.media = [...service.media];
         })
@@ -253,11 +249,11 @@ export default {
       // Edit serveice
       let formData = new FormData();
       Object.keys(this.service).forEach(key => {
-        if (key == "main_image") {
-          if (this.service[key] instanceof File) {
-            this.UpdateMainPhoto(this.service[key]);
-          }
-        } else {
+        if (!(key == "main_image")) {
+          //   if (this.service[key] instanceof File) {
+          //     this.UpdateMainPhoto(this.service[key]);
+          //   }
+          // } else {
           formData.append(key, this.service[key]);
         }
       });
@@ -293,27 +289,27 @@ export default {
           console.log(err);
           this.loading.save = false;
         });
-    },
-    UpdateMainPhoto(image) {
-      let formData = new FormData();
-      formData.append("file", image);
-      formData.append("_method", "PUT");
-      formData.append("locale", this.locale);
-
-      this.loading.media = true;
-      UpdateMedia({ id: this.currentImageId, data: formData })
-        .then(() => {
-          if (!this.loading.main) {
-            this.$router.push({ name: "ServicesList" });
-            this.loading.save = false;
-          }
-          this.loading.media = false;
-        })
-        .catch(err => {
-          console.log(err);
-          this.loading.save = false;
-        });
     }
+    // UpdateMainPhoto(image) {
+    //   let formData = new FormData();
+    //   formData.append("file", image);
+    //   formData.append("_method", "PUT");
+    //   formData.append("locale", this.locale);
+
+    //   this.loading.media = true;
+    //   UpdateMedia({ id: this.currentImageId, data: formData })
+    //     .then(() => {
+    //       if (!this.loading.main) {
+    //         this.$router.push({ name: "ServicesList" });
+    //         this.loading.save = false;
+    //       }
+    //       this.loading.media = false;
+    //     })
+    //     .catch(err => {
+    //       console.log(err);
+    //       this.loading.save = false;
+    //     });
+    // }
   },
   validations() {
     return {
