@@ -23,6 +23,7 @@
                     :resetToggle="resetImage"
                     @fileSelected="handleselectLogo"
                     :maxSize="logoSize"
+                    :imgId="form.logo ? form.logo.id : null"
                   />
                 </v-col>
                 <v-col cols="12" md="6">
@@ -33,6 +34,7 @@
                     :resetToggle="resetImage"
                     @fileSelected="handleSelectMainImage"
                     :maxSize="mainImageSize"
+                    :imgId="form.main_media ? form.main_media.id : null"
                   />
                 </v-col>
                 <upload-video
@@ -248,7 +250,12 @@ export default {
 
             media.map(el => {
               if (el.type === "photo") {
-                this.mediaPhotos.push(el);
+                if (!el.main && el.title !== "logo") {
+                  if (this.mediaPhotos.includes(el)) {
+                    return;
+                  }
+                  this.mediaPhotos.push(el);
+                }
               } else {
                 if (this.form.videos.includes(el.path)) {
                   return;
@@ -353,11 +360,11 @@ export default {
         videos
       } = this.form;
 
-      this.mainMediaChanged && formData.append("main_media", main_media);
+      !this.$route.params.slug && formData.append("main_media", main_media);
       formData.append("name", name);
       description && formData.append("description", description);
       formData.append("priority", priority);
-      this.logoChange && formData.append("logo", logo);
+      !this.$route.params.slug && formData.append("logo", logo);
 
       this.multiImageChanged &&
         photos.map(el => formData.append("photos[]", el));
