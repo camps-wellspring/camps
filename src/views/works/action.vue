@@ -181,7 +181,6 @@ export default {
         description: "",
         priority: "",
         logo: "",
-
         photos: [],
         platforms_ids: "",
         work_url: "",
@@ -202,7 +201,8 @@ export default {
       selectLoading: true,
       logoChange: false,
       mainMediaChanged: false,
-      multiImageChanged: false
+      multiImageChanged: false,
+      videoChanged: false
     };
   },
   mounted() {
@@ -212,6 +212,7 @@ export default {
   },
   methods: {
     handleSetVideo(videos) {
+      this.videoChanged = true;
       this.form.videos = videos;
     },
     handleDeletePlatForm(item, index) {
@@ -251,9 +252,6 @@ export default {
             media.map(el => {
               if (el.type === "photo") {
                 if (!el.main && el.title !== "logo") {
-                  if (this.mediaPhotos.includes(el)) {
-                    return;
-                  }
                   this.mediaPhotos.push(el);
                 }
               } else {
@@ -316,7 +314,8 @@ export default {
         });
     },
     handleDeletePhoto(index) {
-      this.form.media.splice(index, 1);
+      //   this.form.media.splice(index, 1);
+      this.mediaPhotos.splice(index, 1);
     },
     getPhotos() {
       if (this.mediaPhotos) {
@@ -368,7 +367,7 @@ export default {
 
       this.multiImageChanged &&
         photos.map(el => formData.append("photos[]", el));
-      videos.length && videos.map(el => formData.append("videos[]", el));
+      this.videoChanged && videos.map(el => formData.append("videos[]", el));
       this.myPlatforms.length &&
         this.myPlatforms.map((el, index) => {
           formData.append(`platforms[${index}][id]`, el.id);
@@ -399,6 +398,7 @@ export default {
       })
         .then(() => {
           this.$router.go(-1);
+          this.videoChanged = false;
         })
         .catch(err => console.log(err))
         .finally(() => {

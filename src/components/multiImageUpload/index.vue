@@ -4,7 +4,7 @@
       type="file"
       ref="file"
       @change="onFileChange"
-      multiple
+      v-toggle-attr="isSingle"
       v-on="$attrs"
       style="display:none"
     />
@@ -14,7 +14,7 @@
         class="button button--upload"
         small
         text
-        @click="$refs.file.click()"
+        @click="openFileUpload"
         v-on="$attrs"
         title="upload Image"
       >
@@ -22,7 +22,9 @@
         <span class="upload_icon">Hoss</span>
       </v-btn>
       <div class="image__placeholder">
-        <span class="file-upload__image__placeholder ">Upload Media Gallery</span>
+        <span class="file-upload__image__placeholder "
+          >Upload Media Gallery</span
+        >
       </div>
     </section>
 
@@ -36,6 +38,14 @@
         class="img_pointer my-2 mt-4 px-2"
       >
         <v-img aspect-ratio="1.5" :src="showImg" alt class=" ml-2 show-photo" />
+        <v-icon
+          v-if="imgsUrl[index]"
+          @click="handleUpdatePhoto(index)"
+          :title="$t('label.edit')"
+          small
+          class="edit-icon"
+          >mdi-pencil</v-icon
+        >
         <!-- <i
           class="icon-close close_icon"
           @click="deleteIamge($event, index, ShowImgs)"
@@ -69,6 +79,8 @@
 <script>
 import { isValidImgType, isValidImgSize } from "@/utils/validate";
 import { deleteMedia } from "@/api/media.js";
+import { UpdateMedia } from "@/helpers/apiMethods";
+
 export default {
   props: {
     imgsUrl: {
@@ -107,6 +119,7 @@ export default {
       type: String
     }
   },
+
   watch: {
     reset: {
       handler(newValue) {
@@ -117,7 +130,8 @@ export default {
     },
     imgsUrl: {
       handler(value) {
-        this.ShowImgs = value.map(el => el.path);
+        const imgsPaths = value.map(el => el.path);
+        this.ShowImgs = [...this.ShowImgsCopy, ...imgsPaths];
       },
       immediate: true
     }
@@ -125,16 +139,29 @@ export default {
   data() {
     return {
       ShowImgs: [],
+      ShowImgsCopy: [],
       imgsFiles: [],
       errorDialog: null,
       errorText: "",
-      errorType: ""
+      errorType: "",
+      editCase: false,
+      photoIndex: "",
+      isSingle: false
     };
   },
   methods: {
-    // handleDrageImage(e) {
-    //   //   this.$refs.file.click();
-    // },
+    openFileUpload() {
+      this.isSingle = false;
+      this.$nextTick(() => this.$refs.file.click());
+    },
+    handleUpdatePhoto(index) {
+      console.log(index);
+      this.photoIndex = index;
+      this.editCase = true;
+      this.isSingle = true;
+      this.$nextTick(() => this.$refs.file.click());
+    },
+
     deleteIamge(e, index, imgs) {
       this.change = false;
 
@@ -147,7 +174,7 @@ export default {
             deleteMedia(id)
               .then(() => {
                 this.ShowImgs.splice(index, 1);
-                this.imgsFiles.splice(key, 1);
+                // this.imgsFiles.splice(key, 1);
                 this.$emit("handle_delete_image", index);
               })
               .catch(err => console.log(err));
@@ -157,6 +184,24 @@ export default {
         imgs.splice(index, 1);
         this.imgsFiles.splice(key, 1);
         this.$refs.file.value = "";
+      }
+    },
+    updatephoto(imgFile) {
+      // in case update
+      let formData = new FormData();
+      formData.append("file", imgFile);
+      formData.append("_method", "PUT");
+      formData.append("locale", "en");
+      if (this.photoIndex) {
+        const { id } = this.imgsUrl[this.photoIndex];
+        UpdateMedia({ id, data: formData })
+          .then(res => {
+            const { media } = res.data;
+            this.$set(this.ShowImgs, this.photoIndex, media.path);
+            this.editCase = false;
+            this.isSingle = false;
+          })
+          .catch(err => console.log(err));
       }
     },
 
@@ -169,7 +214,10 @@ export default {
         if (this.validateType(imgFiles[i])) {
           if (this.validateSize(imgFiles[i])) {
             fileReader.addEventListener("load", () => {
-              this.ShowImgs.push(fileReader.result);
+              if (!this.editCase) {
+                this.ShowImgs.push(fileReader.result);
+                this.ShowImgsCopy.push(fileReader.result);
+              }
             });
           }
         }
@@ -181,6 +229,7 @@ export default {
     },
     readImage(imgsFiles) {
       this.$emit("fileSelected", imgsFiles);
+      this.updatephoto(imgsFiles[0]);
     },
     validateSize(file) {
       if (isValidImgSize(file.size, this.maxSize)) {
@@ -244,7 +293,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .upload_file_section {
   border: 1px solid #ccc;
   padding: 20px !important;
@@ -269,6 +318,18 @@ export default {
 }
 .show-photo {
   border-radius: 3px;
+  position: relative;
+}
+.edit-icon {
+  position: absolute;
+  top: 12px;
+  right: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 10px #444;
+  transition: all 0.5s ease;
+  &:hover {
+    color: brown;
+  }
 }
 .image__placeholder {
   border: 1px solid #ccc;

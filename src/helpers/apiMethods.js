@@ -21,7 +21,13 @@ export const StoreData = args => {
 };
 // method for update data
 export const UpdateData = args => {
-  return updateData(args.reqName, args.data, args.id, args.locale, args.thereIsPhotos);
+  return updateData(
+    args.reqName,
+    args.data,
+    args.id,
+    args.locale,
+    args.thereIsPhotos
+  );
 };
 
 // method for delete data
