@@ -1,12 +1,18 @@
 <template>
-  <section class="platforms">
+  <section class="technologies">
     <global-toolbar
-      title="platforms"
+      title="technologies"
       action-button
       action-button-text="create"
-      @ButtonClicked="initDialog(false)"
+      @ButtonClicked="initDialog('create')"
     />
-    <v-data-table :headers="headers" :items="items" hide-default-footer :loading="loading.table">
+    <v-data-table
+      :headers="headers"
+      :items="items"
+      disable-pagination
+      hide-default-footer
+      :loading="loading.table"
+    >
       <template v-slot:item="{ item, index }">
         <tr>
           <td>{{ item.name }}</td>
@@ -21,13 +27,13 @@
           </td>
 
           <td>
-            <v-btn small depressed :color="item.color" />
+            <v-chip class="color-chip" :color="item.color" />
           </td>
 
           <td class="text-center">
             <toggle-service
               :is-edit="true"
-              model-name="platforms"
+              :model-name="config.modelName"
               :model-id="item.id"
               field="visible"
               v-model="item.visible"
@@ -36,7 +42,7 @@
           </td>
 
           <td>
-            <v-btn icon @click="initDialog(true, item)">
+            <v-btn icon @click="initDialog('update', item)">
               <v-icon medium title="edit">mdi-pencil</v-icon>
             </v-btn>
             <v-btn icon>
@@ -55,12 +61,15 @@
       </template>
       <template #body v-if="dialog">
         <component
-          :cur-item="editingItem"
+          :curr-item="editingItem"
           @closed="handleDialogClose"
-          :is="isEdit ? 'editItem' : 'createItem'"
+          :is="'action'"
+          :action-type="actionType"
+          :dialog="dialog"
         />
       </template>
     </DialogComponent>
+
     <global-image-preview
       :image-path="currImg"
       :show-dialog="imgPreviewDialog"
@@ -70,83 +79,29 @@
 </template>
 
 <script>
-import generateTableHeaders from "@/helpers/TableHeaders";
-import { IndexData, DeleteData } from "@/helpers/apiMethods";
-import imgPreviewMixin from "@/mixins/imgPreview";
+import indexMixin from "@/mixins/indexMixin";
 
 export default {
   name: "Platforms",
 
-  mixins: [imgPreviewMixin],
-
   components: {
-    createItem: () => import("./components/create"),
-    editItem: () => import("./components/edit")
+    action: () => import("./components/action")
   },
+
+  mixins: [indexMixin],
 
   data() {
     return {
-      headerValues: ["name", "logo", "color", "visible", "actions"],
-      items: [],
-      isEdit: false,
-      editingItem: {},
-      loading: {
-        table: false
+      headerValues: ["name", "icon", "color", "visible", "actions"],
+      model: {
+        name: "",
+        color: "",
+        icon: null
       },
-      dialog: false
+      config: {
+        modelName: "platforms"
+      }
     };
-  },
-
-  computed: {
-    headers() {
-      return generateTableHeaders(this.headerValues);
-    },
-    dialogTitle() {
-      return this.isEdit ? this.$t("heading.edit") : this.$t("heading.create");
-    }
-  },
-
-  created() {
-    this.fetchItems();
-  },
-
-  methods: {
-    fetchItems() {
-      this.loading.table = true;
-      IndexData({ reqName: "platforms" })
-        .then(res => {
-          this.items = res.data.data;
-          this.loading.table = false;
-        })
-        .catch(() => (this.loading.table = false));
-    },
-
-    initDialog(state, currItem) {
-      this.isEdit = state;
-      state && (this.editingItem = currItem);
-      this.dialog = true;
-    },
-
-    handleDialogClose() {
-      this.dialog = false;
-      this.fetchItems();
-    },
-
-    handleDelete(id, index) {
-      this.popUp(this.$t("message.delete")).then(value => {
-        if (!value.dismiss) {
-          this.loading.table = true;
-          DeleteData({ reqName: "platforms", id })
-            .then(() => {
-              this.items.splice(index, 1);
-              this.loading.table = false;
-            })
-            .catch(() => {
-              this.loading.table = false;
-            });
-        }
-      });
-    }
   }
 };
 </script>

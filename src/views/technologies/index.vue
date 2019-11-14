@@ -46,6 +46,7 @@
           @closed="handleDialogClose"
           :is="'action'"
           :action-type="actionType"
+          :dialog="dialog"
         />
       </template>
     </DialogComponent>
@@ -59,82 +60,29 @@
 </template>
 
 <script>
-import generateTableHeaders from "@/helpers/TableHeaders";
-import { IndexData, DeleteData } from "@/helpers/apiMethods";
-import imgPreviewMixin from "@/mixins/imgPreview";
+import indexMixin from "@/mixins/indexMixin";
 
 export default {
   name: "Technologies",
-
-  mixins: [imgPreviewMixin],
 
   components: {
     action: () => import("./components/action")
   },
 
+  mixins: [indexMixin],
+
   data() {
     return {
       headerValues: ["name", "icon", "url", "actions"],
-      items: [],
-      actionType: "",
-      editingItem: {},
-      loading: {
-        table: false
+      model: {
+        name: "",
+        url: "",
+        icon: null
       },
-      dialog: false
+      config: {
+        modelName: "technologies"
+      }
     };
-  },
-
-  computed: {
-    headers() {
-      return generateTableHeaders(this.headerValues);
-    },
-    dialogTitle() {
-      return this.actionType ? this.$t("heading.edit") : this.$t("heading.create");
-    }
-  },
-
-  created() {
-    this.fetchItems();
-  },
-
-  methods: {
-    fetchItems() {
-      this.loading.table = true;
-      IndexData({ reqName: "technologies" })
-        .then(res => {
-          this.items = res.data.data;
-          this.loading.table = false;
-        })
-        .catch(() => (this.loading.table = false));
-    },
-
-    initDialog(type, currItem) {
-      this.actionType = type;
-      type === "update" && (this.editingItem = currItem);
-      this.dialog = true;
-    },
-
-    handleDialogClose() {
-      this.dialog = false;
-      this.fetchItems();
-    },
-
-    handleDelete(id, index) {
-      this.popUp(this.$t("message.delete")).then(value => {
-        if (!value.dismiss) {
-          this.loading.table = true;
-          DeleteData({ reqName: "technologies", id })
-            .then(() => {
-              this.items.splice(index, 1);
-              this.loading.table = false;
-            })
-            .catch(() => {
-              this.loading.table = false;
-            });
-        }
-      });
-    }
   }
 };
 </script>
