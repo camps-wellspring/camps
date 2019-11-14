@@ -1,7 +1,7 @@
 <template>
-  <section class="technologies">
+  <section class="store_categories">
     <global-toolbar
-      title="technologies"
+      title="store-categories"
       action-button
       action-button-text="create"
       @ButtonClicked="initDialog('create')"
@@ -35,7 +35,7 @@
               <v-icon medium title="edit">mdi-pencil</v-icon>
             </v-btn>
             <v-btn icon>
-              <v-icon medium title="delete" @click="handleDelete(item.id, index)">
+              <v-icon medium title="delete" @click="handleDelete(item.slug, index)">
                 mdi-delete</v-icon
               >
             </v-btn>
@@ -54,6 +54,7 @@
           @closed="handleDialogClose"
           :is="'action'"
           :action-type="actionType"
+          :config="config"
           :dialog="dialog"
         />
       </template>
@@ -88,6 +89,7 @@ export default {
         icon: null
       },
       config: {
+        idType: "slug",
         modelName: "store-categories",
         imgType: "icon"
       }

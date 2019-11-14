@@ -85,12 +85,6 @@ export default {
 
   mixins: [actionMixin],
 
-  data() {
-    return {
-      form: {}
-    };
-  },
-
   validations() {
     return {
       form: {
