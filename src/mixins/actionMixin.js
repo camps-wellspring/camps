@@ -9,13 +9,17 @@ export default {
     actionType: {
       type: String,
       required: true
+    },
+    dialog: {
+      type: Boolean,
+      default: false
     }
   },
 
   data() {
     return {
-      // [this.config.imgType]: null,
       locale: "",
+      imgUpdated: true,
       loading: {
         submit: false,
         fetch: false
@@ -39,10 +43,18 @@ export default {
     }
   },
 
+  mounted() {
+    window.eventBus.$on("SET_DIALOG", value => {
+      if (!value) {
+        this.reset();
+      }
+    });
+  },
+
   methods: {
     onSubmit() {
       if (this.actionType === "update") {
-        this.update().then(() => this.closeDialog());
+        this.update().then(() => this.imgUpdated && this.closeDialog());
       } else {
         this.create().then(() => this.closeDialog());
       }
@@ -101,8 +113,9 @@ export default {
     },
 
     handleImg(img) {
-      this.form[this.imgType] = img.file;
-      this.$v.form[this.imgType].$touch();
+      this.form[this.config.imgType] = img.file;
+      this.imgUpdated = false;
+      this.$v.form[this.config.imgType].$touch();
     },
 
     closeDialog() {
@@ -112,7 +125,6 @@ export default {
 
     reset() {
       this.form = {};
-      [this.imgType] = null;
       this.locale = this.$store.getters.locale;
     }
   }

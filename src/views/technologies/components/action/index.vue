@@ -38,12 +38,18 @@
           </v-col>
 
           <v-col cols="12" md="6">
-            <new-image-upload
-              class="file-upload__image"
-              :imgUrl="form[config.imgType] && form[config.imgType].path"
-              :imgId="form[config.imgType] && form[config.imgType].id"
-              @fileSelected="handleImg"
-            />
+            <form-group :name="config.imgType">
+              <template slot-scope="{ attrs }">
+                <new-image-upload
+                  class="file-upload__image"
+                  :imgUrl="form[config.imgType] && form[config.imgType].path"
+                  :imgId="form[config.imgType] && form[config.imgType].id"
+                  @fileSelected="handleImg"
+                  @ImageUpdated="imgUpdated = true"
+                  v-bind="attrs"
+                />
+              </template>
+            </form-group>
           </v-col>
 
           <v-col cols="12">
@@ -72,21 +78,12 @@ export default {
 
   data() {
     return {
-      form: {
-        name: "",
-        url: "",
-        icon: null
-      },
-      icon: null,
       config: {
-        modelName: "technologies"
-      }
+        modelName: "technologies",
+        imgType: "icon"
+      },
+      form: {}
     };
-  },
-  computed: {
-    imgType() {
-      return "icon";
-    }
   },
 
   validations() {
@@ -98,9 +95,10 @@ export default {
           maxLength: maxLength(20)
         },
         url: {
-          url
+          url,
+          required: requiredIf(() => this.actionType === "create")
         },
-        icon: {
+        [this.config.imgType]: {
           required: requiredIf(() => this.actionType === "create")
         }
       }

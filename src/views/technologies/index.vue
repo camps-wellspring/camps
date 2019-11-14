@@ -46,6 +46,7 @@
           @closed="handleDialogClose"
           :is="'action'"
           :action-type="actionType"
+          :dialog="dialog"
         />
       </template>
     </DialogComponent>
@@ -78,6 +79,11 @@ export default {
       items: [],
       actionType: "",
       editingItem: {},
+      model: {
+        name: "",
+        url: "",
+        icon: null
+      },
       loading: {
         table: false
       },
@@ -111,7 +117,7 @@ export default {
 
     initDialog(type, currItem) {
       this.actionType = type;
-      type === "update" && (this.editingItem = currItem);
+      type === "update" ? (this.editingItem = currItem) : (this.editingItem = this.model);
       this.dialog = true;
     },
 
