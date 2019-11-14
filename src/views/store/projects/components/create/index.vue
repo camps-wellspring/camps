@@ -23,7 +23,7 @@
 
           <v-col cols="12" md="6">
             <div class="d-flex align-center">
-              <span class="color-label">Color: </span>
+              <span class="color-label">{{ $t("label.color") }}:</span>
               <v-menu
                 bottom
                 origin="center center"

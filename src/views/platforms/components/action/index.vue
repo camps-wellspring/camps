@@ -24,17 +24,26 @@
           </v-col>
 
           <v-col cols="12" md="6">
-            <form-group name="url">
-              <template slot-scope="{ attrs }">
-                <v-text-field
-                  v-model="form.url"
-                  v-bind="attrs"
-                  outlined
-                  :label="$t('label.url')"
-                  @blur="$v.form.url.$touch()"
-                ></v-text-field>
-              </template>
-            </form-group>
+            <div class="d-flex align-center">
+              <span class="color-label">{{ $t("label.color") }}:</span>
+              <v-menu
+                bottom
+                origin="center center"
+                transition="scale-transition"
+                :close-on-content-click="false"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-btn class="color-button" x-large depressed :color="form.color" v-on="on" />
+                </template>
+                <v-color-picker
+                  :value="form.color"
+                  @update:color="form.color = $event.hex"
+                  mode="hexa"
+                  hide-mode-switch
+                  @input="$v.form.color.$touch()"
+                />
+              </v-menu>
+            </div>
           </v-col>
 
           <v-col cols="12" md="6">
@@ -68,18 +77,18 @@
 </template>
 
 <script>
-import { url, minLength, maxLength, required, requiredIf } from "vuelidate/lib/validators";
+import { minLength, maxLength, required, requiredIf } from "vuelidate/lib/validators";
 import actionMixin from "@/mixins/actionMixin";
 
 export default {
-  name: "technologies",
+  name: "Platforms",
 
   mixins: [actionMixin],
 
   data() {
     return {
       config: {
-        modelName: "technologies",
+        modelName: "platforms",
         imgType: "icon"
       },
       form: {}
@@ -94,8 +103,7 @@ export default {
           minLength: minLength(3),
           maxLength: maxLength(20)
         },
-        url: {
-          url,
+        color: {
           required: requiredIf(() => this.actionType === "create")
         },
         [this.config.imgType]: {

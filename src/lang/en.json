@@ -71,7 +71,7 @@
     "works": "Works",
     "platforms": "Platforms",
     "store-categories": "Store Categories",
-    "demo_types":"Demo Types"
+    "demo_types": "Demo Types"
   },
   "table": {
     "profile": "Profile",
@@ -119,7 +119,8 @@
     "video_url": "Video Url",
     "main_video": "Video Url",
     "platforms": "Platforms",
-    "features": "Features"
+    "features": "Features",
+    "color": "Color"
   },
   "title": {
     "edit_service": "Edit Service",
