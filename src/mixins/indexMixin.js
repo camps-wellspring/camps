@@ -33,7 +33,7 @@ export default {
   methods: {
     fetchItems() {
       this.loading.table = true;
-      IndexData({ reqName: "technologies" })
+      IndexData({ reqName: this.config.modelName })
         .then(res => {
           this.items = res.data.data;
           this.loading.table = false;
@@ -56,7 +56,7 @@ export default {
       this.popUp(this.$t("message.delete")).then(value => {
         if (!value.dismiss) {
           this.loading.table = true;
-          DeleteData({ reqName: "technologies", id })
+          DeleteData({ reqName: this.config.modelName, id })
             .then(() => {
               this.items.splice(index, 1);
               this.loading.table = false;

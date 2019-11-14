@@ -78,6 +78,9 @@ export default {
         name: "",
         url: "",
         icon: null
+      },
+      config: {
+        modelName: "technologies"
       }
     };
   }
