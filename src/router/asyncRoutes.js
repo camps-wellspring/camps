@@ -176,9 +176,29 @@ export const asyncRouterMap = [
         path: "projects",
         component: () => import("@/views/store/projects"),
         name: "Projects",
-        // hidden: true,
+        // hidden: false,
         meta: {
           title: "projects",
+          icon: "mdi-account-circle"
+        }
+      },
+      {
+        path: "projects/create",
+        component: () => import("@/views/store/projects/action"),
+        name: "ProjectCreate",
+        hidden: true,
+        meta: {
+          title: "create_project",
+          icon: "mdi-account-circle"
+        }
+      },
+      {
+        path: "projects/edit",
+        component: () => import("@/views/store/projects/action"),
+        name: "ProjectEdit",
+        hidden: true,
+        meta: {
+          title: "edit_project",
           icon: "mdi-account-circle"
         }
       }

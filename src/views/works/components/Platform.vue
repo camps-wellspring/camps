@@ -59,10 +59,7 @@
                   <td>{{ item.name }}</td>
                   <td>{{ item.url }}</td>
                   <td>
-                    <v-icon
-                      medium
-                      title="delete"
-                      @click="handleDeletePlatForm(item, index)"
+                    <v-icon medium title="delete" @click="handleDeletePlatForm(item, index)"
                       >mdi-delete</v-icon
                     >
                   </td>
@@ -132,15 +129,11 @@ export default {
       this.items.unshift(item);
     },
     handleValidPlatforms() {
-      return (
-        this.$v.form.platforms_ids.$invalid || this.$v.form.work_url.$invalid
-      );
+      return this.$v.form.platforms_ids.$invalid || this.$v.form.work_url.$invalid;
     },
     handleAddPlatforms() {
       const { work_url, platforms_ids } = this.form;
-      const platFormObject = this.items.filter(
-        el => el.id === platforms_ids
-      )[0];
+      const platFormObject = this.items.filter(el => el.id === platforms_ids)[0];
       platFormObject.url = work_url;
 
       if (work_url !== "" && platforms_ids !== "") {

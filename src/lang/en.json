@@ -71,7 +71,8 @@
     "works": "Works",
     "platforms": "Platforms",
     "store-categories": "Store Categories",
-    "demo_types": "Demo Types"
+    "demo_types": "Demo Types",
+    "projects": "Projects"
   },
   "table": {
     "profile": "Profile",
@@ -93,7 +94,8 @@
     "features": "Features",
     "visibility": "Visibility",
     "template": "Template",
-    "photo": "Photo"
+    "photo": "Photo",
+    "available": "Available"
   },
   "label": {
     "hoss": "Hoss",

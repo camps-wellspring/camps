@@ -1,10 +1,10 @@
 <template>
-  <section class="technologies">
+  <section class="projects">
     <global-toolbar
-      title="technologies"
+      title="projects"
       action-button
       action-button-text="create"
-      @ButtonClicked="initDialog('create')"
+      @ButtonClicked="$router.push({ name: 'ProjectCreate' })"
     />
     <v-data-table :headers="headers" :items="items" hide-default-footer :loading="loading.table">
       <template v-slot:item="{ item, index }">
@@ -45,7 +45,7 @@
           </td>
 
           <td>
-            <v-btn icon @click="initDialog('update', item)">
+            <v-btn icon :to="{ name: 'ProjectEdit' }" append>
               <v-icon medium title="edit">mdi-pencil</v-icon>
             </v-btn>
             <v-btn icon>
@@ -89,7 +89,7 @@ export default {
   name: "Projects",
 
   components: {
-    action: () => import("./components/action")
+    action: () => import("./action")
   },
 
   mixins: [indexMixin],
