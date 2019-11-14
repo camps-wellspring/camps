@@ -53,12 +53,8 @@
             </v-btn>
           </td>
           <td>
-            <v-icon medium title="edit" @click="handleEdit(item, index)"
-              >mdi-pencil</v-icon
-            >
-            <v-icon medium title="delete" @click="handleDelete(item, index)"
-              >mdi-delete</v-icon
-            >
+            <v-icon medium title="edit" @click="handleEdit(item, index)">mdi-pencil</v-icon>
+            <v-icon medium title="delete" @click="handleDelete(item, index)">mdi-delete</v-icon>
           </td>
         </tr>
       </template>

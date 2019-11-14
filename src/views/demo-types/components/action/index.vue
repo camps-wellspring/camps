@@ -24,26 +24,13 @@
           </v-col>
 
           <v-col cols="12" md="6">
-            <form-group name="url">
-              <template slot-scope="{ attrs }">
-                <v-text-field
-                  v-model="form.url"
-                  v-bind="attrs"
-                  outlined
-                  :label="$t('label.url')"
-                  @blur="$v.form.url.$touch()"
-                ></v-text-field>
-              </template>
-            </form-group>
-          </v-col>
-
-          <v-col cols="12" md="6">
             <form-group :name="config.imgType">
               <template slot-scope="{ attrs }">
                 <new-image-upload
                   class="file-upload__image"
                   :imgUrl="form[config.imgType] && form[config.imgType].path"
                   :imgId="form[config.imgType] && form[config.imgType].id"
+                  :max-size="2"
                   @fileSelected="handleImg"
                   @ImageUpdated="imgUpdated = true"
                   v-bind="attrs"
@@ -68,12 +55,10 @@
 </template>
 
 <script>
-import { url, minLength, maxLength, required, requiredIf } from "vuelidate/lib/validators";
+import { minLength, maxLength, required, requiredIf } from "vuelidate/lib/validators";
 import actionMixin from "@/mixins/actionMixin";
 
 export default {
-  name: "technologies",
-
   mixins: [actionMixin],
 
   validations() {
@@ -82,11 +67,7 @@ export default {
         name: {
           required,
           minLength: minLength(3),
-          maxLength: maxLength(20)
-        },
-        url: {
-          url,
-          required: requiredIf(() => this.actionType === "create")
+          maxLength: maxLength(40)
         },
         [this.config.imgType]: {
           required: requiredIf(() => this.actionType === "create")

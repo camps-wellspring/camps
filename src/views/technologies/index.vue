@@ -14,9 +14,9 @@
           <td class="table-logo">
             <v-avatar class="square">
               <img
-                :src="item.icon.path"
-                :alt="item.icon.description"
-                @click="handleImgPreview(item.icon.path)"
+                :src="item[config.imgType].path"
+                :alt="item[config.imgType].description"
+                @click="handleImgPreview(item[config.imgType].path)"
             /></v-avatar>
           </td>
 
@@ -45,6 +45,7 @@
           :curr-item="editingItem"
           @closed="handleDialogClose"
           :is="'action'"
+          :config="config"
           :action-type="actionType"
           :dialog="dialog"
         />
@@ -80,7 +81,8 @@ export default {
         icon: null
       },
       config: {
-        modelName: "technologies"
+        modelName: "technologies",
+        imgType: "icon"
       }
     };
   }

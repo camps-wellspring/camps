@@ -6,6 +6,10 @@ export default {
       type: Object,
       default: () => {}
     },
+    config: {
+      type: Object,
+      default: () => {}
+    },
     actionType: {
       type: String,
       required: true
@@ -20,6 +24,7 @@ export default {
     return {
       locale: "",
       imgUpdated: true,
+      form: {},
       loading: {
         submit: false,
         fetch: false
@@ -30,6 +35,9 @@ export default {
   computed: {
     currLocale() {
       return this.locale ? this.locale : this.$store.getters.locale;
+    },
+    itemId() {
+      return this.config.idType ? this.config.idType : "id";
     }
   },
 
@@ -72,7 +80,7 @@ export default {
         UpdateData({
           reqName: this.config.modelName,
           data: payload,
-          id: this.currItem.id
+          id: this.currItem[this.itemId]
         })
           .then(() => {
             this.loading.submit = false;

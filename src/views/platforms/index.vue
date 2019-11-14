@@ -20,9 +20,9 @@
           <td class="table-logo">
             <v-avatar class="square">
               <img
-                :src="item.icon.path"
-                :alt="item.icon.description"
-                @click="handleImgPreview(item.icon.path)"
+                :src="item[config.imgType].path"
+                :alt="item[config.imgType].description"
+                @click="handleImgPreview(item[config.imgType].path)"
             /></v-avatar>
           </td>
 
@@ -65,6 +65,7 @@
           @closed="handleDialogClose"
           :is="'action'"
           :action-type="actionType"
+          :config="config"
           :dialog="dialog"
         />
       </template>
@@ -99,7 +100,8 @@ export default {
         icon: null
       },
       config: {
-        modelName: "platforms"
+        modelName: "platforms",
+        imgType: "icon"
       }
     };
   }

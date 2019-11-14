@@ -1,7 +1,13 @@
 <template>
   <v-container>
+    <locale-select
+      v-if="actionType === 'update'"
+      :loading="loading.fetch"
+      @change="handleLocaleChange"
+    />
+
     <form-wrapper :validator="$v.form">
-      <form @submit.prevent="submit">
+      <form @submit.prevent="onSubmit">
         <v-row>
           <v-col cols="12" md="6">
             <form-group name="name">
@@ -18,10 +24,6 @@
           </v-col>
 
           <v-col cols="12" md="6">
-            <new-image-upload class="file-upload__image" @fileSelected="handleImg" />
-          </v-col>
-
-          <v-col cols="12" md="6">
             <div class="d-flex align-center">
               <span class="color-label">{{ $t("label.color") }}:</span>
               <v-menu
@@ -34,13 +36,29 @@
                   <v-btn class="color-button" x-large depressed :color="form.color" v-on="on" />
                 </template>
                 <v-color-picker
-                  v-model="form.color"
+                  :value="form.color"
+                  @update:color="form.color = $event.hex"
                   mode="hexa"
                   hide-mode-switch
-                  @update:color="handleColorChange($event.hex)"
+                  @input="$v.form.color.$touch()"
                 />
               </v-menu>
             </div>
+          </v-col>
+
+          <v-col cols="12" md="6">
+            <form-group :name="config.imgType">
+              <template slot-scope="{ attrs }">
+                <new-image-upload
+                  class="file-upload__image"
+                  :imgUrl="form[config.imgType] && form[config.imgType].path"
+                  :imgId="form[config.imgType] && form[config.imgType].id"
+                  @fileSelected="handleImg"
+                  @ImageUpdated="imgUpdated = true"
+                  v-bind="attrs"
+                />
+              </template>
+            </form-group>
           </v-col>
 
           <v-col cols="12">
@@ -59,18 +77,13 @@
 </template>
 
 <script>
-import { required, minLength, maxLength } from "vuelidate/lib/validators";
-import { StoreData } from "@/helpers/apiMethods";
+import { minLength, maxLength, required, requiredIf } from "vuelidate/lib/validators";
+import actionMixin from "@/mixins/actionMixin";
 
 export default {
-  data() {
-    return {
-      form: {},
-      loading: {
-        submit: false
-      }
-    };
-  },
+  name: "Platforms",
+
+  mixins: [actionMixin],
 
   validations() {
     return {
@@ -78,50 +91,16 @@ export default {
         name: {
           required,
           minLength: minLength(3),
-          maxLength: maxLength(50)
+          maxLength: maxLength(20)
         },
         color: {
-          required
+          required: requiredIf(() => this.actionType === "create")
         },
-        icon: {
-          required
+        [this.config.imgType]: {
+          required: requiredIf(() => this.actionType === "create")
         }
       }
     };
-  },
-
-  methods: {
-    handleImg(img) {
-      this.form.icon = img.file;
-      this.$v.form.icon.$touch();
-    },
-
-    handleColorChange(color) {
-      this.form.color = color;
-      this.$v.form.color.$touch();
-    },
-
-    submit() {
-      this.loading.submit = true;
-      let payload = new FormData();
-      for (const el in this.form) {
-        payload.append(el, this.form[el]);
-      }
-      StoreData({
-        reqName: "store-categories",
-        data: payload
-      })
-        .then(() => {
-          this.loading.submit = false;
-          this.reset();
-          this.$emit("closed");
-        })
-        .catch(() => (this.loading.submit = false));
-    },
-
-    reset() {
-      this.form = {};
-    }
   }
 };
 </script>
