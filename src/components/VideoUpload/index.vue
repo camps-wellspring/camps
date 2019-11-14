@@ -43,11 +43,7 @@
                   allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                   allowfullscreen
                 ></iframe>
-                <v-icon
-                  @click="deleteVideo(video, index)"
-                  class="close_icon"
-                  medium
-                  color="#fff"
+                <v-icon @click="deleteVideo(video, index)" class="close_icon" medium color="#fff"
                   >mdi-close
                 </v-icon>
               </div>

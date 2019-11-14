@@ -11,20 +11,11 @@
         {{ $t("button.create") }}
       </v-btn>
     </v-toolbar> -->
-    <global-toolbar
-      title="services"
-      :actionButton="true"
-      @ButtonClicked="createService"
-    />
+    <global-toolbar title="services" :actionButton="true" @ButtonClicked="createService" />
     <!-- Toolbar -->
 
     <!-- Table -->
-    <v-data-table
-      :headers="headers"
-      :items="services"
-      hide-default-footer
-      :loading="tableLoading"
-    >
+    <v-data-table :headers="headers" :items="services" hide-default-footer :loading="tableLoading">
       <template v-slot:item="{ item, index }">
         <tr>
           <td>
@@ -99,11 +90,7 @@
               @click="handleSubs(item)"
               >mdi-plus</v-icon
             > -->
-            <v-icon
-              class="edit"
-              small
-              :title="$t('label.edit')"
-              @click="handleEdit(item)"
+            <v-icon class="edit" small :title="$t('label.edit')" @click="handleEdit(item)"
               >mdi-pencil</v-icon
             >
             <v-icon

@@ -85,16 +85,6 @@ export default {
 
   mixins: [actionMixin],
 
-  data() {
-    return {
-      config: {
-        modelName: "platforms",
-        imgType: "icon"
-      },
-      form: {}
-    };
-  },
-
   validations() {
     return {
       form: {

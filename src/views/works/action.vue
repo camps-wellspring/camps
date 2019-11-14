@@ -117,10 +117,7 @@
                           <td>{{ item.name }}</td>
                           <td>{{ item.url }}</td>
                           <td>
-                            <v-icon
-                              medium
-                              title="delete"
-                              @click="handleDeletePlatForm(item, index)"
+                            <v-icon medium title="delete" @click="handleDeletePlatForm(item, index)"
                               >mdi-delete</v-icon
                             >
                           </td>
@@ -151,21 +148,9 @@
 </template>
 
 <script>
-import {
-  required,
-  minLength,
-  maxLength,
-  numeric,
-  url,
-  requiredIf
-} from "vuelidate/lib/validators";
+import { required, minLength, maxLength, numeric, url, requiredIf } from "vuelidate/lib/validators";
 import TableHeaders from "@/helpers/TableHeaders";
-import {
-  IndexData,
-  StoreData,
-  ShowData,
-  UpdateData
-} from "../../helpers/apiMethods";
+import { IndexData, StoreData, ShowData, UpdateData } from "../../helpers/apiMethods";
 import Cookies from "js-cookie";
 
 export default {
@@ -235,15 +220,7 @@ export default {
         ShowData({ reqName: "works", id: slug, locale: this.locale })
           .then(res => {
             const { work } = res.data;
-            const {
-              name,
-              description,
-              logo,
-              media,
-              platforms,
-              main_media,
-              priority
-            } = work;
+            const { name, description, logo, media, platforms, main_media, priority } = work;
             this.updateData = work;
             this.form = {
               name,
@@ -279,15 +256,11 @@ export default {
       this.form = {};
     },
     handleValidPlatforms() {
-      return (
-        this.$v.form.platforms_ids.$invalid || this.$v.form.work_url.$invalid
-      );
+      return this.$v.form.platforms_ids.$invalid || this.$v.form.work_url.$invalid;
     },
     handleAddPlatforms() {
       const { work_url, platforms_ids } = this.form;
-      const platFormObject = this.items.filter(
-        el => el.id === platforms_ids
-      )[0];
+      const platFormObject = this.items.filter(el => el.id === platforms_ids)[0];
       platFormObject.url = work_url;
 
       if (work_url !== "" && platforms_ids !== "") {
@@ -357,15 +330,7 @@ export default {
     },
     buildData() {
       const formData = new FormData();
-      const {
-        name,
-        description,
-        main_media,
-        photos,
-        priority,
-        logo,
-        videos
-      } = this.form;
+      const { name, description, main_media, photos, priority, logo, videos } = this.form;
 
       !this.$route.params.slug && formData.append("main_media", main_media);
       formData.append("name", name);
@@ -373,8 +338,7 @@ export default {
       formData.append("priority", priority);
       !this.$route.params.slug && formData.append("logo", logo);
 
-      this.multiImageChanged &&
-        photos.map(el => formData.append("photos[]", el));
+      this.multiImageChanged && photos.map(el => formData.append("photos[]", el));
       this.videoChanged && videos.map(el => formData.append("videos[]", el));
       this.myPlatforms.length &&
         this.myPlatforms.map((el, index) => {
