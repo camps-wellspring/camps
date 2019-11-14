@@ -5,6 +5,9 @@
       <v-divider class="mx-2" inset vertical></v-divider>
     </v-toolbar>
     <v-container>
+      <v-col cols="12" v-if="$route.params.slug">
+        <locale-select @change="fireLocaleChange" />
+      </v-col>
       <form-wrapper :validator="$v.form">
         <form @submit.prevent="handleSubmit">
           <!-- main info componennt -->
@@ -163,6 +166,7 @@ import {
   ShowData,
   UpdateData
 } from "../../helpers/apiMethods";
+import Cookies from "js-cookie";
 
 export default {
   name: "CreateAndEdit",
@@ -202,7 +206,8 @@ export default {
       logoChange: false,
       mainMediaChanged: false,
       multiImageChanged: false,
-      videoChanged: false
+      videoChanged: false,
+      locale: Cookies.get("language")
     };
   },
   mounted() {
@@ -211,6 +216,10 @@ export default {
     this.showWorkData();
   },
   methods: {
+    fireLocaleChange(locale) {
+      this.locale = locale;
+      this.showWorkData();
+    },
     handleSetVideo(videos) {
       this.videoChanged = true;
       this.form.videos = videos;
@@ -223,7 +232,7 @@ export default {
     showWorkData() {
       const { slug } = this.$route.params;
       if (this.$route.name === "edit_work") {
-        ShowData({ reqName: "works", id: slug })
+        ShowData({ reqName: "works", id: slug, locale: this.locale })
           .then(res => {
             const { work } = res.data;
             const {
@@ -249,15 +258,14 @@ export default {
             };
             this.myPlatforms = platforms;
 
+            this.mediaPhotos = [];
+
             media.map(el => {
               if (el.type === "photo") {
                 if (!el.main && el.title !== "logo") {
                   this.mediaPhotos.push(el);
                 }
               } else {
-                if (this.form.videos.includes(el.path)) {
-                  return;
-                }
                 this.videosFiles.push(el);
                 this.form.videos.push(el);
               }
@@ -374,7 +382,7 @@ export default {
           formData.append(`platforms[${index}][url]`, el.url);
         });
       formData.append("visible", true);
-      formData.append("locale", "en");
+      this.$route.params.slug && formData.append("locale", this.locale);
       this.$route.name === "edit_work" && formData.append("_method", "put");
       return formData;
     },

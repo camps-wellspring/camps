@@ -19,8 +19,10 @@
       <template v-slot:item="{ item, index }">
         <tr>
           <td>
-            <v-avatar size="50">
+            <v-avatar size="40" style=" cursor: pointer;">
               <v-img
+                :title="$t('label.preview')"
+                @click="showImagePreview(item.logo)"
                 aspect-ratio="1"
                 :src="item.logo ? item.logo.path : '@/assets/imgs/user.jpg'"
               ></v-img>
@@ -40,12 +42,45 @@
           <td>{{ item.priority }}</td>
           <td>{{ item.description | truncate }}</td>
           <td>
-            <v-icon medium title="edit" @click="handleEdit(item, index)">mdi-pencil</v-icon>
-            <v-icon medium title="delete" @click="handleDelete(item, index)">mdi-delete</v-icon>
+            <v-btn
+              :title="$t('label.features')"
+              @click="handleFeatures(item)"
+              :color="item.features ? 'primary' : 'red'"
+              icon
+              fab
+              small
+            >
+              <v-icon class="edit">mdi-star-circle-outline</v-icon>
+            </v-btn>
+          </td>
+          <td>
+            <v-icon medium title="edit" @click="handleEdit(item, index)"
+              >mdi-pencil</v-icon
+            >
+            <v-icon medium title="delete" @click="handleDelete(item, index)"
+              >mdi-delete</v-icon
+            >
           </td>
         </tr>
       </template>
     </v-data-table>
+    <!-- Image Preview -->
+    <global-image-preview
+      :showDialog="imageOverlay"
+      :imagePath="currentPreviewImage"
+      @closePreview="imageOverlay = false"
+    />
+    <!-- Image Preview -->
+    <!-- Dialog -->
+    <v-dialog v-model="showFeaturesDialog" max-width="700px">
+      <global-features
+        FeaturedItemType="work"
+        v-if="showFeaturesDialog"
+        :FeaturedItemId="currentFeaturedItemId"
+        @closeFeatures="closeFeatures"
+      ></global-features>
+    </v-dialog>
+    <!-- Dialog -->
     <!-- table -->
     <div class="text-xs-center mt-4">
       <v-pagination
@@ -62,9 +97,14 @@
 <script>
 import TableHeaders from "@/helpers/TableHeaders";
 import { IndexData, DeleteData } from "@/helpers/apiMethods";
+
 import { isEqual } from "lodash";
 export default {
   name: "Works",
+  components: {
+    GlobalFeatures: () => import("@/components/GlobalFeatures")
+  },
+
   data() {
     return {
       headers: [],
@@ -72,14 +112,30 @@ export default {
       expanded: [],
       pagination: {},
       singleExpand: false,
+      showFeaturesDialog: false,
       tableLoading: true,
-      queries: {}
+      queries: {},
+      imageOverlay: false,
+      currentPreviewImage: ""
     };
   },
   mounted() {
     this.createTableHeaders();
   },
   methods: {
+    showImagePreview(image) {
+      if (image) {
+        this.currentPreviewImage = image.path;
+        this.imageOverlay = true;
+      }
+    },
+    closeFeatures() {
+      this.showFeaturesDialog = false;
+    },
+    handleFeatures({ id }) {
+      this.showFeaturesDialog = true;
+      this.currentFeaturedItemId = id;
+    },
     handlePagination(page) {
       this.queries = { ...this.queries, page };
       if (!isEqual(this.queries, this.$route.query)) {
@@ -122,7 +178,15 @@ export default {
         });
     },
     createTableHeaders() {
-      const headersList = ["logo", "name", "visible", "priority", "description", "configs"];
+      const headersList = [
+        "logo",
+        "name",
+        "visible",
+        "priority",
+        "description",
+        "features",
+        "configs"
+      ];
       this.headers = TableHeaders(headersList);
     }
   },
