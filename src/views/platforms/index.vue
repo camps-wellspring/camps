@@ -80,8 +80,8 @@ export default {
   mixins: [imgPreviewMixin],
 
   components: {
-    createItem: () => import("./components/create"),
-    editItem: () => import("./components/edit")
+    // createItem: () => import("./components/create"),
+    // editItem: () => import("./components/edit")
   },
 
   data() {
