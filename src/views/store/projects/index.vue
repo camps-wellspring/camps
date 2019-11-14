@@ -1,144 +1,113 @@
 <template>
-  <div class="store-categories">
-    <v-container>
-      <global-toolbar
-        title="store-categories"
-        action-button
-        action-button-text="create"
-        @ButtonClicked="initDialog(false)"
-      />
-      <v-data-table :headers="headers" :items="items" hide-default-footer :loading="loading.table">
-        <template v-slot:item="{ item, index }">
-          <tr>
-            <td>
-              <read-more class="read-more" :text="item.name" :max-chars="20" less-str="read less" />
-            </td>
+  <section class="technologies">
+    <global-toolbar
+      title="technologies"
+      action-button
+      action-button-text="create"
+      @ButtonClicked="initDialog('create')"
+    />
+    <v-data-table :headers="headers" :items="items" hide-default-footer :loading="loading.table">
+      <template v-slot:item="{ item, index }">
+        <tr>
+          <td>{{ item.name }}</td>
 
-            <td class="table-logo">
-              <v-avatar @click="handleImgPreview(item.icon.path)" class="square">
-                <img :src="item.icon.path" :alt="item.icon.description"
-              /></v-avatar>
-            </td>
+          <td class="table-logo">
+            <v-avatar class="square">
+              <img
+                :src="item[config.imgType].path"
+                :alt="item[config.imgType].description"
+                @click="handleImgPreview(item[config.imgType].path)"
+            /></v-avatar>
+          </td>
 
-            <td>
-              <v-btn small depressed :color="item.color" />
-            </td>
+          <td>{{ item.short_description ? item.short_description : item.description }}</td>
 
-            <td>
-              <v-btn icon @click="initDialog(true, item)">
-                <v-icon medium title="edit">mdi-pencil</v-icon>
-              </v-btn>
-              <v-btn icon>
-                <v-icon medium title="delete" @click="handleDelete(item.slug, index)">
-                  mdi-delete</v-icon
-                >
-              </v-btn>
-            </td>
-          </tr>
-        </template>
-      </v-data-table>
+          <td class="text-center">
+            <toggle-service
+              :is-edit="true"
+              :model-name="config.modelName"
+              :model-id="item.id"
+              field="visible"
+              v-model="item.visible"
+              :validate="true"
+            />
+          </td>
 
-      <DialogComponent v-model="dialog">
-        <template #heading>
-          <v-card-title>{{ dialogTitle }}</v-card-title>
-        </template>
-        <template #body v-if="dialog">
-          <component
-            :cur-item="editingItem"
-            @closed="handleDialogClose"
-            :is="isEdit ? 'editItem' : 'createItem'"
-          />
-        </template>
-      </DialogComponent>
-    </v-container>
+          <td class="text-center">
+            <toggle-service
+              :is-edit="true"
+              :model-name="config.modelName"
+              :model-id="item.id"
+              field="available"
+              v-model="item.available"
+              :validate="true"
+            />
+          </td>
+
+          <td>
+            <v-btn icon @click="initDialog('update', item)">
+              <v-icon medium title="edit">mdi-pencil</v-icon>
+            </v-btn>
+            <v-btn icon>
+              <v-icon medium title="delete" @click="handleDelete(item.id, index)">
+                mdi-delete</v-icon
+              >
+            </v-btn>
+          </td>
+        </tr>
+      </template>
+    </v-data-table>
+
+    <DialogComponent v-model="dialog">
+      <template #heading>
+        <v-card-title>{{ dialogTitle }}</v-card-title>
+      </template>
+      <template #body v-if="dialog">
+        <component
+          :curr-item="editingItem"
+          @closed="handleDialogClose"
+          :is="'action'"
+          :config="config"
+          :action-type="actionType"
+          :dialog="dialog"
+        />
+      </template>
+    </DialogComponent>
 
     <global-image-preview
       :image-path="currImg"
       :show-dialog="imgPreviewDialog"
       @closePreview="closePreview"
     />
-  </div>
+  </section>
 </template>
 
 <script>
-import generateTableHeaders from "@/helpers/TableHeaders";
-import { IndexData, DeleteData } from "@/helpers/apiMethods";
-import imgPreviewMixin from "@/mixins/imgPreview";
+import indexMixin from "@/mixins/indexMixin";
 
 export default {
-  name: "Store_Categories",
-
-  mixins: [imgPreviewMixin],
+  name: "Projects",
 
   components: {
-    createItem: () => import("./components/create"),
-    editItem: () => import("./components/edit")
+    action: () => import("./components/action")
   },
+
+  mixins: [indexMixin],
 
   data() {
     return {
-      headerValues: ["name", "icon", "color", "actions"],
-      items: [],
-      isEdit: false,
-      editingItem: {},
-      loading: {
-        table: false
+      headerValues: ["name", "photo", "description", "visible", "available", "actions"],
+      model: {
+        name: "",
+        description: "",
+        short_description: "",
+        main_media: null
       },
-      dialog: false
+      config: {
+        modelName: "projects",
+        imgType: "main_media"
+      }
     };
-  },
-
-  computed: {
-    headers() {
-      return generateTableHeaders(this.headerValues);
-    },
-    dialogTitle() {
-      return this.isEdit ? this.$t("heading.edit") : this.$t("heading.create");
-    }
-  },
-
-  created() {
-    this.fetchItems();
-  },
-
-  methods: {
-    fetchItems() {
-      this.loading.table = true;
-      IndexData({ reqName: "store-categories" })
-        .then(res => {
-          this.items = res.data.data;
-          this.loading.table = false;
-        })
-        .catch(() => (this.loading.table = false));
-    },
-
-    initDialog(state, currItem) {
-      this.isEdit = state;
-      state && (this.editingItem = currItem);
-      this.dialog = true;
-    },
-
-    handleDialogClose() {
-      this.dialog = false;
-      this.fetchItems();
-    },
-
-    handleDelete(slug, index) {
-      console.log("TCL: handleDelete -> slug", slug);
-      this.popUp(this.$t("message.delete")).then(value => {
-        if (!value.dismiss) {
-          this.loading.table = true;
-          DeleteData({ reqName: "store-categories", id: slug })
-            .then(() => {
-              this.items.splice(index, 1);
-              this.loading.table = false;
-            })
-            .catch(() => {
-              this.loading.table = false;
-            });
-        }
-      });
-    }
   }
 };
 </script>

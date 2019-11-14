@@ -39,9 +39,9 @@
           <td class="toggle-adjust">
             <toggle-service
               :is-edit="true"
-              model-name="project_available"
+              model-name="extra-service"
               :model-id="item.id"
-              field="available"
+              field="project_available"
               v-model="item.is_project_available"
               :validate="true"
             />
@@ -49,9 +49,9 @@
           <td class="toggle-adjust">
             <toggle-service
               :is-edit="true"
-              model-name="service_available"
+              model-name="extra-service"
               :model-id="item.id"
-              field="available"
+              field="service_available"
               v-model="item.is_service_available"
               :validate="true"
             />
