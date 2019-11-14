@@ -152,6 +152,7 @@ export default {
   methods: {
     openFileUpload() {
       this.isSingle = false;
+      this.editCase = false;
       this.$nextTick(() => this.$refs.file.click());
     },
     handleUpdatePhoto(index) {
@@ -197,9 +198,11 @@ export default {
         UpdateMedia({ id, data: formData })
           .then(res => {
             const { media } = res.data;
+
             this.$set(this.ShowImgs, this.photoIndex, media.path);
             this.editCase = false;
             this.isSingle = false;
+            this.imgsFiles = [];
           })
           .catch(err => console.log(err));
       }
@@ -221,7 +224,6 @@ export default {
             });
           }
         }
-
         fileReader.readAsDataURL(imgFiles[i]);
       }
 
@@ -229,7 +231,9 @@ export default {
     },
     readImage(imgsFiles) {
       this.$emit("fileSelected", imgsFiles);
-      this.updatephoto(imgsFiles[0]);
+      if (this.editCase) {
+        this.updatephoto(imgsFiles[0]);
+      }
     },
     validateSize(file) {
       if (isValidImgSize(file.size, this.maxSize)) {
