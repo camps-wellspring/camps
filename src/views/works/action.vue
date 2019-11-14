@@ -57,81 +57,9 @@
               </v-row>
             </v-card-text>
           </v-card>
-          <v-card>
-            <v-card-title>Platforms</v-card-title>
-            <v-card-text>
-              <v-row>
-                <v-col cols="12">
-                  <v-row>
-                    <v-col md="4">
-                      <form-group name="platforms_ids">
-                        <template slot-scope="{ attrs }">
-                          <v-select
-                            v-bind="attrs"
-                            :items="items"
-                            item-text="name"
-                            item-value="id"
-                            outlined
-                            v-model="form.platforms_ids"
-                            :loading="selectLoading"
-                            :label="$t('label.platforms')"
-                            @input="hadleChange('platforms_ids')"
-                          ></v-select>
-                        </template>
-                      </form-group>
-                    </v-col>
-                    <v-col md="6">
-                      <form-group name="work_url" attribute="label.url">
-                        <template slot-scope="{ attrs }">
-                          <v-text-field
-                            v-bind="attrs"
-                            v-model="form.work_url"
-                            outlined
-                            :label="$t('label.url')"
-                            @input="hadleChange('work_url')"
-                          ></v-text-field>
-                        </template>
-                      </form-group>
-                    </v-col>
-                    <v-col md="2">
-                      <v-btn
-                        @click="handleAddPlatforms"
-                        :disabled="handleValidPlatforms()"
-                        class="primary"
-                        large
-                        >{{ $t("button.add") }}</v-btn
-                      >
-                    </v-col>
-                  </v-row>
-                  <!-- table -->
-                  <transition name="fadeIn" mode="in-out">
-                    <v-data-table
-                      v-if="myPlatforms.length > 0"
-                      :headers="headers"
-                      :items="myPlatforms"
-                      hide-default-footer
-                      :items-per-page="20"
-                    >
-                      <template v-slot:item="{ item, index }">
-                        <tr>
-                          <td>{{ item.name }}</td>
-                          <td>{{ item.url }}</td>
-                          <td>
-                            <v-icon medium title="delete" @click="handleDeletePlatForm(item, index)"
-                              >mdi-delete</v-icon
-                            >
-                          </td>
-                        </tr>
-                      </template>
-                    </v-data-table>
-                  </transition>
-
-                  <!-- table -->
-                </v-col>
-              </v-row>
-            </v-card-text>
-          </v-card>
-
+          <!-- platform component -->
+          <Platform :form="form" :myPlatforms="myPlatforms" />
+          <!-- platform component -->
           <v-col cols="12">
             <v-btn
               type="submit"
@@ -148,19 +76,27 @@
 </template>
 
 <script>
-import { required, minLength, maxLength, numeric, url, requiredIf } from "vuelidate/lib/validators";
-import TableHeaders from "@/helpers/TableHeaders";
-import { IndexData, StoreData, ShowData, UpdateData } from "../../helpers/apiMethods";
+import {
+  required,
+  minLength,
+  maxLength,
+  numeric,
+  url,
+  requiredIf
+} from "vuelidate/lib/validators";
+import { StoreData, ShowData, UpdateData } from "@/helpers/apiMethods";
 import Cookies from "js-cookie";
 
 export default {
   name: "CreateAndEdit",
   components: {
-    MainInfo: () => import("./components/MainInfo")
+    MainInfo: () => import("./components/MainInfo"),
+    Platform: () => import("./components/Platform")
   },
   provide() {
     return {
-      hadleChange: this.hadleChange
+      hadleChange: this.hadleChange,
+      $v: this.$v
     };
   },
   data() {
@@ -179,15 +115,15 @@ export default {
       updateData: {},
       videosFiles: [],
       mediaPhotos: [],
-      items: [],
+
       myPlatforms: [],
-      headers: [],
+
       logoSize: 1.24,
       mainImageSize: 2.48,
       photosMaxSize: 1.24,
       resetImage: false,
       btnLoading: false,
-      selectLoading: true,
+
       logoChange: false,
       mainMediaChanged: false,
       multiImageChanged: false,
@@ -196,8 +132,6 @@ export default {
     };
   },
   mounted() {
-    this.handleGetPlatForms();
-    this.createTableHeaders();
     this.showWorkData();
   },
   methods: {
@@ -209,10 +143,6 @@ export default {
       this.videoChanged = true;
       this.form.videos = videos;
     },
-    handleDeletePlatForm(item, index) {
-      this.$delete(this.myPlatforms, index);
-      this.items.unshift(item);
-    },
 
     showWorkData() {
       const { slug } = this.$route.params;
@@ -220,7 +150,15 @@ export default {
         ShowData({ reqName: "works", id: slug, locale: this.locale })
           .then(res => {
             const { work } = res.data;
-            const { name, description, logo, media, platforms, main_media, priority } = work;
+            const {
+              name,
+              description,
+              logo,
+              media,
+              platforms,
+              main_media,
+              priority
+            } = work;
             this.updateData = work;
             this.form = {
               name,
@@ -255,45 +193,7 @@ export default {
       this.$v.form.$reset();
       this.form = {};
     },
-    handleValidPlatforms() {
-      return this.$v.form.platforms_ids.$invalid || this.$v.form.work_url.$invalid;
-    },
-    handleAddPlatforms() {
-      const { work_url, platforms_ids } = this.form;
-      const platFormObject = this.items.filter(el => el.id === platforms_ids)[0];
-      platFormObject.url = work_url;
 
-      if (work_url !== "" && platforms_ids !== "") {
-        this.myPlatforms.push(platFormObject);
-      }
-      this.form.work_url = "";
-      this.form.platforms_ids = "";
-      if (this.myPlatforms.includes(platFormObject)) {
-        this.items = this.items.filter(el => el.id !== platFormObject.id);
-      }
-      this.$v.form.$reset();
-    },
-    createTableHeaders() {
-      const headersList = ["name", "url", "configs"];
-      this.headers = TableHeaders(headersList);
-    },
-    handleGetPlatForms() {
-      IndexData({ reqName: "platforms" })
-        .then(res => {
-          const { data } = res.data;
-
-          this.items = data.map(el => {
-            return {
-              id: el.id,
-              name: el.name
-            };
-          });
-        })
-        .catch(err => console.log(err))
-        .finally(() => {
-          this.selectLoading = false;
-        });
-    },
     handleDeletePhoto(index) {
       //   this.form.media.splice(index, 1);
       this.mediaPhotos.splice(index, 1);
@@ -330,7 +230,15 @@ export default {
     },
     buildData() {
       const formData = new FormData();
-      const { name, description, main_media, photos, priority, logo, videos } = this.form;
+      const {
+        name,
+        description,
+        main_media,
+        photos,
+        priority,
+        logo,
+        videos
+      } = this.form;
 
       !this.$route.params.slug && formData.append("main_media", main_media);
       formData.append("name", name);
@@ -338,7 +246,8 @@ export default {
       formData.append("priority", priority);
       !this.$route.params.slug && formData.append("logo", logo);
 
-      this.multiImageChanged && photos.map(el => formData.append("photos[]", el));
+      this.multiImageChanged &&
+        photos.map(el => formData.append("photos[]", el));
       this.videoChanged && videos.map(el => formData.append("videos[]", el));
       this.myPlatforms.length &&
         this.myPlatforms.map((el, index) => {
@@ -421,17 +330,6 @@ export default {
     }
   },
   watch: {
-    myPlatforms: {
-      handler(myPlatforms) {
-        if (myPlatforms && this.items) {
-          const platformsIds = [];
-          myPlatforms.forEach(el => platformsIds.push(el.id));
-          this.items = this.items.filter(el => !platformsIds.includes(el.id));
-        }
-        // console.log(myPlatforms);
-      },
-      immediate: true
-    },
     form: {
       handler(form) {
         this.form = form;
