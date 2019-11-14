@@ -60,6 +60,7 @@
         :items="features"
         hide-default-footer
         :loading="tableLoading"
+        :items-per-page="20"
       >
         <template v-slot:item="{ item, index }">
           <tr>

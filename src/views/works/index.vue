@@ -45,7 +45,6 @@
             <v-btn
               :title="$t('label.features')"
               @click="handleFeatures(item)"
-              :color="item.features ? 'primary' : 'red'"
               icon
               fab
               small
