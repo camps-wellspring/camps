@@ -21,6 +21,11 @@
           </td>
 
           <td>{{ item.short_description ? item.short_description : item.description }}</td>
+          <td>
+            <v-btn :title="$t('label.features')" @click="handleFeatures(item)" icon fab small>
+              <v-icon class="edit">mdi-star-circle-outline</v-icon>
+            </v-btn>
+          </td>
 
           <td class="text-center">
             <toggle-service
@@ -58,6 +63,15 @@
       </template>
     </v-data-table>
 
+    <v-dialog v-model="featureDialog" max-width="700px">
+      <global-features
+        featured-item-type="projects"
+        v-if="featureDialog"
+        :featured-item-id="featureId"
+        @closeFeatures="featureDialog = false"
+      />
+    </v-dialog>
+
     <global-image-preview
       :image-path="currImg"
       :show-dialog="imgPreviewDialog"
@@ -73,11 +87,15 @@ import indexMixin from "@/mixins/indexMixin";
 export default {
   name: "Projects",
 
+  components: {
+    GlobalFeatures: () => import("@/components/GlobalFeatures")
+  },
+
   mixins: [indexMixin],
 
   data() {
     return {
-      headerValues: ["name", "photo", "description", "visible", "available", "actions"],
+      headerValues: ["name", "photo", "description", "features", "visible", "available", "actions"],
       model: {
         name: "",
         description: "",
@@ -88,8 +106,17 @@ export default {
         modelName: "projects",
         imgType: "main_media",
         idType: "slug"
-      }
+      },
+      featureDialog: false,
+      featureId: null
     };
+  },
+
+  methods: {
+    handleFeatures(id) {
+      this.featureDialog = true;
+      this.featureId = id;
+    }
   }
 };
 </script>
