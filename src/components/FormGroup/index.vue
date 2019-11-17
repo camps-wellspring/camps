@@ -5,6 +5,7 @@
         errorMessages: getServerErrors || activeErrorMessages
       }"
       :hasErrors="hasErrors"
+      :listeners="{ input: () => preferredValidator.$touch() }"
     />
   </div>
 </template>

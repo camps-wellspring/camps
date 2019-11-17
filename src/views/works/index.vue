@@ -161,7 +161,6 @@ export default {
           const { data, meta } = res.data;
           this.items = data;
           this.pagination = meta;
-          console.log(this.items);
         })
         .catch(err => {
           console.log(err);

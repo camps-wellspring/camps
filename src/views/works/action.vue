@@ -115,15 +115,12 @@ export default {
       updateData: {},
       videosFiles: [],
       mediaPhotos: [],
-
       myPlatforms: [],
-
       logoSize: 1.24,
       mainImageSize: 2.48,
       photosMaxSize: 1.24,
       resetImage: false,
       btnLoading: false,
-
       logoChange: false,
       mainMediaChanged: false,
       multiImageChanged: false,
