@@ -42,13 +42,23 @@
           <td>{{ item.priority }}</td>
           <td>{{ item.description | truncate }}</td>
           <td>
-            <v-btn :title="$t('label.features')" @click="handleFeatures(item)" icon fab small>
+            <v-btn
+              :title="$t('label.features')"
+              @click="handleFeatures(item)"
+              icon
+              fab
+              small
+            >
               <v-icon class="edit">mdi-star-circle-outline</v-icon>
             </v-btn>
           </td>
           <td>
-            <v-icon medium title="edit" @click="handleEdit(item, index)">mdi-pencil</v-icon>
-            <v-icon medium title="delete" @click="handleDelete(item, index)">mdi-delete</v-icon>
+            <v-icon medium title="edit" @click="handleEdit(item, index)"
+              >mdi-pencil</v-icon
+            >
+            <v-icon medium title="delete" @click="handleDelete(item, index)"
+              >mdi-delete</v-icon
+            >
           </td>
         </tr>
       </template>
@@ -131,25 +141,19 @@ export default {
         this.$router.push({ query: this.queries });
       }
     },
-    handleEdit({ slug }, index) {
-      console.log(index);
+    handleEdit({ slug }) {
       this.$router.push({ name: "edit_work", params: { slug } });
     },
     handleDelete({ slug }, index) {
       this.popUp().then(value => {
         if (!value.dismiss) {
           DeleteData({ reqName: "works", id: slug })
-            .then(res => {
-              console.log(res);
+            .then(() => {
               this.$delete(this.items, index);
             })
             .catch(err => console.log(err));
         }
       });
-    },
-    handleExpand(props) {
-      props.isExpanded = !props.isExpanded;
-      console.log(props);
     },
     handleGetWorks(query) {
       IndexData({ reqName: "works", query })
@@ -157,7 +161,6 @@ export default {
           const { data, meta } = res.data;
           this.items = data;
           this.pagination = meta;
-          console.log(this.items);
         })
         .catch(err => {
           console.log(err);

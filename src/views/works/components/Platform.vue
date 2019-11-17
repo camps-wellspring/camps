@@ -7,32 +7,30 @@
           <v-row>
             <v-col md="4">
               <form-group name="platforms_ids">
-                <template slot-scope="{ attrs }">
-                  <v-select
-                    v-bind="attrs"
-                    :items="items"
-                    item-text="name"
-                    item-value="id"
-                    outlined
-                    v-model="form.platforms_ids"
-                    :loading="selectLoading"
-                    :label="$t('label.platforms')"
-                    @input="hadleChange('platforms_ids')"
-                  ></v-select>
-                </template>
+                <v-select
+                  slot-scope="{ attrs, listeners }"
+                  v-bind="attrs"
+                  :items="items"
+                  item-text="name"
+                  item-value="id"
+                  outlined
+                  v-model="form.platforms_ids"
+                  :loading="selectLoading"
+                  :label="$t('label.platforms')"
+                  v-on="listeners"
+                ></v-select>
               </form-group>
             </v-col>
             <v-col md="6">
               <form-group name="work_url" attribute="label.url">
-                <template slot-scope="{ attrs }">
-                  <v-text-field
-                    v-bind="attrs"
-                    v-model="form.work_url"
-                    outlined
-                    :label="$t('label.url')"
-                    @input="hadleChange('work_url')"
-                  ></v-text-field>
-                </template>
+                <v-text-field
+                  slot-scope="{ attrs, listeners }"
+                  v-bind="attrs"
+                  v-model="form.work_url"
+                  outlined
+                  :label="$t('label.url')"
+                  v-on="listeners"
+                ></v-text-field>
               </form-group>
             </v-col>
             <v-col md="2">
@@ -59,7 +57,10 @@
                   <td>{{ item.name }}</td>
                   <td>{{ item.url }}</td>
                   <td>
-                    <v-icon medium title="delete" @click="handleDeletePlatForm(item, index)"
+                    <v-icon
+                      medium
+                      title="delete"
+                      @click="handleDeletePlatForm(item, index)"
                       >mdi-delete</v-icon
                     >
                   </td>
@@ -90,7 +91,7 @@ export default {
       required: true
     }
   },
-  inject: ["hadleChange", "$v"],
+  inject: ["$v"],
   data() {
     return {
       items: [],
@@ -108,12 +109,15 @@ export default {
         .then(res => {
           const { data } = res.data;
 
-          this.items = data.map(el => {
+          const dataPlatform = data.map(el => {
             return {
               id: el.id,
               name: el.name
             };
           });
+          const platformsIds = [];
+          this.myPlatforms.map(el => platformsIds.push(el.id));
+          this.items = dataPlatform.filter(el => !platformsIds.includes(el.id));
         })
         .catch(err => console.log(err))
         .finally(() => {
@@ -129,11 +133,15 @@ export default {
       this.items.unshift(item);
     },
     handleValidPlatforms() {
-      return this.$v.form.platforms_ids.$invalid || this.$v.form.work_url.$invalid;
+      return (
+        this.$v.form.platforms_ids.$invalid || this.$v.form.work_url.$invalid
+      );
     },
     handleAddPlatforms() {
       const { work_url, platforms_ids } = this.form;
-      const platFormObject = this.items.filter(el => el.id === platforms_ids)[0];
+      const platFormObject = this.items.filter(
+        el => el.id === platforms_ids
+      )[0];
       platFormObject.url = work_url;
 
       if (work_url !== "" && platforms_ids !== "") {
@@ -145,19 +153,6 @@ export default {
         this.items = this.items.filter(el => el.id !== platFormObject.id);
       }
       this.$v.form.$reset();
-    }
-  },
-  watch: {
-    myPlatforms: {
-      handler(myPlatforms) {
-        if (myPlatforms && this.items) {
-          const platformsIds = [];
-          myPlatforms.forEach(el => platformsIds.push(el.id));
-          this.items = this.items.filter(el => !platformsIds.includes(el.id));
-        }
-      },
-      immediate: true,
-      deep: true
     }
   }
 };
