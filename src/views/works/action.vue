@@ -95,7 +95,6 @@ export default {
   },
   provide() {
     return {
-      hadleChange: this.hadleChange,
       $v: this.$v
     };
   },
@@ -214,9 +213,7 @@ export default {
         this.updateWork();
       }
     },
-    hadleChange(name) {
-      this.$v.form[name].$touch();
-    },
+
     handleSelectMainImage(photo) {
       this.form.main_media = photo.file;
       this.mainMediaChanged = true;
