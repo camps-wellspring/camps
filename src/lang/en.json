@@ -74,7 +74,9 @@
     "store-categories": "Store Categories",
     "demo_types": "Demo Types",
     "projects": "Projects",
-    "main_info": "Main Info"
+    "main_info": "Main Info",
+    "contacts": "Contacts",
+    "attachments": "Attachments"
   },
   "table": {
     "profile": "Profile",
@@ -97,7 +99,18 @@
     "visibility": "Visibility",
     "template": "Template",
     "photo": "Photo",
-    "available": "Available"
+    "available": "Available",
+    "attachments": "Attachments",
+    "phone": "Phone",
+    "messages": "Messages",
+    "email": "Email"
+  },
+  "input": {
+    "user_name": "User Name",
+    "user_email": "User Email",
+    "user_phone": "User Phone",
+    "topic_id": "Topic",
+    "message": "Message"
   },
   "label": {
     "hoss": "Hoss",

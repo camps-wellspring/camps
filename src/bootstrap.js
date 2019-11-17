@@ -13,7 +13,9 @@ import multiImageUpload from "@/components/multiImageUpload";
 import GlobalImagePreview from "@/components/GlobalImagePreview";
 import DialogComponent from "@/components/DialogComponent";
 import ToggleService from "@/components/ToggleService";
+import TextField from "@/components/TextField";
 import VideoUpload from "@/components/VideoUpload";
+
 import { SweetAlert } from "@/helpers/mixins/SweetAlert.js";
 import VueSweetalert2 from "vue-sweetalert2";
 import NoData from "@/components/NoData";
@@ -54,6 +56,7 @@ Vue.component("upload-video", VideoUpload);
 Vue.component("NoData", NoData);
 Vue.component("DialogComponent", DialogComponent);
 Vue.component("toggle-service", ToggleService);
+Vue.component("TextField", TextField);
 
 Vue.filter("truncate", function(value, strCount = 50) {
   if (!value) {

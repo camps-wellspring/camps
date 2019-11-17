@@ -24,7 +24,11 @@
                 @click="showImagePreview(item.main_image)"
                 class="hover-pointer"
                 aspect-ratio="1"
-                :src="item.main_image ? item.main_image.path : '@/assets/imgs/user.jpg'"
+                :src="
+                  item.main_image
+                    ? item.main_image.path
+                    : '@/assets/imgs/user.jpg'
+                "
               ></v-img>
             </v-avatar>
           </td>
@@ -34,8 +38,12 @@
           <td>{{ item.priority }}</td>
 
           <td>
-            <v-icon small title="edit" @click="handleEdit(item, index)"> mdi-pencil</v-icon>
-            <v-icon small title="delete" @click="handleDelete(item, index)"> mdi-delete</v-icon>
+            <v-icon small title="edit" @click="handleEdit(item, index)">
+              mdi-pencil</v-icon
+            >
+            <v-icon small title="delete" @click="handleDelete(item, index)">
+              mdi-delete</v-icon
+            >
           </td>
         </tr>
       </template>
@@ -135,7 +143,14 @@ export default {
       this.items.push(item);
     },
     createTableHeaders() {
-      const headersList = ["profile", "name", "position", "bio", "priority", "configs"];
+      const headersList = [
+        "profile",
+        "name",
+        "position",
+        "bio",
+        "priority",
+        "configs"
+      ];
       this.headers = TableHeaders(headersList);
     },
     handleGetMembers() {
