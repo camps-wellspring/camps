@@ -42,23 +42,13 @@
           <td>{{ item.priority }}</td>
           <td>{{ item.description | truncate }}</td>
           <td>
-            <v-btn
-              :title="$t('label.features')"
-              @click="handleFeatures(item)"
-              icon
-              fab
-              small
-            >
+            <v-btn :title="$t('label.features')" @click="handleFeatures(item)" icon fab small>
               <v-icon class="edit">mdi-star-circle-outline</v-icon>
             </v-btn>
           </td>
           <td>
-            <v-icon medium title="edit" @click="handleEdit(item, index)"
-              >mdi-pencil</v-icon
-            >
-            <v-icon medium title="delete" @click="handleDelete(item, index)"
-              >mdi-delete</v-icon
-            >
+            <v-icon medium title="edit" @click="handleEdit(item, index)">mdi-pencil</v-icon>
+            <v-icon medium title="delete" @click="handleDelete(item, index)">mdi-delete</v-icon>
           </td>
         </tr>
       </template>

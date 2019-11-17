@@ -124,6 +124,7 @@ export default {
   },
   methods: {
     getFeatures() {
+      console.log("getting features");
       IndexData({
         reqName: `${this.FeaturedItemType}-features?${this.FeaturedItemType}_id=${this.FeaturedItemId}`
       })

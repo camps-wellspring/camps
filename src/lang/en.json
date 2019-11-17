@@ -21,7 +21,9 @@
     "required": "%{attribute} is required",
     "maxLength": "%{attribute} must be at most %{max} characters long",
     "minLength": "%{attribute} must be %{min} characters at least",
-    "minWords": "%{attribute} must be at least %{min} words",
+    "minWords": "%{attribute} must be at least 3 words",
+    "maxWords": "%{attribute} must be less than 500 words",
+    "description": "Description",
     "valid": "must be valid",
     "number": " must be numbers",
     "set_as_default_address": "Set as default Address",
@@ -74,7 +76,10 @@
     "store-categories": "Store Categories",
     "demo_types": "Demo Types",
     "projects": "Projects",
-    "main_info": "Main Info"
+    "main_info": "Main Info",
+    "media": "Media",
+    "features": "Features",
+    "demo": "Demo"
   },
   "table": {
     "profile": "Profile",
@@ -125,7 +130,9 @@
     "main_video": "Video Url",
     "platforms": "Platforms",
     "features": "Features",
-    "color": "Color"
+    "color": "Color",
+    "demo_type": "Demo Type",
+    "demo_url": "Demo URL"
   },
   "title": {
     "edit_service": "Edit Service",
