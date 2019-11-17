@@ -21,6 +21,7 @@
     "required": "%{attribute} is required",
     "maxLength": "%{attribute} must be at most %{max} characters long",
     "minLength": "%{attribute} must be %{min} characters at least",
+    "minWords": "%{attribute} must be at least %{min} words",
     "valid": "must be valid",
     "number": " must be numbers",
     "set_as_default_address": "Set as default Address",
@@ -72,7 +73,8 @@
     "platforms": "Platforms",
     "store-categories": "Store Categories",
     "demo_types": "Demo Types",
-    "projects": "Projects"
+    "projects": "Projects",
+    "main_info": "Main Info"
   },
   "table": {
     "profile": "Profile",

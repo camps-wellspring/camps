@@ -58,22 +58,6 @@
       </template>
     </v-data-table>
 
-    <DialogComponent v-model="dialog">
-      <template #heading>
-        <v-card-title>{{ dialogTitle }}</v-card-title>
-      </template>
-      <template #body v-if="dialog">
-        <component
-          :curr-item="editingItem"
-          @closed="handleDialogClose"
-          :is="'action'"
-          :config="config"
-          :action-type="actionType"
-          :dialog="dialog"
-        />
-      </template>
-    </DialogComponent>
-
     <global-image-preview
       :image-path="currImg"
       :show-dialog="imgPreviewDialog"
@@ -88,10 +72,6 @@ import indexMixin from "@/mixins/indexMixin";
 // TODO add pagination
 export default {
   name: "Projects",
-
-  components: {
-    action: () => import("./action")
-  },
 
   mixins: [indexMixin],
 
