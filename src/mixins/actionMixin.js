@@ -4,11 +4,11 @@ export default {
   props: {
     currItem: {
       type: Object,
-      default: () => {}
+      required: true
     },
     config: {
       type: Object,
-      default: () => {}
+      required: true
     },
     actionType: {
       type: String,
@@ -16,7 +16,7 @@ export default {
     },
     dialog: {
       type: Boolean,
-      default: false
+      required: true
     }
   },
 
@@ -111,7 +111,11 @@ export default {
 
     handleLocaleChange(locale) {
       this.loading.fetch = true;
-      ShowData({ reqName: this.config.modelName, id: this.currItem.id, locale })
+      ShowData({
+        reqName: this.config.modelName,
+        id: this.currItem[this.config.idType || "id"],
+        locale
+      })
         .then(res => {
           this.locale = locale;
           this.form = res.data[Object.keys(res.data)[0]];

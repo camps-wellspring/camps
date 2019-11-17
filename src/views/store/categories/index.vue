@@ -6,13 +6,7 @@
       action-button-text="create"
       @ButtonClicked="initDialog('create')"
     />
-    <v-data-table
-      :headers="headers"
-      :items="items"
-      disable-pagination
-      hide-default-footer
-      :loading="loading.table"
-    >
+    <v-data-table :headers="headers" :items="items" hide-default-footer :loading="loading.table">
       <template v-slot:item="{ item, index }">
         <tr>
           <td>{{ item.name }}</td>
@@ -71,6 +65,7 @@
 <script>
 import indexMixin from "@/mixins/indexMixin";
 
+// TODO add pagination
 export default {
   name: "Categories",
 

@@ -85,6 +85,7 @@
 <script>
 import indexMixin from "@/mixins/indexMixin";
 
+// TODO add pagination
 export default {
   name: "Projects",
 
