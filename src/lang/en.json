@@ -11,7 +11,9 @@
     "projects": "Projects",
     "platforms": "Platforms",
     "technologies": "Technologies",
-    "demo_types": "Demo Types"
+    "demo_types": "Demo Types",
+    "contact_list":"Contact List",
+    "extra_services_list":"Extra Services List"
   },
   "fields": {
     "password": "Password",
