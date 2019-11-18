@@ -156,7 +156,9 @@
     "pending": "Pending",
     "seen": "Seen",
     "closed": "Closed",
-    "visible": "Visible"
+    "visible": "Visible",
+    "platform_url": "Platform URL",
+    "platform": "Platform"
   },
   "title": {
     "edit_service": "Edit Service",

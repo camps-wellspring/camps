@@ -17,4 +17,16 @@
     border-radius: 15px !important;
     box-shadow: 0 2px 10px #444;
   }
+  th,
+  td {
+    text-align: center !important;
+  }
+
+  .v-avatar {
+    border-radius: 0;
+    cursor: pointer;
+    img {
+      padding: 0.5rem;
+    }
+  }
 }

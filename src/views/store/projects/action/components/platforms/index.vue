@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-card-title>{{ $t("heading.demo") }}</v-card-title>
+    <v-card-title>{{ $t("heading.platforms") }}</v-card-title>
     <v-card-text>
       <v-container fluid>
         <v-row>
@@ -10,13 +10,13 @@
                 <v-select
                   v-bind="attrs"
                   outlined
-                  :label="$t('label.demo_type')"
-                  :items="demoTypes"
+                  :label="$t('label.platform')"
+                  :items="platforms"
                   item-text="name"
                   return-object
                   @input="handleItemChoose"
-                  @change="$v.demo.id.$touch()"
-                  ref="demoSelect"
+                  @change="$v.platform.id.$touch()"
+                  ref="platformSelect"
                 />
               </template>
             </form-group>
@@ -26,35 +26,21 @@
             <form-group name="url">
               <template slot-scope="{ attrs }">
                 <v-text-field
-                  v-model="demo.url"
+                  v-model="platform.url"
                   v-bind="attrs"
                   outlined
-                  :label="$t('label.demo_url')"
-                  @blur="$v.demo.url.$touch()"
+                  :label="$t('label.platform_url')"
+                  @blur="$v.platform.url.$touch()"
                 ></v-text-field>
               </template>
             </form-group>
           </v-col>
 
-          <v-col cols="12" md="6">
-            <new-image-upload
-              class="file-upload__image"
-              :imgUrl="demo.screen && demo.screen.path"
-              :imgId="demo.screen && demo.screen.id"
-              :max-size="2"
-              @fileSelected="demo.screen = $event"
-            />
-          </v-col>
-
-          <v-col sm="3" class="d-flex justify-center">
-            <v-switch hide-details v-model="demo.visible" :label="$t('label.visible')" />
-          </v-col>
-
-          <v-col sm="3">
+          <v-col md="6">
             <v-card-actions>
               <v-btn
                 block
-                :disabled="$v.demo.$invalid"
+                :disabled="$v.platform.$invalid"
                 @click="handleAddItem"
                 class="primary"
                 large
@@ -64,7 +50,7 @@
           </v-col>
         </v-row>
 
-        <v-card-text v-if="addedDemos.length > 0">
+        <v-card-text v-if="addedPlatforms.length > 0">
           <v-container fluid>
             <v-row>
               <v-col cols="12">
@@ -74,13 +60,11 @@
                       <tr>
                         <th>{{ $t("table.name") }}</th>
                         <th>{{ $t("table.url") }}</th>
-                        <th>{{ $t("table.visible") }}</th>
-                        <th>{{ $t("table.screen") }}</th>
                         <th>{{ $t("table.delete") }}</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-for="(item, i) in addedDemos" :key="item.id">
+                      <tr v-for="(item, i) in addedPlatforms" :key="item.id">
                         <td>
                           <read-more
                             class="read-more"
@@ -96,17 +80,6 @@
                             :max-chars="50"
                             less-str="read less"
                           />
-                        </td>
-                        <td>
-                          <v-avatar>
-                            <img
-                              @click="handleImgPreview(screenPath(item.screen.file))"
-                              :src="screenPath(item.screen.file)"
-                            />
-                          </v-avatar>
-                        </td>
-                        <td>
-                          <v-switch hide-details v-model="item.visible" />
                         </td>
                         <td>
                           <v-btn icon>
@@ -133,11 +106,11 @@ import { required, url } from "vuelidate/lib/validators";
 
 export default {
   props: {
-    demoTypes: {
+    platforms: {
       type: Array,
       default: () => []
     },
-    addedDemos: {
+    addedPlatforms: {
       type: Array,
       default: () => []
     }
@@ -145,57 +118,42 @@ export default {
 
   data() {
     return {
-      demo: {
+      platform: {
         id: null,
-        url: "",
-        visible: true,
-        screen: null
+        url: ""
       }
     };
   },
 
   validations() {
     return {
-      demo: {
+      platform: {
         id: {
           required
         },
         url: {
           required,
           url
-        },
-        screen: {
-          required
         }
       }
     };
   },
 
   methods: {
-    handleItemChoose(demoItem) {
-      Object.assign(this.demo, demoItem);
-    },
-
-    handleDemoImg(img) {
-      this.demo.screen = img;
-    },
-
-    screenPath(file) {
-      return URL.createObjectURL(file);
+    handleItemChoose(platformItem) {
+      Object.assign(this.platform, platformItem);
     },
 
     handleItemDelete(item, i) {
-      this.$emit("DeleteDemo", item, i);
-      this.$refs.demoSelect.reset();
+      this.$emit("DeletePlatform", item, i);
+      this.$refs.platformSelect.reset();
     },
 
     handleAddItem() {
-      this.$emit("AddDemo", this.demo);
-      this.demo = {
+      this.$emit("AddPlatform", this.platform);
+      this.platform = {
         id: null,
         url: "",
-        visible: true,
-        screen: null,
         name: ""
       };
     }

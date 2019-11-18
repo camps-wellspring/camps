@@ -94,6 +94,14 @@
             @DeleteDemo="deleteDemo"
           />
 
+          <!-- PLATFORMS -->
+          <platforms
+            :platforms="options.platforms"
+            :added-platforms="form.platforms"
+            @AddPlatform="addPlatform"
+            @DeletePlatform="deletePlatform"
+          />
+
           <v-col cols="12">
             <v-btn
               type="submit"
@@ -127,7 +135,8 @@ export default {
 
   components: {
     Demos: () => import("./components/demos"),
-    Media: () => import("./components/media")
+    Media: () => import("./components/media"),
+    platforms: () => import("./components/platforms")
   },
 
   mixins: [switchLocale, imgPreviewMixin],
@@ -140,7 +149,10 @@ export default {
         short_description: "",
         main_media: null,
         photos: [],
-        demos: []
+        demos: [],
+        platforms: [],
+        categories: [],
+        technologies: []
       },
       mediaPhotos: [],
       options: {
@@ -181,7 +193,7 @@ export default {
         main_media: {
           required: requiredIf(() => this.actionType === "create")
         },
-        // TODO dynamically display min & max values in the message
+        // TODO dynamically display min & max values in the message validation error message
         description: {
           minWords: minWords(3),
           maxWords: maxWords(500)
@@ -203,9 +215,9 @@ export default {
       Object.keys(this.options).forEach(el => {
         this.loading.options[el] = true;
         IndexData({ reqName: el }).then(res => {
-          if (el === "demo-types") {
-            res.data.data.map(item => {
-              return (this.options[el] = [{ name: item.name, id: item.id }]);
+          if (el === "demo-types" || el === "platforms") {
+            this.options[el] = res.data.data.map(item => {
+              return { name: item.name, id: item.id };
             });
           } else {
             this.options[el] = res.data.data;
@@ -220,32 +232,31 @@ export default {
       this.$v.form.main_media.$touch();
     },
 
-    // setPhotos(photos) {
-    //   this.form.photos = photos;
-    // },
-
-    // deletePhoto(i) {
-    //   this.form.photos.splice(i, 1);
-    // },
-
-    // getPhotos() {
-    //   if (this.mediaPhotos) {
-    //     return this.mediaPhotos;
-    //   }
-    // },
-
     addDemo(newDemo) {
       this.form.demos.push(newDemo);
-      const demoTypeIndex = this.options["demo-types"].indexOf({
-        id: newDemo.id,
-        name: newDemo.name
-      });
+      const demoTypeIndex = this.getIndexById(newDemo.id, this.options["demo-types"]);
       this.options["demo-types"].splice(demoTypeIndex, 1);
+    },
+
+    addPlatform(newPlatform) {
+      this.form.platforms.push(newPlatform);
+      console.log("TCL: addPlatform -> this.form.platforms", this.form.platforms);
+      const platformIndex = this.getIndexById(newPlatform.id, this.options.platforms);
+      this.options.platforms.splice(platformIndex, 1);
     },
 
     deleteDemo(item, i) {
       this.form.demos.splice(i, 1);
       this.options["demo-types"].push(item);
+    },
+
+    deletePlatform(item, i) {
+      this.form.platforms.splice(i, 1);
+      this.options.platforms.push(item);
+    },
+
+    getIndexById(id, targetArr) {
+      return targetArr.forEach((el, i) => el.id === id && i);
     }
   }
 };
