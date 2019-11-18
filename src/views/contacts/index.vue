@@ -75,18 +75,23 @@
       </template>
       <template #body>
         <v-row>
-          <v-col cols="12" md="4" v-for="(photo, index) in photos" :key="index">
-            <v-img fluid aspect-ratio="1" :src="photo && photo.path"></v-img>
+          <v-col cols="12" md="3" v-for="photo in photos" :key="photo.id">
+            <v-img
+              title="photo"
+              fluid
+              aspect-ratio="1"
+              :src="photo && photo.path"
+            ></v-img>
           </v-col>
-          <v-col cols="12" md="4" v-for="(file, key) in pdfFiles" :key="key">
-            <router-link :to="file.path" target="_blank">
+          <v-col cols="12" md="3" v-for="file in pdfFiles" :key="file.id">
+            <a :href="file.path" target="_blank">
               <v-img
                 title="pdf"
                 fluid
                 aspect-ratio="1"
                 :src="require('@/assets/imgs/pdf-icon.png')"
               ></v-img>
-            </router-link>
+            </a>
           </v-col>
         </v-row>
       </template>
