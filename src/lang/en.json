@@ -12,8 +12,8 @@
     "platforms": "Platforms",
     "technologies": "Technologies",
     "demo_types": "Demo Types",
-    "contact_list":"Contact List",
-    "extra_services_list":"Extra Services List"
+    "contact_list": "Contact List",
+    "extra_services_list": "Extra Services List"
   },
   "fields": {
     "password": "Password",
@@ -83,7 +83,8 @@
     "attachments": "Attachments",
     "media": "Media",
     "features": "Features",
-    "demo": "Demo"
+    "demo": "Demo",
+    "topics": "Topics"
   },
   "table": {
     "profile": "Profile",
@@ -117,7 +118,8 @@
     "user_email": "User Email",
     "user_phone": "User Phone",
     "topic_id": "Topic",
-    "message": "Message"
+    "message": "Message",
+    "name":"Name"
   },
   "label": {
     "hoss": "Hoss",

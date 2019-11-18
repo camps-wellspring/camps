@@ -13,6 +13,7 @@ import multiImageUpload from "@/components/multiImageUpload";
 import GlobalImagePreview from "@/components/GlobalImagePreview";
 import DialogComponent from "@/components/DialogComponent";
 import ToggleService from "@/components/ToggleService";
+import WrappingTable from "@/components/WrappingTable";
 import TextField from "@/components/TextField";
 import VideoUpload from "@/components/VideoUpload";
 
@@ -57,6 +58,7 @@ Vue.component("NoData", NoData);
 Vue.component("DialogComponent", DialogComponent);
 Vue.component("toggle-service", ToggleService);
 Vue.component("TextField", TextField);
+Vue.component("wrapping-table", WrappingTable);
 
 Vue.filter("truncate", function(value, strCount = 50) {
   if (!value) {
