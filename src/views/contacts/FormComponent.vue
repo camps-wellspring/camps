@@ -3,6 +3,13 @@
     <form-wrapper :validator="$v.form">
       <form @submit.prevent="handleSubmit">
         <v-row>
+          <v-col cols="12">
+            <v-switch
+              :label="$t('label.close')"
+              v-model="form.closed"
+              :disabled="form.status && form.status === 2"
+            ></v-switch>
+          </v-col>
           <v-col
             cols="12"
             md="6"
@@ -71,7 +78,8 @@ export default {
         user_phone: "",
         user_email: "",
         topic_id: "",
-        message: ""
+        message: "",
+        closed: false
       },
       nameFields: ["user_name", "user_email", "user_phone"],
       btnLoading: false,
@@ -104,6 +112,9 @@ export default {
             const { contact_message } = res.data;
             this.form = contact_message;
             this.form.topic_id = contact_message.topic.id;
+            if (contact_message.status === 2) {
+              this.form.closed = true;
+            }
             delete this.form.topic;
             delete this.form.attachments;
             console.log(contact_message);

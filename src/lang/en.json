@@ -111,7 +111,8 @@
     "attachments": "Attachments",
     "phone": "Phone",
     "messages": "Messages",
-    "email": "Email"
+    "email": "Email",
+    "status": "Status"
   },
   "input": {
     "user_name": "User Name",
@@ -119,7 +120,7 @@
     "user_phone": "User Phone",
     "topic_id": "Topic",
     "message": "Message",
-    "name":"Name"
+    "name": "Name"
   },
   "label": {
     "hoss": "Hoss",
@@ -149,7 +150,10 @@
     "features": "Features",
     "color": "Color",
     "demo_type": "Demo Type",
-    "demo_url": "Demo URL"
+    "demo_url": "Demo URL",
+    "pending": "Pending",
+    "seen": "Seen",
+    "closed": "Closed"
   },
   "title": {
     "edit_service": "Edit Service",
