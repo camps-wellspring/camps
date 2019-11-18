@@ -83,7 +83,8 @@
     "attachments": "Attachments",
     "media": "Media",
     "features": "Features",
-    "demo": "Demo"
+    "demo": "Demo",
+    "topics": "Topics"
   },
   "table": {
     "profile": "Profile",
@@ -119,7 +120,8 @@
     "user_email": "User Email",
     "user_phone": "User Phone",
     "topic_id": "Topic",
-    "message": "Message"
+    "message": "Message",
+    "name":"Name"
   },
   "label": {
     "hoss": "Hoss",

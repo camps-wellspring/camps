@@ -277,6 +277,16 @@ export const asyncRouterMap = [
           title: "contact_list",
           icon: "mdi-account-circle"
         }
+      },
+      {
+        path: "topics",
+        component: () => import("@/views/contacts/Components/Topics"),
+        name: "topics",
+
+        meta: {
+          title: "topics",
+          icon: "mdi-account-circle"
+        }
       }
     ]
   },
