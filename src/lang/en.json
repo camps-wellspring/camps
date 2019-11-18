@@ -112,7 +112,9 @@
     "phone": "Phone",
     "messages": "Messages",
     "email": "Email",
-    "status": "Status"
+    "status": "Status",
+    "screen": "Screen",
+    "delete": "Delete"
   },
   "input": {
     "user_name": "User Name",
@@ -153,7 +155,8 @@
     "demo_url": "Demo URL",
     "pending": "Pending",
     "seen": "Seen",
-    "closed": "Closed"
+    "closed": "Closed",
+    "visible": "Visible"
   },
   "title": {
     "edit_service": "Edit Service",

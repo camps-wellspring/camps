@@ -110,28 +110,34 @@
             <v-card-title>{{ $t("heading.demo") }}</v-card-title>
             <v-card-text>
               <v-container fluid>
-                <v-row v-for="(demo, i) in form.demo_types" :key="i">
+                <v-row>
                   <v-col cols="12" md="6">
-                    <v-select
-                      v-model="demo.id"
-                      v-bind="attrs"
-                      outlined
-                      :label="$t('label.demo_type')"
-                      :items="options['demo-types']"
-                      item-text="name"
-                      item-value="id"
-                    />
+                    <form-group name="id">
+                      <template slot-scope="{ attrs }">
+                        <v-select
+                          v-bind="attrs"
+                          outlined
+                          :label="$t('label.demo_type')"
+                          :items="options['demo-types']"
+                          item-text="name"
+                          return-object
+                          @input="handleDemoChoose"
+                          @change="$v.demo.id.$touch()"
+                          ref="demoSelect"
+                        />
+                      </template>
+                    </form-group>
                   </v-col>
 
                   <v-col cols="12" md="6">
-                    <form-group name="demo_url">
+                    <form-group name="url">
                       <template slot-scope="{ attrs }">
                         <v-text-field
                           v-model="demo.url"
                           v-bind="attrs"
                           outlined
                           :label="$t('label.demo_url')"
-                          @blur="$v.demo_url.$touch()"
+                          @blur="$v.demo.url.$touch()"
                         ></v-text-field>
                       </template>
                     </form-group>
@@ -141,12 +147,89 @@
                     <new-image-upload
                       class="file-upload__image"
                       :imgUrl="demo.screen && demo.screen.path"
-                      :imgId="demo.screen && demo.screen.path"
+                      :imgId="demo.screen && demo.screen.id"
                       :max-size="2"
-                      @fileSelected="handleDemoImg($event)"
+                      @fileSelected="demo.screen = $event"
                     />
                   </v-col>
+
+                  <v-col sm="3" class="d-flex justify-center">
+                    <v-switch hide-details v-model="demo.visible" :label="$t('label.visible')" />
+                  </v-col>
+
+                  <v-col sm="3">
+                    <v-card-actions>
+                      <v-btn
+                        block
+                        :disabled="$v.demo.$invalid"
+                        @click="addDemo"
+                        class="primary"
+                        large
+                        >{{ $t("button.add") }}</v-btn
+                      >
+                    </v-card-actions>
+                  </v-col>
                 </v-row>
+
+                <v-card-text v-if="form.demos.length > 0">
+                  <v-container fluid>
+                    <v-row>
+                      <v-col cols="12">
+                        <v-simple-table>
+                          <template v-slot:default>
+                            <thead>
+                              <tr>
+                                <th>{{ $t("table.name") }}</th>
+                                <th>{{ $t("table.url") }}</th>
+                                <th>{{ $t("table.visible") }}</th>
+                                <th>{{ $t("table.screen") }}</th>
+                                <th>{{ $t("table.delete") }}</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr v-for="(item, i) in form.demos" :key="item.id">
+                                <td>
+                                  <read-more
+                                    class="read-more"
+                                    :text="item.name"
+                                    :max-chars="20"
+                                    less-str="read less"
+                                  />
+                                </td>
+                                <td>
+                                  <read-more
+                                    class="read-more"
+                                    :text="item.url"
+                                    :max-chars="50"
+                                    less-str="read less"
+                                  />
+                                </td>
+                                <td>
+                                  <v-avatar>
+                                    <img
+                                      @click="handleImgPreview(screenPath(item.screen.file))"
+                                      :src="screenPath(item.screen.file)"
+                                    />
+                                  </v-avatar>
+                                </td>
+                                <td>
+                                  <v-switch hide-details v-model="item.visible" />
+                                </td>
+                                <td>
+                                  <v-btn icon>
+                                    <v-icon medium title="delete" @click="handleItemDelete(item, i)"
+                                      >mdi-delete</v-icon
+                                    >
+                                  </v-btn>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </template>
+                        </v-simple-table>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                </v-card-text>
               </v-container>
             </v-card-text>
           </v-card>
@@ -163,6 +246,12 @@
         </form>
       </form-wrapper>
     </v-container>
+
+    <global-image-preview
+      :image-path="currImg"
+      :show-dialog="imgPreviewDialog"
+      @closePreview="closePreview"
+    />
   </div>
 </template>
 
@@ -170,12 +259,13 @@
 import { minLength, maxLength, required, requiredIf, url } from "vuelidate/lib/validators";
 import { minWords, maxWords } from "@/utils/validate";
 import switchLocale from "@/mixins/switchLocale";
+import imgPreviewMixin from "@/mixins/imgPreview";
 import { IndexData } from "@/helpers/apiMethods";
 
 export default {
   name: "CreateProject",
 
-  mixins: [switchLocale],
+  mixins: [switchLocale, imgPreviewMixin],
 
   data() {
     return {
@@ -185,14 +275,14 @@ export default {
         short_description: "",
         main_media: null,
         photos: [],
-        demo_types: [
-          {
-            id: null,
-            url: "",
-            visible: true,
-            screen: null
-          }
-        ]
+        demos: []
+      },
+      demoTypes: [],
+      demo: {
+        id: null,
+        url: "",
+        visible: true,
+        screen: null
       },
       mediaPhotos: [],
       options: {
@@ -243,8 +333,17 @@ export default {
           maxLength: maxLength(150)
         }
       },
-      demo_url: {
-        url
+      demo: {
+        id: {
+          required
+        },
+        url: {
+          required,
+          url
+        },
+        screen: {
+          required
+        }
       }
     };
   },
@@ -258,10 +357,20 @@ export default {
       Object.keys(this.options).forEach(el => {
         this.loading.options[el] = true;
         IndexData({ reqName: el }).then(res => {
-          this.options[el] = res.data.data;
+          if (el === "demo-types") {
+            res.data.data.map(item => {
+              return (this.options[el] = [{ name: item.name, id: item.id }]);
+            });
+          } else {
+            this.options[el] = res.data.data;
+          }
           this.loading.options[el] = false;
         });
       });
+    },
+
+    handleDemoChoose(demoItem) {
+      Object.assign(this.demo, demoItem);
     },
 
     handleImg(img) {
@@ -284,8 +393,48 @@ export default {
     },
 
     handleDemoImg(img) {
-      console.log("TCL: handleDemoImg -> img", img);
+      this.demo.screen = img;
+    },
+
+    screenPath(file) {
+      return URL.createObjectURL(file);
+    },
+
+    addDemo() {
+      this.form.demos.push(this.demo);
+      const demoTypeIndex = this.options["demo-types"].indexOf({
+        id: this.demo.id,
+        name: this.demo.name
+      });
+      this.options["demo-types"].splice(demoTypeIndex, 1);
+      this.demo = {
+        id: null,
+        url: "",
+        visible: true,
+        screen: null
+      };
+    },
+
+    handleItemDelete(item, i) {
+      this.form.demos.splice(i, 1);
+      this.options["demo-types"].push(item);
+      this.$refs.demoSelect.reset();
     }
   }
 };
 </script>
+
+<style lang="scss" scoped>
+th,
+td {
+  text-align: center !important;
+}
+
+.v-avatar {
+  border-radius: 0;
+  cursor: pointer;
+  img {
+    padding: 0.5rem;
+  }
+}
+</style>
