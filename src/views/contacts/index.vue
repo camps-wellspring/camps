@@ -19,6 +19,11 @@
           <td>{{ item.user_phone }}</td>
           <td :title="item.message">{{ item.message | truncate }}</td>
           <td>
+            <v-chip :class="changeStyle(item.status)">{{
+              getStatus(item.status)
+            }}</v-chip>
+          </td>
+          <td>
             <v-icon medium title="edit" @click="handleEdit(item, index)"
               >mdi-pencil</v-icon
             >
@@ -104,6 +109,7 @@
 import TableHeaders from "@/helpers/TableHeaders";
 import { IndexData, DeleteData } from "@/helpers/apiMethods";
 import { isEqual } from "lodash";
+
 export default {
   name: "Contacts",
   components: {
@@ -128,11 +134,44 @@ export default {
       anotherDialog: false
     };
   },
+
   mounted() {
     this.handleCreateHeaders();
     this.handleGetContacts();
   },
+
   methods: {
+    changeStyle(status) {
+      if (status === 0) {
+        return "pending";
+      } else if (status === 1) {
+        return "seen";
+      } else if (status === 2) {
+        return "closed";
+      }
+    },
+    getStatus(status) {
+      switch (status) {
+        case 0:
+          return this.$t("label.pending");
+          // eslint-disable-next-line no-unreachable
+          break;
+
+        case 1:
+          //   this.statusClass = "seen";
+          return this.$t("label.seen");
+          // eslint-disable-next-line no-unreachable
+          break;
+        case 2:
+          this.statusClass = "closed";
+          return this.$t("label.closed");
+          // eslint-disable-next-line no-unreachable
+          break;
+
+        default:
+          return "";
+      }
+    },
     showAttachments({ attachments }) {
       this.anotherDialog = !this.anotherDialog;
 
@@ -157,7 +196,14 @@ export default {
       }
     },
     handleCreateHeaders() {
-      const headerList = ["name", "email", "phone", "messages", "configs"];
+      const headerList = [
+        "name",
+        "email",
+        "phone",
+        "messages",
+        "status",
+        "configs"
+      ];
       this.headers = TableHeaders(headerList);
     },
     handleGetContacts(query) {
@@ -205,6 +251,7 @@ export default {
       handler(value) {
         if (!value) {
           this.isEdited = false;
+          this.handleGetContacts(this.queries);
         }
       },
       immediate: true
@@ -222,4 +269,20 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.pending {
+  background-color: rgb(173, 173, 173) !important;
+  color: #fff;
+  box-shadow: 0 2px 10px #ccc;
+}
+.seen {
+  background-color: rgb(4, 87, 8) !important;
+  color: #fff;
+  box-shadow: 0 2px 10px #ccc;
+}
+.closed {
+  background-color: rgb(87, 16, 4) !important;
+  color: #fff;
+  box-shadow: 0 2px 10px #ccc;
+}
+</style>

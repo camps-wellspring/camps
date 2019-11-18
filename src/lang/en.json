@@ -112,6 +112,7 @@
     "phone": "Phone",
     "messages": "Messages",
     "email": "Email",
+    "status": "Status",
     "screen": "Screen",
     "delete": "Delete"
   },
@@ -121,7 +122,7 @@
     "user_phone": "User Phone",
     "topic_id": "Topic",
     "message": "Message",
-    "name":"Name"
+    "name": "Name"
   },
   "label": {
     "hoss": "Hoss",
@@ -152,6 +153,9 @@
     "color": "Color",
     "demo_type": "Demo Type",
     "demo_url": "Demo URL",
+    "pending": "Pending",
+    "seen": "Seen",
+    "closed": "Closed",
     "visible": "Visible"
   },
   "title": {
