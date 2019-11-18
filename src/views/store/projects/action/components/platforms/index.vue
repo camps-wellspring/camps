@@ -5,7 +5,7 @@
       <v-container fluid>
         <v-row>
           <v-col cols="12" md="6">
-            <form-group name="id">
+            <form-group name="id" :validator="$v.platform.id">
               <template slot-scope="{ attrs }">
                 <v-select
                   v-bind="attrs"
@@ -23,7 +23,7 @@
           </v-col>
 
           <v-col cols="12" md="6">
-            <form-group name="url">
+            <form-group name="url" :validator="$v.platform.url">
               <template slot-scope="{ attrs }">
                 <v-text-field
                   v-model="platform.url"
