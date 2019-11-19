@@ -64,6 +64,7 @@
           @set_refresh="handleGetMembers"
           :isEdited="isEdit"
           :slug="slug"
+          @update_main_image="handleUpdateImage"
         />
       </template>
     </DialogComponent>
@@ -114,6 +115,10 @@ export default {
     this.handleGetMembers();
   },
   methods: {
+    handleUpdateImage(image) {
+      this.items[this.itemIndex].main_image = image;
+      this.items = [...this.items];
+    },
     handleEditedMember(member) {
       this.$set(this.items, this.itemIndex, member);
     },
@@ -139,7 +144,6 @@ export default {
       });
     },
     handleSetMember(item) {
-      console.log(item);
       this.items.push(item);
     },
     createTableHeaders() {

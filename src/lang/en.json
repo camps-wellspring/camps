@@ -24,7 +24,7 @@
     "maxLength": "%{attribute} must be at most %{max} characters long",
     "minLength": "%{attribute} must be %{min} characters at least",
     "minWords": "%{attribute} must be at least 3 words",
-    "maxWords": "%{attribute} must be less than 500 words",
+    "maxWords": "%{attribute} must be less than %{maxWords} words",
     "description": "Description",
     "valid": "must be valid",
     "number": " must be numbers",
