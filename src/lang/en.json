@@ -11,7 +11,10 @@
     "projects": "Projects",
     "platforms": "Platforms",
     "technologies": "Technologies",
-    "demo_types": "Demo Types"
+    "demo_types": "Demo Types",
+    "extra_services_list": "Extra Services",
+    "budget_ranges_list": "Budget Ranges",
+    "time_ranges_list": "Time Ranges"
   },
   "fields": {
     "password": "Password",
@@ -72,7 +75,10 @@
     "platforms": "Platforms",
     "store-categories": "Store Categories",
     "demo_types": "Demo Types",
-    "projects": "Projects"
+    "projects": "Projects",
+    "extra_services": "Extra Services",
+    "budget_ranges": "Budget Ranges",
+    "time_ranges": "Time Ranges"
   },
   "table": {
     "profile": "Profile",
@@ -95,7 +101,10 @@
     "visibility": "Visibility",
     "template": "Template",
     "photo": "Photo",
-    "available": "Available"
+    "available": "Available",
+    "range": "Range",
+    "service_available": "Service Available",
+    "project_available": "Project Available"
   },
   "label": {
     "hoss": "Hoss",
@@ -123,7 +132,15 @@
     "main_video": "Video Url",
     "platforms": "Platforms",
     "features": "Features",
-    "color": "Color"
+    "color": "Color",
+    "edit_budgets": "Edit Budgets",
+    "create_budgets": "Create Budgets",
+    "add": "Add",
+    "minimum": "Minimum",
+    "months": "Months",
+    "sar": "SAR",
+    "edit_times": "Edit Time",
+    "create_times": "Create Times"
   },
   "title": {
     "edit_service": "Edit Service",
