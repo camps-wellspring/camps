@@ -123,10 +123,8 @@ export default {
       this.$set(this.items, this.itemIndex, member);
     },
     handleEdit({ slug }, index) {
-      console.log(index);
       this.slug = slug;
       this.itemIndex = index;
-
       this.dialog = true;
       this.isEdit = true;
     },
