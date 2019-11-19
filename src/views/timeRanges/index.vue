@@ -204,6 +204,9 @@ export default {
         .then(res => {
           const { data } = res.data;
           this.times = data;
+
+          // to remove the more
+          this.times.pop();
         })
         .catch(err => {
           console.log(err);

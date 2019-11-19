@@ -17,7 +17,7 @@
     >
       <template v-slot:item="{ item, index }">
         <tr>
-          <td>{{ item.text }} {{ $t('label.sar') }}</td>
+          <td>{{ item.text }} {{ $t("label.sar") }}</td>
           <!-- <td>{{ item.min }}</td> -->
           <td class="toggle-adjust">
             <toggle-service
@@ -206,6 +206,9 @@ export default {
         .then(res => {
           const { data } = res.data;
           this.budgets = data;
+
+          // to remove the more
+          this.budgets.pop();
         })
         .catch(err => {
           console.log(err);
