@@ -6,43 +6,40 @@
       <v-row>
         <v-col cols="12" md="6">
           <form-group name="name">
-            <template slot-scope="{ attrs }">
-              <v-text-field
-                v-bind="attrs"
-                v-model="form.name"
-                outlined
-                :label="$t('label.name')"
-                @input="hadleChange('name')"
-              ></v-text-field>
-            </template>
+            <v-text-field
+              slot-scope="{ attrs, listeners }"
+              v-bind="attrs"
+              v-model="form.name"
+              outlined
+              :label="$t('label.name')"
+              v-on="listeners"
+            ></v-text-field>
           </form-group>
         </v-col>
         <v-col cols="12" md="6">
           <form-group name="priority">
-            <template slot-scope="{ attrs }">
-              <v-text-field
-                v-bind="attrs"
-                v-model="form.priority"
-                outlined
-                :label="$t('label.priority')"
-                @input="hadleChange('priority')"
-              ></v-text-field>
-            </template>
+            <v-text-field
+              slot-scope="{ attrs, listeners }"
+              v-bind="attrs"
+              v-model="form.priority"
+              outlined
+              :label="$t('label.priority')"
+              v-on="listeners"
+            ></v-text-field>
           </form-group>
         </v-col>
         <v-col cols="12">
           <form-group name="description">
-            <template slot-scope="{ attrs }">
-              <v-textarea
-                v-bind="attrs"
-                v-model="form.description"
-                outlined
-                auto-grow
-                row-height="40"
-                :label="$t('label.description')"
-                @input="hadleChange('description')"
-              ></v-textarea>
-            </template>
+            <v-textarea
+              slot-scope="{ attrs, listeners }"
+              v-bind="attrs"
+              v-model="form.description"
+              outlined
+              auto-grow
+              row-height="40"
+              :label="$t('label.description')"
+              v-on="listeners"
+            ></v-textarea>
           </form-group>
         </v-col>
       </v-row>
@@ -59,8 +56,7 @@ export default {
       type: Object,
       required: true
     }
-  },
-  inject: ["hadleChange"]
+  }
 };
 </script>
 

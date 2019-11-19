@@ -1,5 +1,5 @@
 <template>
-  <main class="works">
+  <main class="form-page">
     <v-toolbar flat color="white" class="mb-4">
       <v-toolbar-title>{{ formTitle }}</v-toolbar-title>
       <v-divider class="mx-2" inset vertical></v-divider>
@@ -88,7 +88,6 @@ export default {
   },
   provide() {
     return {
-      hadleChange: this.hadleChange,
       $v: this.$v
     };
   },
@@ -108,15 +107,12 @@ export default {
       updateData: {},
       videosFiles: [],
       mediaPhotos: [],
-
       myPlatforms: [],
-
       logoSize: 1.24,
       mainImageSize: 2.48,
       photosMaxSize: 1.24,
       resetImage: false,
       btnLoading: false,
-
       logoChange: false,
       mainMediaChanged: false,
       multiImageChanged: false,
@@ -202,9 +198,7 @@ export default {
         this.updateWork();
       }
     },
-    hadleChange(name) {
-      this.$v.form[name].$touch();
-    },
+
     handleSelectMainImage(photo) {
       this.form.main_media = photo.file;
       this.mainMediaChanged = true;

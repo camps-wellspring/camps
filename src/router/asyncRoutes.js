@@ -300,6 +300,38 @@ export const asyncRouterMap = [
       }
     ]
   },
+  {
+    path: "/contacts",
+    component: Layout,
+    redirect: "/contacts/list",
+    alwaysShow: true,
+    meta: {
+      title: "contacts",
+      icon: "mdi-account-circle"
+    },
+    children: [
+      {
+        path: "list",
+        component: () => import("@/views/contacts/index"),
+        name: "contact_list",
+
+        meta: {
+          title: "contact_list",
+          icon: "mdi-account-circle"
+        }
+      },
+      {
+        path: "topics",
+        component: () => import("@/views/contacts/Components/Topics"),
+        name: "topics",
+
+        meta: {
+          title: "topics",
+          icon: "mdi-account-circle"
+        }
+      }
+    ]
+  },
 
   //   {
   //     path: "/members",

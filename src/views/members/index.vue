@@ -24,7 +24,11 @@
                 @click="showImagePreview(item.main_image)"
                 class="hover-pointer"
                 aspect-ratio="1"
-                :src="item.main_image ? item.main_image.path : '@/assets/imgs/user.jpg'"
+                :src="
+                  item.main_image
+                    ? item.main_image.path
+                    : '@/assets/imgs/user.jpg'
+                "
               ></v-img>
             </v-avatar>
           </td>
@@ -34,8 +38,12 @@
           <td>{{ item.priority }}</td>
 
           <td>
-            <v-icon small title="edit" @click="handleEdit(item, index)"> mdi-pencil</v-icon>
-            <v-icon small title="delete" @click="handleDelete(item, index)"> mdi-delete</v-icon>
+            <v-icon small title="edit" @click="handleEdit(item, index)">
+              mdi-pencil</v-icon
+            >
+            <v-icon small title="delete" @click="handleDelete(item, index)">
+              mdi-delete</v-icon
+            >
           </td>
         </tr>
       </template>
@@ -56,6 +64,7 @@
           @set_refresh="handleGetMembers"
           :isEdited="isEdit"
           :slug="slug"
+          @update_main_image="handleUpdateImage"
         />
       </template>
     </DialogComponent>
@@ -106,14 +115,16 @@ export default {
     this.handleGetMembers();
   },
   methods: {
+    handleUpdateImage(image) {
+      this.items[this.itemIndex].main_image = image;
+      this.items = [...this.items];
+    },
     handleEditedMember(member) {
       this.$set(this.items, this.itemIndex, member);
     },
     handleEdit({ slug }, index) {
-      console.log(index);
       this.slug = slug;
       this.itemIndex = index;
-
       this.dialog = true;
       this.isEdit = true;
     },
@@ -131,11 +142,17 @@ export default {
       });
     },
     handleSetMember(item) {
-      console.log(item);
       this.items.push(item);
     },
     createTableHeaders() {
-      const headersList = ["profile", "name", "position", "bio", "priority", "configs"];
+      const headersList = [
+        "profile",
+        "name",
+        "position",
+        "bio",
+        "priority",
+        "configs"
+      ];
       this.headers = TableHeaders(headersList);
     },
     handleGetMembers() {

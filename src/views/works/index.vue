@@ -131,25 +131,19 @@ export default {
         this.$router.push({ query: this.queries });
       }
     },
-    handleEdit({ slug }, index) {
-      console.log(index);
+    handleEdit({ slug }) {
       this.$router.push({ name: "edit_work", params: { slug } });
     },
     handleDelete({ slug }, index) {
       this.popUp().then(value => {
         if (!value.dismiss) {
           DeleteData({ reqName: "works", id: slug })
-            .then(res => {
-              console.log(res);
+            .then(() => {
               this.$delete(this.items, index);
             })
             .catch(err => console.log(err));
         }
       });
-    },
-    handleExpand(props) {
-      props.isExpanded = !props.isExpanded;
-      console.log(props);
     },
     handleGetWorks(query) {
       IndexData({ reqName: "works", query })
@@ -157,7 +151,6 @@ export default {
           const { data, meta } = res.data;
           this.items = data;
           this.pagination = meta;
-          console.log(this.items);
         })
         .catch(err => {
           console.log(err);

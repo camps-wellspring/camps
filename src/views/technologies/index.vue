@@ -6,7 +6,13 @@
       action-button-text="create"
       @ButtonClicked="initDialog('create')"
     />
-    <v-data-table :headers="headers" :items="items" hide-default-footer :loading="loading.table">
+    <v-data-table
+      :headers="headers"
+      :items="items"
+      hide-default-footer
+      disable-pagination
+      :loading="loading.table"
+    >
       <template v-slot:item="{ item, index }">
         <tr>
           <td>{{ item.name }}</td>

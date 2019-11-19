@@ -1,6 +1,9 @@
-import { UpdateData, ShowData, StoreData } from "@/helpers/apiMethods";
+import { UpdateData, StoreData } from "@/helpers/apiMethods";
+import switchLocale from "@/mixins/switchLocale";
 
 export default {
+  mixins: [switchLocale],
+
   props: {
     currItem: {
       type: Object,
@@ -12,17 +15,16 @@ export default {
     },
     actionType: {
       type: String,
-      required: true
+      default: ""
     },
     dialog: {
       type: Boolean,
-      default: false
+      default: ""
     }
   },
 
   data() {
     return {
-      locale: "",
       imgUpdated: true,
       form: {},
       loading: {
@@ -33,9 +35,6 @@ export default {
   },
 
   computed: {
-    currLocale() {
-      return this.locale ? this.locale : this.$store.getters.locale;
-    },
     itemId() {
       return this.config.idType ? this.config.idType : "id";
     }
@@ -107,17 +106,6 @@ export default {
           })
           .catch(() => (this.loading.submit = false));
       });
-    },
-
-    handleLocaleChange(locale) {
-      this.loading.fetch = true;
-      ShowData({ reqName: this.config.modelName, id: this.currItem.id, locale })
-        .then(res => {
-          this.locale = locale;
-          this.form = res.data[Object.keys(res.data)[0]];
-          this.loading.fetch = false;
-        })
-        .catch(() => (this.loading.fetch = false));
     },
 
     handleImg(img) {
