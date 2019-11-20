@@ -70,8 +70,8 @@ export default {
   },
   data() {
     return {
-      email: "super@solutionplus.sa",
-      password: "123123",
+      email: "",
+      password: "",
 
       loading: false,
       redirect: undefined
