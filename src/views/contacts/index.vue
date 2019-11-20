@@ -19,20 +19,12 @@
           <td>{{ item.user_phone }}</td>
           <td :title="item.message">{{ item.message | truncate }}</td>
           <td>
-            <v-chip :class="changeStyle(item.status)">{{
-              getStatus(item.status)
-            }}</v-chip>
+            <v-chip :class="changeStyle(item.status)">{{ getStatus(item.status) }}</v-chip>
           </td>
           <td>
-            <v-icon medium title="edit" @click="handleEdit(item, index)"
-              >mdi-pencil</v-icon
-            >
-            <v-icon medium title="delete" @click="handleDelete(item, index)"
-              >mdi-delete</v-icon
-            >
-            <v-icon medium title="attachment" @click="showAttachments(item)"
-              >mdi-attachment</v-icon
-            >
+            <v-icon medium title="edit" @click="handleEdit(item, index)">mdi-pencil</v-icon>
+            <v-icon medium title="delete" @click="handleDelete(item, index)">mdi-delete</v-icon>
+            <v-icon medium title="attachment" @click="showAttachments(item)">mdi-attachment</v-icon>
           </td>
         </tr>
       </template>
@@ -81,12 +73,7 @@
       <template #body>
         <v-row>
           <v-col cols="12" md="3" v-for="photo in photos" :key="photo.id">
-            <v-img
-              title="photo"
-              fluid
-              aspect-ratio="1"
-              :src="photo && photo.path"
-            ></v-img>
+            <v-img title="photo" fluid aspect-ratio="1" :src="photo && photo.path"></v-img>
           </v-col>
           <v-col cols="12" md="3" v-for="file in pdfFiles" :key="file.id">
             <a :href="file.path" target="_blank">
@@ -196,14 +183,7 @@ export default {
       }
     },
     handleCreateHeaders() {
-      const headerList = [
-        "name",
-        "email",
-        "phone",
-        "messages",
-        "status",
-        "configs"
-      ];
+      const headerList = ["name", "email", "phone", "messages", "status", "configs"];
       this.headers = TableHeaders(headerList);
     },
     handleGetContacts(query) {

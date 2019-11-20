@@ -10,12 +10,7 @@
               :disabled="form.status && form.status === 2"
             ></v-switch>
           </v-col>
-          <v-col
-            cols="12"
-            md="6"
-            v-for="(field, index) in nameFields"
-            :key="index"
-          >
+          <v-col cols="12" md="6" v-for="(field, index) in nameFields" :key="index">
             <TextField :model="form" :fieldName="field" />
           </v-col>
           <v-col cols="12" md="6">
@@ -38,9 +33,7 @@
               :loading="btnLoading"
               >{{ $t("button.save") }}</v-btn
             >
-            <v-btn class="warning mx-2" v-on="$listeners">{{
-              $t("button.close")
-            }}</v-btn>
+            <v-btn class="warning mx-2" v-on="$listeners">{{ $t("button.close") }}</v-btn>
           </v-col>
         </v-row>
       </form>
@@ -49,13 +42,7 @@
 </template>
 
 <script>
-import {
-  required,
-  minLength,
-  maxLength,
-  numeric,
-  email
-} from "vuelidate/lib/validators";
+import { required, minLength, maxLength, numeric, email } from "vuelidate/lib/validators";
 import { UpdateData, IndexData, ShowData } from "@/helpers/apiMethods";
 import Cookies from "js-cookie";
 export default {
