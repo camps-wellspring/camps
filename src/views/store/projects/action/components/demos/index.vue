@@ -198,6 +198,7 @@ export default {
         screen: null,
         name: ""
       };
+      this.$v.demo.$reset();
     }
   }
 };
