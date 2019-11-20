@@ -50,7 +50,10 @@
           </td>
 
           <td>
-            <v-btn icon :to="{ name: 'ProjectEdit' }" append>
+            <v-btn
+              icon
+              :to="{ name: 'ProjectEdit', params: { slug: item.slug, actionType: 'edit' } }"
+            >
               <v-icon medium title="edit">mdi-pencil</v-icon>
             </v-btn>
             <v-btn icon>

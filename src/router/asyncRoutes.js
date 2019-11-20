@@ -193,7 +193,7 @@ export const asyncRouterMap = [
         }
       },
       {
-        path: "projects/edit",
+        path: "projects/:slug/:actionType",
         component: () => import("@/views/store/projects/action"),
         name: "ProjectEdit",
         hidden: true,

@@ -133,7 +133,7 @@ import { minLength, maxLength, required, requiredIf } from "vuelidate/lib/valida
 import { minWords, maxWords } from "@/utils/validate";
 import switchLocale from "@/mixins/switchLocale";
 import imgPreviewMixin from "@/mixins/imgPreview";
-import { IndexData, StoreData } from "@/helpers/apiMethods";
+import { IndexData, StoreData, ShowData } from "@/helpers/apiMethods";
 import { isEmpty } from "lodash";
 
 export default {
@@ -177,9 +177,11 @@ export default {
 
   computed: {
     actionType() {
-      const pathArr = this.$route.path.split("/");
-      const actionType = pathArr[pathArr.length - 1];
-      return actionType === "create" ? "create" : "update";
+      return this.$route.params && this.$route.params.actionType;
+    },
+
+    slug() {
+      return this.$route.params && this.$route.params.slug;
     },
 
     additionalOptions() {
@@ -216,6 +218,7 @@ export default {
 
   created() {
     this.fetchOptions();
+    this.actionType === "edit" && this.fetchProject();
   },
 
   methods: {
@@ -230,6 +233,13 @@ export default {
             this.options[el] = res.data.data;
           }
         });
+      });
+    },
+
+    fetchProject() {
+      this.loading.fetch = true;
+      ShowData({ reqName: "projects", id: this.slug }).then(res => {
+        this.form = res.data.project;
       });
     },
 
