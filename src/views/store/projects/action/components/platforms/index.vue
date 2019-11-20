@@ -156,6 +156,7 @@ export default {
         url: "",
         name: ""
       };
+      this.$v.platform.$reset();
     }
   }
 };

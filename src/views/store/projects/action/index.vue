@@ -36,7 +36,7 @@
                           class="file-upload__image"
                           :imgUrl="form.main_media && form.main_media.path"
                           :imgId="form.main_media && form.main_media.id"
-                          @fileSelected="handleImg"
+                          @fileSelected="handleImgSelect"
                           v-bind="attrs"
                         />
                       </template>
@@ -102,15 +102,20 @@
             @DeletePlatform="deletePlatform"
           />
 
-          <v-col cols="12">
-            <v-btn
-              type="submit"
-              class="primary"
-              :disabled="$v.form.$invalid"
-              :loading="loading.submit"
-              >{{ $t("button.submit") }}</v-btn
-            >
-          </v-col>
+          <!-- CATEGORIES & TECHNOLOGIES -->
+          <options
+            :options="additionalOptions"
+            @categoriesUpdated="form.categories = $event"
+            @technologiesUpdated="form.technologies = $event"
+          />
+
+          <v-btn
+            type="submit"
+            class="primary"
+            :disabled="$v.form.$invalid"
+            :loading="loading.submit"
+            >{{ $t("button.submit") }}</v-btn
+          >
         </form>
       </form-wrapper>
     </v-container>
@@ -128,7 +133,8 @@ import { minLength, maxLength, required, requiredIf } from "vuelidate/lib/valida
 import { minWords, maxWords } from "@/utils/validate";
 import switchLocale from "@/mixins/switchLocale";
 import imgPreviewMixin from "@/mixins/imgPreview";
-import { IndexData } from "@/helpers/apiMethods";
+import { IndexData, StoreData } from "@/helpers/apiMethods";
+import { isEmpty } from "lodash";
 
 export default {
   name: "CreateProject",
@@ -136,7 +142,8 @@ export default {
   components: {
     Demos: () => import("./components/demos"),
     Media: () => import("./components/media"),
-    platforms: () => import("./components/platforms")
+    Platforms: () => import("./components/platforms"),
+    Options: () => import("./components/options")
   },
 
   mixins: [switchLocale, imgPreviewMixin],
@@ -163,13 +170,7 @@ export default {
       },
       loading: {
         submit: false,
-        fetch: false,
-        options: {
-          ["demo-types"]: false,
-          ["store-categories"]: false,
-          technologies: false,
-          platforms: false
-        }
+        fetch: false
       }
     };
   },
@@ -179,6 +180,13 @@ export default {
       const pathArr = this.$route.path.split("/");
       const actionType = pathArr[pathArr.length - 1];
       return actionType === "create" ? "create" : "update";
+    },
+
+    additionalOptions() {
+      return {
+        categories: this.options["store-categories"],
+        technologies: this.options.technologies
+      };
     }
   },
 
@@ -213,7 +221,6 @@ export default {
   methods: {
     fetchOptions() {
       Object.keys(this.options).forEach(el => {
-        this.loading.options[el] = true;
         IndexData({ reqName: el }).then(res => {
           if (el === "demo-types" || el === "platforms") {
             this.options[el] = res.data.data.map(item => {
@@ -222,12 +229,24 @@ export default {
           } else {
             this.options[el] = res.data.data;
           }
-          this.loading.options[el] = false;
         });
       });
     },
 
-    handleImg(img) {
+    onSubmit() {
+      let payload = new FormData();
+      for (const el in this.form) {
+        this.form[el] instanceof File && payload.append(el, this.form[el]);
+        !isEmpty(this.form[el]) && payload.append(el, this.form[el]);
+      }
+      this.loading.submit = true;
+      StoreData({ reqName: "projects", data: payload }).then(() => {
+        this.loading.submit = false;
+        this.$router.push({ name: "Projects" });
+      });
+    },
+
+    handleImgSelect(img) {
       this.form.main_media = img.file;
       this.$v.form.main_media.$touch();
     },
@@ -240,9 +259,9 @@ export default {
 
     addPlatform(newPlatform) {
       this.form.platforms.push(newPlatform);
-      console.log("TCL: addPlatform -> this.form.platforms", this.form.platforms);
-      const platformIndex = this.getIndexById(newPlatform.id, this.options.platforms);
-      this.options.platforms.splice(platformIndex, 1);
+      // FIXME handle splice properly
+      // const platformIndex = this.getIndexById(newPlatform.id, this.options.platforms);
+      // this.options.platforms.splice(platformIndex, 1);
     },
 
     deleteDemo(item, i) {
@@ -256,7 +275,7 @@ export default {
     },
 
     getIndexById(id, targetArr) {
-      return targetArr.forEach((el, i) => el.id === id && i);
+      targetArr.forEach((el, i) => el.id === id && i);
     }
   }
 };

@@ -89,7 +89,9 @@
     "topics": "Topics",
     "extra_services": "Extra Services",
     "budget_ranges": "Budget Ranges",
-    "time_ranges": "Time Ranges"
+    "time_ranges": "Time Ranges",
+    "categories_and_technologies": "Categories And Technologies",
+    "options": "Options"
   },
   "table": {
     "profile": "Profile",
@@ -174,7 +176,9 @@
     "months": "Months",
     "sar": "SAR",
     "edit_times": "Edit Time",
-    "create_times": "Create Times"
+    "create_times": "Create Times",
+    "categories": "Categories",
+    "technologies": "Technologies"
   },
   "title": {
     "edit_service": "Edit Service",
