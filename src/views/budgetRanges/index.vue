@@ -9,12 +9,7 @@
     <!-- Toolbar -->
 
     <!-- Table -->
-    <v-data-table
-      :headers="headers"
-      :items="budgets"
-      hide-default-footer
-      :loading="tableLoading"
-    >
+    <v-data-table :headers="headers" :items="budgets" hide-default-footer :loading="tableLoading">
       <template v-slot:item="{ item, index }">
         <tr>
           <td>{{ item.text }} {{ $t("label.sar") }}</td>
@@ -40,11 +35,7 @@
             />
           </td>
           <td>
-            <v-icon
-              class="edit"
-              small
-              :title="$t('label.edit')"
-              @click="handleEdit(item, index)"
+            <v-icon class="edit" small :title="$t('label.edit')" @click="handleEdit(item, index)"
               >mdi-pencil</v-icon
             >
             <v-icon
@@ -64,9 +55,7 @@
     <v-dialog v-model="showBudgetsDialog" max-width="700px">
       <v-card>
         <v-card-title>{{
-          editMode
-            ? this.$t("label.edit_budgets")
-            : this.$t("label.create_budgets")
+          editMode ? this.$t("label.edit_budgets") : this.$t("label.create_budgets")
         }}</v-card-title>
         <v-divider></v-divider>
 
@@ -104,12 +93,7 @@
                 </v-col>
 
                 <v-col v-if="!editMode" md="2" cols="12" class="text-end">
-                  <v-btn
-                    color="primary"
-                    :disabled="$v.$invalid"
-                    @click="addBudget"
-                    x-large
-                  >
+                  <v-btn color="primary" :disabled="$v.$invalid" @click="addBudget" x-large>
                     {{ $t("label.add") }}
                   </v-btn>
                 </v-col>
@@ -126,13 +110,9 @@
           <v-btn color="secondary" @click="closeBudgetsDialog">{{
             this.$t("button.cancel")
           }}</v-btn>
-          <v-btn
-            color="primary"
-            :loading="loading.save"
-            :disabled="saveValidation"
-            @click="save"
-            >{{ this.$t("button.save") }}</v-btn
-          >
+          <v-btn color="primary" :loading="loading.save" :disabled="saveValidation" @click="save">{{
+            this.$t("button.save")
+          }}</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -143,13 +123,7 @@
 <script>
 import TableHeaders from "@/helpers/TableHeaders";
 import { required, minValue, maxValue } from "vuelidate/lib/validators";
-import {
-  IndexData,
-  ShowData,
-  StoreData,
-  UpdateData,
-  DeleteData
-} from "@/helpers/apiMethods";
+import { IndexData, ShowData, StoreData, UpdateData, DeleteData } from "@/helpers/apiMethods";
 import Cookies from "js-cookie";
 
 export default {
@@ -179,8 +153,7 @@ export default {
   computed: {
     saveValidation() {
       return (
-        (!this.editMode && this.selectedBudgets.length === 0) ||
-        (this.editMode && this.$v.$invalid)
+        (!this.editMode && this.selectedBudgets.length === 0) || (this.editMode && this.$v.$invalid)
       );
     }
   },
@@ -292,11 +265,7 @@ export default {
         data: formData
       })
         .then(res => {
-          this.budgets.splice(
-            this.currentBudgetIndex,
-            1,
-            res.data.budget_range
-          );
+          this.budgets.splice(this.currentBudgetIndex, 1, res.data.budget_range);
 
           this.loading.save = false;
           this.getBudgets();
