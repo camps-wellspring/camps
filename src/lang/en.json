@@ -13,7 +13,9 @@
     "technologies": "Technologies",
     "demo_types": "Demo Types",
     "contact_list": "Contact List",
-    "extra_services_list": "Extra Services List"
+    "extra_services_list": "Extra Services",
+    "budget_ranges_list": "Budget Ranges",
+    "time_ranges_list": "Time Ranges"
   },
   "fields": {
     "password": "Password",
@@ -24,7 +26,7 @@
     "maxLength": "%{attribute} must be at most %{max} characters long",
     "minLength": "%{attribute} must be %{min} characters at least",
     "minWords": "%{attribute} must be at least 3 words",
-    "maxWords": "%{attribute} must be less than 500 words",
+    "maxWords": "%{attribute} must be less than %{maxWords} words",
     "description": "Description",
     "valid": "must be valid",
     "number": " must be numbers",
@@ -84,7 +86,10 @@
     "media": "Media",
     "features": "Features",
     "demo": "Demo",
-    "topics": "Topics"
+    "topics": "Topics",
+    "extra_services": "Extra Services",
+    "budget_ranges": "Budget Ranges",
+    "time_ranges": "Time Ranges"
   },
   "table": {
     "profile": "Profile",
@@ -114,7 +119,10 @@
     "email": "Email",
     "status": "Status",
     "screen": "Screen",
-    "delete": "Delete"
+    "delete": "Delete",
+    "range": "Range",
+    "service_available": "Service Available",
+    "project_available": "Project Available"
   },
   "input": {
     "user_name": "User Name",
@@ -158,7 +166,15 @@
     "closed": "Closed",
     "visible": "Visible",
     "platform_url": "Platform URL",
-    "platform": "Platform"
+    "platform": "Platform",
+    "edit_budgets": "Edit Budgets",
+    "create_budgets": "Create Budgets",
+    "add": "Add",
+    "minimum": "Minimum",
+    "months": "Months",
+    "sar": "SAR",
+    "edit_times": "Edit Time",
+    "create_times": "Create Times"
   },
   "title": {
     "edit_service": "Edit Service",

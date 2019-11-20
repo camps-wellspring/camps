@@ -44,6 +44,7 @@
 <script>
 import { required, minLength, maxLength, numeric, email } from "vuelidate/lib/validators";
 import { UpdateData, IndexData, ShowData } from "@/helpers/apiMethods";
+
 import Cookies from "js-cookie";
 export default {
   name: "FormComponent",

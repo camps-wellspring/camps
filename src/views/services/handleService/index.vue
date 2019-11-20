@@ -229,7 +229,11 @@ export default {
         data: formData
       })
         .then(() => {
-          this.popUp(this.$t("message.services_should_have_subs"), "info", true).then(value => {
+          this.popUp(
+            this.$t("message.services_should_have_subs"),
+            "info",
+            true
+          ).then(value => {
             if (!value.dismiss) {
               this.$router.push({ name: "ServicesList" });
               this.loading.save = false;

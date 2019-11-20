@@ -197,8 +197,9 @@ export default {
       formData.append("locale", "en");
 
       UpdateMedia({ id: this.imgId, data: formData })
-        .then(() => {
-          this.$emit("ImageUpdated");
+        .then(res => {
+          const { media } = res.data;
+          this.$emit("ImageUpdated", media);
         })
         .catch(err => {
           console.log(err);

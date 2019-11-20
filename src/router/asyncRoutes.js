@@ -259,6 +259,48 @@ export const asyncRouterMap = [
     ]
   },
   {
+    path: "/budget-ranges",
+    component: Layout,
+    redirect: "/budget-ranges/list",
+    meta: {
+      title: "budget_ranges",
+      icon: "mdi-account-circle"
+    },
+    children: [
+      {
+        path: "list",
+        component: () => import("@/views/budgetRanges/index"),
+        name: "BudgetRangesList",
+
+        meta: {
+          title: "budget_ranges_list",
+          icon: "mdi-account-circle"
+        }
+      }
+    ]
+  },
+  {
+    path: "/time-ranges",
+    component: Layout,
+    redirect: "/time-ranges/list",
+    meta: {
+      title: "time_ranges",
+      icon: "mdi-account-circle"
+    },
+    children: [
+      {
+        path: "list",
+        component: () => import("@/views/timeRanges/index"),
+        name: "TimeRangesList",
+
+        meta: {
+          title: "time_ranges_list",
+          icon: "mdi-account-circle"
+        }
+      }
+    ]
+  },
+  {
     path: "/contacts",
     component: Layout,
     redirect: "/contacts/list",

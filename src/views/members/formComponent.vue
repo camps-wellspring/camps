@@ -10,8 +10,10 @@
             <new-image-upload
               class="file-upload__image"
               :imgUrl="form.main_image ? form.main_image.path : ''"
+              :imgId="form.main_image ? form.main_image.id : null"
               :resetToggle="resetImage"
               @fileSelected="handleImageSelect"
+              @ImageUpdated="handleImageUpdate"
               :maxSize="maxsize"
             />
           </v-col>
@@ -89,6 +91,7 @@
 import { required, minLength, maxLength, numeric } from "vuelidate/lib/validators";
 import { StoreData, UpdateData, ShowData, UpdateMedia } from "@/helpers/apiMethods";
 import Cookies from "js-cookie";
+import { maxWords } from "@/utils/validate";
 
 export default {
   name: "FormComponent",
@@ -123,6 +126,9 @@ export default {
   },
 
   methods: {
+    handleImageUpdate(photo) {
+      this.$emit("update_main_image", photo);
+    },
     fireLocaleChange(locale) {
       this.locale = locale;
       this.showData(locale);
@@ -168,20 +174,27 @@ export default {
 
       UpdateData({
         reqName: "members",
-        data: { name, position, bio, priority, locale: this.locale },
+        data: {
+          name,
+          position,
+          bio,
+          priority,
+          locale: this.locale,
+          _method: "put"
+        },
         id: this.slug
         // locale: Cookies.get("language")
       })
         .then(res => {
           const { member } = res.data;
           this.$emit("set_edited_member", member);
+          this.reset();
         })
         .catch(err => {
           console.log(err);
         })
         .finally(() => {
           this.btnLoading = false;
-          this.reset();
         });
     },
     handleUpdateImage() {
@@ -276,7 +289,8 @@ export default {
         },
         bio: {
           minLength: minLength(3),
-          maxLength: maxLength(50)
+          maxWords: maxWords(50)
+          //   maxLength: maxLength(50)
         }
       }
     };
