@@ -269,7 +269,7 @@ export default {
 
     onSubmit() {
       this.actionType === "create" ? this.createProject() : this.updateProject();
-      this.createProject();
+      console.log("TCL: onSubmit -> this.actionType", this.actionType);
     },
 
     createProject() {
@@ -284,14 +284,37 @@ export default {
     },
 
     updateProject() {
-      let features = [];
-      this.form.features.forEach(el => features.push(el.id));
+      let categories = [];
+      let technologies = [];
+
+      if (this.form.categories.length > 0) {
+        if (typeof this.form.categories === "object") {
+          this.form.categories.forEach(el => categories.push(el.id));
+        } else {
+          categories = this.form.categories;
+        }
+      }
+      if (this.form.technologies.length > 0) {
+        if (typeof this.form.technologies === "object") {
+          this.form.technologies.forEach(el => technologies.push(el.id));
+        } else {
+          technologies = this.form.technologies;
+        }
+      }
+
       const payload = {
         name: this.form.name,
-        features
+        description: this.form.description,
+        short_description: this.form.short_description,
+        platforms: this.form.platforms,
+        categories,
+        technologies,
+        _method: "put",
+        locale: this.locale
       };
+
       this.loading.submit = true;
-      UpdateData({ reqName: "projects", data: this.form, id: this.slug, locale: this.locale })
+      UpdateData({ reqName: "projects", data: payload, id: this.slug, locale: this.locale })
         .then(() => {
           this.loading.submit = false;
           this.$router.push({ name: "Projects" });
