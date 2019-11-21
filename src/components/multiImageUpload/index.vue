@@ -70,7 +70,7 @@
         <v-card-text class="subheading">{{ ImageErrorMsg }}</v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn @click="errorDialog = false" flat>Got it!</v-btn>
+          <v-btn @click="errorDialog = false" text>Got it!</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -214,9 +214,11 @@ export default {
       //   console.log(imgFiles);
       for (let i = 0; i < imgFiles.length; i++) {
         const fileReader = new FileReader(); // important
-        this.imgsFiles.push(imgFiles[i]);
+
         if (this.validateType(imgFiles[i])) {
           if (this.validateSize(imgFiles[i])) {
+            this.imgsFiles.push(imgFiles[i]);
+
             fileReader.addEventListener("load", () => {
               if (!this.editCase) {
                 this.ShowImgs.push(fileReader.result);
