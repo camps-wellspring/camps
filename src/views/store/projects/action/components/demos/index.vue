@@ -42,7 +42,7 @@
               :imgUrl="demo.screen && demo.screen.path"
               :imgId="demo.screen && demo.screen.id"
               :max-size="2"
-              @fileSelected="demo.screen = $event"
+              @fileSelected="demo.screen = $event.file"
             />
           </v-col>
 
@@ -100,8 +100,8 @@
                         <td>
                           <v-avatar>
                             <img
-                              @click="handleImgPreview(screenPath(item.screen.file))"
-                              :src="screenPath(item.screen.file)"
+                              @click="handleImgPreview(screenPath(item.screen))"
+                              :src="screenPath(item.screen)"
                             />
                           </v-avatar>
                         </td>
