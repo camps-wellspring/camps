@@ -284,7 +284,12 @@ export default {
     },
 
     updateProject() {
-      console.log("is update");
+      let features = [];
+      this.form.features.forEach(el => features.push(el.id));
+      const payload = {
+        name: this.form.name,
+        features
+      };
       this.loading.submit = true;
       UpdateData({ reqName: "projects", data: this.form, id: this.slug, locale: this.locale })
         .then(() => {

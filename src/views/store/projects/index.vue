@@ -20,7 +20,7 @@
           <td class="table-logo">
             <v-avatar class="square">
               <img
-                :src="item[config.imgType].path"
+                :src="item[config.imgType] && item[config.imgType].path"
                 :alt="item[config.imgType].description"
                 @click="handleImgPreview(item[config.imgType].path)"
             /></v-avatar>
