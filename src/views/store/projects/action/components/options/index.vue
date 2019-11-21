@@ -1,11 +1,12 @@
 <template>
   <v-card>
-    <v-card-title>{{ $t("heading.options") }}</v-card-title>
+    <v-card-title>{{ $t("heading.categories_and_technologies") }}</v-card-title>
     <v-card-text>
       <v-container fluid>
         <v-row>
           <v-col cols="12" md="6">
             <v-select
+              :value="selectedItems.categories"
               multiple
               outlined
               :label="$t('label.categories')"
@@ -18,6 +19,7 @@
 
           <v-col cols="12" md="6">
             <v-select
+              :value="selectedItems.technologies"
               multiple
               outlined
               :label="$t('label.technologies')"
@@ -37,6 +39,10 @@
 export default {
   props: {
     options: {
+      type: Object,
+      default: () => {}
+    },
+    selectedItems: {
       type: Object,
       default: () => {}
     }

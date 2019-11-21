@@ -38,6 +38,7 @@
                           :imgId="form.main_media && form.main_media.id"
                           @fileSelected="handleImgSelect"
                           v-bind="attrs"
+                          :max-size="2"
                         />
                       </template>
                     </form-group>
@@ -105,6 +106,7 @@
           <!-- CATEGORIES & TECHNOLOGIES -->
           <options
             :options="additionalOptions"
+            :selected-items="selectedOptions"
             @categoriesUpdated="form.categories = $event"
             @technologiesUpdated="form.technologies = $event"
           />
@@ -164,13 +166,16 @@ export default {
         categories: [],
         technologies: []
       },
+
       mediaPhotos: [],
+
       options: {
         ["demo-types"]: [],
         ["store-categories"]: [],
         technologies: [],
         platforms: []
       },
+
       loading: {
         submit: false,
         fetch: false
@@ -191,6 +196,13 @@ export default {
       return {
         categories: this.options["store-categories"],
         technologies: this.options.technologies
+      };
+    },
+
+    selectedOptions() {
+      return {
+        categories: this.form.categories,
+        technologies: this.form.technologies
       };
     }
   },
@@ -243,7 +255,7 @@ export default {
       this.loading.fetch = true;
       ShowData({ reqName: "projects", id: this.slug }).then(res => {
         this.form = res.data.project;
-        // extracting media files
+        // extracting additional media files
         this.form.media.length > 0 && (this.mediaPhotos = this.form.media);
       });
     },
