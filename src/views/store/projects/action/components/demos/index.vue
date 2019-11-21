@@ -67,7 +67,7 @@
           </v-row>
         </v-form>
 
-        <v-card-text v-if="addedDemos.length > 0">
+        <v-card-text v-if="addedDemos && addedDemos.length > 0">
           <v-container fluid>
             <v-row>
               <v-col cols="12">
@@ -87,7 +87,7 @@
                         <td>
                           <read-more
                             class="read-more"
-                            :text="item.name"
+                            :text="item.name || '---'"
                             :max-chars="20"
                             less-str="read less"
                           />
@@ -95,7 +95,7 @@
                         <td>
                           <read-more
                             class="read-more"
-                            :text="item.url"
+                            :text="item.url || '---'"
                             :max-chars="50"
                             less-str="read less"
                           />
@@ -128,13 +128,22 @@
         </v-card-text>
       </v-container>
     </v-card-text>
+
+    <global-image-preview
+      :image-path="currImg"
+      :show-dialog="imgPreviewDialog"
+      @closePreview="closePreview"
+    />
   </v-card>
 </template>
 
 <script>
 import { required, url } from "vuelidate/lib/validators";
+import imgPreviewMixin from "@/mixins/imgPreview";
 
 export default {
+  mixins: [imgPreviewMixin],
+
   props: {
     demoTypes: {
       type: Array,
@@ -184,7 +193,7 @@ export default {
     },
 
     screenPath(file) {
-      return URL.createObjectURL(file);
+      return file instanceof File ? URL.createObjectURL(file) : file.path;
     },
 
     // TODO emit an empty item instead

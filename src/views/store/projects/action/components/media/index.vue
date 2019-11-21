@@ -7,7 +7,6 @@
           <v-col cols="12">
             <form-group name="main_media">
               <template slot-scope="{ attrs }">
-                <!-- FIXME allow multiple photo select -->
                 <multi-image-upload
                   v-bind="attrs"
                   :maxSize="2"
