@@ -13,7 +13,7 @@
       <!-- Locale -->
 
       <!-- Form -->
-      <v-form>
+      <v-form @submit.prevent="save">
         <form-wrapper :validator="$v.feature">
           <v-row>
             <v-col md="6" sm="8" cols="12">
@@ -36,18 +36,14 @@
                 color="primary"
                 large
                 :loading="loading.save"
-                @click="save"
+                :disabled="$v.$invalid"
+                type="submit"
                 >{{ $t("button.save") }}</v-btn
               >
 
-              <v-btn
-                v-if="editMode"
-                color="secondary"
-                class="mx-1"
-                @click="reset"
-                large
-                >{{ $t("button.reset") }}</v-btn
-              >
+              <v-btn v-if="editMode" color="secondary" class="mx-1" @click="reset" large>{{
+                $t("button.reset")
+              }}</v-btn>
             </v-col>
           </v-row>
         </form-wrapper>
@@ -66,11 +62,7 @@
           <tr>
             <td>{{ item.name }}</td>
             <td>
-              <v-icon
-                class="edit"
-                small
-                :title="$t('label.edit')"
-                @click="handleEdit(item)"
+              <v-icon class="edit" small :title="$t('label.edit')" @click="handleEdit(item)"
                 >mdi-pencil</v-icon
               >
               <v-icon
@@ -90,22 +82,14 @@
     <v-divider class="mx-5"></v-divider>
     <v-card-actions class="py-4 mx-2">
       <v-spacer></v-spacer>
-      <v-btn color="secondary" large @click="closeFeatures">{{
-        $t("button.close")
-      }}</v-btn>
+      <v-btn color="secondary" large @click="closeFeatures">{{ $t("button.close") }}</v-btn>
     </v-card-actions>
   </v-card>
 </template>
 
 <script>
 import TableHeaders from "@/helpers/TableHeaders";
-import {
-  IndexData,
-  ShowData,
-  StoreData,
-  UpdateData,
-  DeleteData
-} from "@/helpers/apiMethods";
+import { IndexData, ShowData, StoreData, UpdateData, DeleteData } from "@/helpers/apiMethods";
 import Cookies from "js-cookie";
 import { required, minLength, maxLength } from "vuelidate/lib/validators";
 

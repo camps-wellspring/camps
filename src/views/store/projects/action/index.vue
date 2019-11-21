@@ -8,7 +8,7 @@
       />
 
       <form-wrapper :validator="$v.form">
-        <form @submit.prevent="onSubmit">
+        <v-form @submit.prevent="onSubmit">
           <!-- MAIN INFO -->
           <v-card>
             <v-card-title>{{ $t("heading.main_info") }}</v-card-title>
@@ -109,14 +109,17 @@
             @technologiesUpdated="form.technologies = $event"
           />
 
-          <v-btn
-            type="submit"
-            class="primary"
-            :disabled="$v.form.$invalid"
-            :loading="loading.submit"
-            >{{ $t("button.submit") }}</v-btn
-          >
-        </form>
+          <div class="d-flex justify-center">
+            <v-btn
+              x-large
+              type="submit"
+              class="primary my-5"
+              :disabled="$v.form.$invalid"
+              :loading="loading.submit"
+              >{{ $t("button.submit") }}</v-btn
+            >
+          </div>
+        </v-form>
       </form-wrapper>
     </v-container>
 
@@ -268,11 +271,6 @@ export default {
     removeFromTable(item, i, field, name) {
       this.form[field].splice(i, 1);
       this.options[name].push(item);
-    },
-
-    deletePlatform(item, i) {
-      this.form.platforms.splice(i, 1);
-      this.options.platforms.push(item);
     }
   }
 };

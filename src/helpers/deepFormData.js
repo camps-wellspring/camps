@@ -1,11 +1,14 @@
 //* CONSTRUCTING A ONE-LEVEL-DEEP FORMDATA OBJECT FROM A GIVEN NORMAL OBJECT (form)
+// ================================================================================
 //! works only with:
 //? flat arrays
 //? arrays of flat objects
 //? arrays of flat objects that contain files
+//? arrays of files
 //? files
 //? Strings
-//? Numbers
+//? Number
+// ================================================================================
 
 import { isEmpty } from "lodash";
 
@@ -16,14 +19,17 @@ export const deepFormData = form => {
     if (!isEmpty(form[el])) {
       // if the property is an array
       if (form[el] instanceof Array) {
-        // if THAT array has at least one nested objects (typically used to detect an array of objects)
-        if (form[el].some(val => typeof val === "object")) {
+        // if THAT array is an array of objects (has at least one object)
+        if (form[el].some(val => typeof val === "object" && !(val instanceof File))) {
           // flattening each object in that array
           form[el].forEach((obj, i) => {
             for (const prop in obj) {
               payload.append(`${el}[${i}][${prop}]`, obj[prop]);
             }
           });
+          // if it's an array of files
+        } else if (form[el].some(val => val instanceof File)) {
+          form[el].forEach((item, i) => payload.append(`${el}[${i}]`, item));
           // if it's a flat array
         } else {
           form[el].forEach((item, i) => payload.append(`${el}[${i}]`, item));
