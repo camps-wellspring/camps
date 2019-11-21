@@ -6,7 +6,13 @@
       action-button-text="create"
       @ButtonClicked="$router.push({ name: 'ProjectCreate' })"
     />
-    <v-data-table :headers="headers" :items="items" hide-default-footer :loading="loading.table">
+    <v-data-table
+      :headers="headers"
+      :items="items"
+      hide-default-footer
+      disable-pagination
+      :loading="loading.table"
+    >
       <template v-slot:item="{ item, index }">
         <tr>
           <td>{{ item.name }}</td>
@@ -94,7 +100,7 @@
 <script>
 import indexMixin from "@/mixins/indexMixin";
 
-// TODO add pagination
+// TODO add pagination & remove "disable-pagination" prop from the table
 export default {
   name: "Projects",
 

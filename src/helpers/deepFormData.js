@@ -1,4 +1,5 @@
 //* CONSTRUCTING A ONE-LEVEL-DEEP FORMDATA OBJECT FROM A GIVEN NORMAL OBJECT (form)
+//* quick-n-dirty solution
 // ================================================================================
 //! works only with:
 //? flat arrays

@@ -2,7 +2,7 @@
   <div class="form-page">
     <v-container>
       <locale-select
-        v-if="actionType === 'update'"
+        v-if="actionType === 'edit'"
         :loading="loading.fetch"
         @change="handleLocaleChange"
       />
@@ -136,9 +136,8 @@
 <script>
 import { minLength, maxLength, required, requiredIf } from "vuelidate/lib/validators";
 import { minWords, maxWords } from "@/utils/validate";
-import { IndexData, StoreData, ShowData } from "@/helpers/apiMethods";
+import { IndexData, StoreData, ShowData, UpdateData } from "@/helpers/apiMethods";
 import { deepFormData } from "@/helpers/deepFormData";
-import switchLocale from "@/mixins/switchLocale";
 import imgPreviewMixin from "@/mixins/imgPreview";
 
 export default {
@@ -151,7 +150,7 @@ export default {
     Options: () => import("./components/options")
   },
 
-  mixins: [switchLocale, imgPreviewMixin],
+  mixins: [imgPreviewMixin],
 
   data() {
     return {
@@ -179,7 +178,9 @@ export default {
       loading: {
         submit: false,
         fetch: false
-      }
+      },
+
+      locale: this.$store.getters.locale
     };
   },
 
@@ -253,14 +254,23 @@ export default {
 
     fetchProject() {
       this.loading.fetch = true;
-      ShowData({ reqName: "projects", id: this.slug }).then(res => {
-        this.form = res.data.project;
-        // extracting additional media files
-        this.form.media.length > 0 && (this.mediaPhotos = this.form.media);
-      });
+      ShowData({ reqName: "projects", id: this.slug, locale: this.locale })
+        .then(res => {
+          this.form = res.data.project;
+          // extracting additional media files
+          this.form.media.length > 0 && (this.mediaPhotos = this.form.media);
+          this.loading.fetch = false;
+        })
+        .catch(() => {
+          this.loading.fetch = false;
+        });
     },
 
     onSubmit() {
+      this.actionType === "create" ? this.createProject() : this.updateProject();
+    },
+
+    createProject() {
       const data = deepFormData(this.form);
       this.loading.submit = true;
       StoreData({ reqName: "projects", data })
@@ -269,6 +279,23 @@ export default {
           this.$router.push({ name: "Projects" });
         })
         .catch(() => (this.loading.submit = false));
+    },
+
+    updateProject() {
+      this.loading.submit = true;
+      UpdateData({ reqName: "projects", data: this.form, id: this.slug, locale: this.locale })
+        .then(() => {
+          this.loading.submit = false;
+          this.$router.push({ name: "Projects" });
+        })
+        .catch(() => {
+          this.loading.submit = false;
+        });
+    },
+
+    handleLocaleChange(locale) {
+      this.locale = locale;
+      this.fetchProject();
     },
 
     handleImgSelect(img) {
