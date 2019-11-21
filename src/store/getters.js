@@ -3,6 +3,7 @@ const getters = {
   user: state => state.user.user,
   serverErrors: state => state.errors.serverErrors,
   notification: state => state.notification.snackbar,
+
   //   errgetUserInfoors: state => state.notification.errors,
   language: state => state.user.language,
   locale: state => state.locale.locale,

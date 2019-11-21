@@ -14,7 +14,11 @@
         v-on="listeners"
       ></v-text-field>
     </form-group>
-    <form-group v-if="inputType === 'textarea'" :name="fieldName" :attribute="`input.${fieldName}`">
+    <form-group
+      v-if="inputType === 'textarea'"
+      :name="fieldName"
+      :attribute="`input.${fieldName}`"
+    >
       <v-textarea
         rows="10"
         auto-grow
@@ -26,7 +30,11 @@
         v-on="listeners"
       ></v-textarea>
     </form-group>
-    <form-group v-if="inputType === 'select'" :name="fieldName" :attribute="`input.${fieldName}`">
+    <form-group
+      v-if="inputType === 'select'"
+      :name="fieldName"
+      :attribute="`input.${fieldName}`"
+    >
       <v-select
         slot-scope="{ attrs, listeners }"
         v-bind="attrs"
