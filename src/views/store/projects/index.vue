@@ -23,8 +23,8 @@
           <td>
             <read-more
               class="read-more"
-              :text="item.short_description && item.short_description"
-              :max-chars="30"
+              :text="item.short_description ? item.short_description : 'No description available'"
+              :max-chars="38"
               less-str="read less"
             />
           </td>
@@ -125,7 +125,6 @@ export default {
 
   methods: {
     handleFeatures(id) {
-      console.log("TCL: handleFeatures -> id", id);
       this.featureDialog = true;
       this.featureId = id;
     }
