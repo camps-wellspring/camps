@@ -243,6 +243,8 @@ export default {
       this.loading.fetch = true;
       ShowData({ reqName: "projects", id: this.slug }).then(res => {
         this.form = res.data.project;
+        // extracting media files
+        this.form.media.length > 0 && (this.mediaPhotos = this.form.media);
       });
     },
 
