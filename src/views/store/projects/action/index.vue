@@ -186,7 +186,7 @@ export default {
 
   computed: {
     actionType() {
-      return this.$route.params && this.$route.params.actionType;
+      return this.$route.params.actionType === "edit" ? "edit" : "create";
     },
 
     slug() {
@@ -235,6 +235,7 @@ export default {
   created() {
     this.fetchOptions();
     this.actionType === "edit" && this.fetchProject();
+    console.log("TCL: created -> this.actionType", this.actionType);
   },
 
   methods: {
@@ -268,6 +269,7 @@ export default {
 
     onSubmit() {
       this.actionType === "create" ? this.createProject() : this.updateProject();
+      this.createProject();
     },
 
     createProject() {
@@ -282,6 +284,7 @@ export default {
     },
 
     updateProject() {
+      console.log("is update");
       this.loading.submit = true;
       UpdateData({ reqName: "projects", data: this.form, id: this.slug, locale: this.locale })
         .then(() => {
