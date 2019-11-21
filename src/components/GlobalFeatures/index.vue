@@ -13,7 +13,7 @@
       <!-- Locale -->
 
       <!-- Form -->
-      <v-form>
+      <v-form @submit.prevent="save">
         <form-wrapper :validator="$v.feature">
           <v-row>
             <v-col md="6" sm="8" cols="12">
@@ -32,9 +32,14 @@
             </v-col>
 
             <v-col md="6" sm="4" cols="12" class="d-flex justify-end">
-              <v-btn color="primary" large :loading="loading.save" @click="save">{{
-                $t("button.save")
-              }}</v-btn>
+              <v-btn
+                color="primary"
+                large
+                :loading="loading.save"
+                :disabled="$v.$invalid"
+                type="submit"
+                >{{ $t("button.save") }}</v-btn
+              >
 
               <v-btn v-if="editMode" color="secondary" class="mx-1" @click="reset" large>{{
                 $t("button.reset")

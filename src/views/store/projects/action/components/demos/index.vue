@@ -3,66 +3,69 @@
     <v-card-title>{{ $t("heading.demo") }}</v-card-title>
     <v-card-text>
       <v-container fluid>
-        <v-row>
-          <v-col cols="12" md="6">
-            <form-group name="id" :validator="$v.demo.id">
-              <template slot-scope="{ attrs }">
-                <v-select
-                  v-bind="attrs"
-                  outlined
-                  :label="$t('label.demo_type')"
-                  :items="demoTypes"
-                  item-text="name"
-                  return-object
-                  @input="handleItemChoose"
-                  @change="$v.demo.id.$touch()"
-                  ref="demoSelect"
-                />
-              </template>
-            </form-group>
-          </v-col>
+        <v-form>
+          <v-row>
+            <v-col cols="12" md="6">
+              <form-group name="id" :validator="$v.demo.id">
+                <template slot-scope="{ attrs }">
+                  <v-select
+                    v-bind="attrs"
+                    outlined
+                    :label="$t('label.demo_type')"
+                    :items="demoTypes"
+                    item-text="name"
+                    return-object
+                    @input="handleItemChoose"
+                    @change="$v.demo.id.$touch()"
+                    ref="demoSelect"
+                  />
+                </template>
+              </form-group>
+            </v-col>
 
-          <v-col cols="12" md="6">
-            <form-group name="url" :validator="$v.demo.url">
-              <template slot-scope="{ attrs }">
-                <v-text-field
-                  v-model="demo.url"
-                  v-bind="attrs"
-                  outlined
-                  :label="$t('label.demo_url')"
-                  @blur="$v.demo.url.$touch()"
-                ></v-text-field>
-              </template>
-            </form-group>
-          </v-col>
+            <v-col cols="12" md="6">
+              <form-group name="url" :validator="$v.demo.url">
+                <template slot-scope="{ attrs }">
+                  <v-text-field
+                    v-model="demo.url"
+                    v-bind="attrs"
+                    outlined
+                    :label="$t('label.demo_url')"
+                    @blur="$v.demo.url.$touch()"
+                  ></v-text-field>
+                </template>
+              </form-group>
+            </v-col>
 
-          <v-col cols="12" md="6">
-            <new-image-upload
-              class="file-upload__image"
-              :imgUrl="demo.screen && demo.screen.path"
-              :imgId="demo.screen && demo.screen.id"
-              :max-size="2"
-              @fileSelected="demo.screen = $event.file"
-            />
-          </v-col>
+            <v-col cols="12" md="6">
+              <new-image-upload
+                class="file-upload__image"
+                :imgUrl="demo.screen && demo.screen.path"
+                :imgId="demo.screen && demo.screen.id"
+                :reset="!demo.screen"
+                :max-size="2"
+                @fileSelected="demo.screen = $event.file"
+              />
+            </v-col>
 
-          <v-col sm="3" class="d-flex justify-center">
-            <v-switch hide-details v-model="demo.visible" :label="$t('label.visible')" />
-          </v-col>
+            <v-col sm="3" class="d-flex justify-center">
+              <v-switch hide-details v-model="demo.visible" :label="$t('label.visible')" />
+            </v-col>
 
-          <v-col sm="3">
-            <v-card-actions>
-              <v-btn
-                block
-                :disabled="$v.demo.$invalid"
-                @click="handleAddItem"
-                class="primary"
-                large
-                >{{ $t("button.add") }}</v-btn
-              >
-            </v-card-actions>
-          </v-col>
-        </v-row>
+            <v-col sm="3">
+              <v-card-actions>
+                <v-btn
+                  block
+                  :disabled="$v.demo.$invalid"
+                  @click="handleAddItem"
+                  class="primary"
+                  large
+                  >{{ $t("button.add") }}</v-btn
+                >
+              </v-card-actions>
+            </v-col>
+          </v-row>
+        </v-form>
 
         <v-card-text v-if="addedDemos.length > 0">
           <v-container fluid>
