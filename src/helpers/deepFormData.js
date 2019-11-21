@@ -1,6 +1,6 @@
 //* CONSTRUCTING A ONE-LEVEL-DEEP FORMDATA OBJECT FROM A GIVEN NORMAL OBJECT (form)
 //! works only with:
-//? flat arrays, arrays of flat objects
+//? flat arrays
 //? arrays of flat objects
 //? arrays of flat objects that contain files
 //? files
