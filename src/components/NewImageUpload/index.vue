@@ -110,6 +110,8 @@ export default {
         if (newValue) {
           this.imageName = this.$t("label.show_image");
           this.ImageUrl = newValue;
+        } else if (this.imageName == this.$t("label.show_image")) {
+          this.resetImageFile();
         }
       }
     }
