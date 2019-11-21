@@ -144,13 +144,14 @@ export default {
       Object.assign(this.platform, platformItem);
     },
 
+    // TODO emit an empty item instead
     handleItemDelete(item, i) {
-      this.$emit("DeletePlatform", item, i);
+      this.$emit("DeletePlatform", item, i, "platforms", "platforms");
       this.$refs.platformSelect.reset();
     },
 
     handleAddItem() {
-      this.$emit("AddPlatform", this.platform);
+      this.$emit("AddPlatform", this.platform, "platforms", "platforms");
       this.platform = {
         id: null,
         url: "",

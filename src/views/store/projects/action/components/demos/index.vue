@@ -184,13 +184,14 @@ export default {
       return URL.createObjectURL(file);
     },
 
+    // TODO emit an empty item instead
     handleItemDelete(item, i) {
-      this.$emit("DeleteDemo", item, i);
+      this.$emit("DeleteDemo", item, i, "demos", "demo-types");
       this.$refs.demoSelect.reset();
     },
 
     handleAddItem() {
-      this.$emit("AddDemo", this.demo);
+      this.$emit("AddDemo", this.demo, "demos", "demo-types");
       this.demo = {
         id: null,
         url: "",

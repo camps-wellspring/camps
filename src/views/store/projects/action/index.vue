@@ -90,16 +90,16 @@
           <demos
             :demo-types="options['demo-types']"
             :added-demos="form.demos"
-            @AddDemo="addDemo"
-            @DeleteDemo="deleteDemo"
+            @AddDemo="pushToTable"
+            @DeleteDemo="removeFromTable"
           />
 
           <!-- PLATFORMS -->
           <platforms
             :platforms="options.platforms"
             :added-platforms="form.platforms"
-            @AddPlatform="addPlatform"
-            @DeletePlatform="deletePlatform"
+            @AddPlatform="pushToTable"
+            @DeletePlatform="removeFromTable"
           />
 
           <!-- CATEGORIES & TECHNOLOGIES -->
@@ -131,10 +131,10 @@
 <script>
 import { minLength, maxLength, required, requiredIf } from "vuelidate/lib/validators";
 import { minWords, maxWords } from "@/utils/validate";
-import switchLocale from "@/mixins/switchLocale";
-import imgPreviewMixin from "@/mixins/imgPreview";
 import { IndexData, StoreData, ShowData } from "@/helpers/apiMethods";
 import { deepFormData } from "@/helpers/deepFormData";
+import switchLocale from "@/mixins/switchLocale";
+import imgPreviewMixin from "@/mixins/imgPreview";
 
 export default {
   name: "CreateProject",
@@ -259,31 +259,20 @@ export default {
       this.$v.form.main_media.$touch();
     },
 
-    addDemo(newDemo) {
-      this.form.demos.push(newDemo);
-      const demoTypeIndex = this.getIndexById(newDemo.id, this.options["demo-types"]);
-      this.options["demo-types"].splice(demoTypeIndex, 1);
+    pushToTable(newItem, field, name) {
+      this.form[field].push(newItem);
+      const index = this.options[name].findIndex(el => el.id === newItem.id);
+      this.options[name].splice(index, 1);
     },
 
-    addPlatform(newPlatform) {
-      this.form.platforms.push(newPlatform);
-      // FIXME handle splice properly
-      // const platformIndex = this.getIndexById(newPlatform.id, this.options.platforms);
-      // this.options.platforms.splice(platformIndex, 1);
-    },
-
-    deleteDemo(item, i) {
-      this.form.demos.splice(i, 1);
-      this.options["demo-types"].push(item);
+    removeFromTable(item, i, field, name) {
+      this.form[field].splice(i, 1);
+      this.options[name].push(item);
     },
 
     deletePlatform(item, i) {
       this.form.platforms.splice(i, 1);
       this.options.platforms.push(item);
-    },
-
-    getIndexById(id, targetArr) {
-      targetArr.forEach((el, i) => el.id === id && i);
     }
   }
 };
