@@ -242,7 +242,6 @@ export default {
             res.data[`${this.FeaturedItemType}_feature`]
           );
 
-          console.log("update", res);
           this.loading.save = false;
           this.reset();
         })
