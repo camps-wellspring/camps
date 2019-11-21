@@ -50,7 +50,7 @@
           </v-col>
         </v-row>
 
-        <v-card-text v-if="addedPlatforms.length > 0">
+        <v-card-text v-if="addedPlatforms && addedPlatforms.length > 0">
           <v-container fluid>
             <v-row>
               <v-col cols="12">
@@ -68,7 +68,7 @@
                         <td>
                           <read-more
                             class="read-more"
-                            :text="item.name"
+                            :text="item.name || '---'"
                             :max-chars="20"
                             less-str="read less"
                           />
@@ -76,7 +76,7 @@
                         <td>
                           <read-more
                             class="read-more"
-                            :text="item.url"
+                            :text="item.url || '---'"
                             :max-chars="50"
                             less-str="read less"
                           />
@@ -144,13 +144,14 @@ export default {
       Object.assign(this.platform, platformItem);
     },
 
+    // TODO emit an empty item instead
     handleItemDelete(item, i) {
-      this.$emit("DeletePlatform", item, i);
+      this.$emit("DeletePlatform", item, i, "platforms", "platforms");
       this.$refs.platformSelect.reset();
     },
 
     handleAddItem() {
-      this.$emit("AddPlatform", this.platform);
+      this.$emit("AddPlatform", this.platform, "platforms", "platforms");
       this.platform = {
         id: null,
         url: "",

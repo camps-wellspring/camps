@@ -22,7 +22,9 @@ export default {
       return generateTableHeaders(this.headerValues);
     },
     dialogTitle() {
-      return this.actionType === "update" ? this.$t("heading.edit") : this.$t("heading.create");
+      return this.actionType === "update"
+        ? this.$t("heading.edit")
+        : this.$t("heading.create");
     }
   },
 
@@ -43,7 +45,9 @@ export default {
 
     initDialog(type, currItem) {
       this.actionType = type;
-      type === "update" ? (this.editingItem = currItem) : (this.editingItem = this.model);
+      type === "update"
+        ? (this.editingItem = currItem)
+        : (this.editingItem = this.model);
       this.dialog = true;
     },
 

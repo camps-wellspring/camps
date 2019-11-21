@@ -2,13 +2,13 @@
   <div class="form-page">
     <v-container>
       <locale-select
-        v-if="actionType === 'update'"
+        v-if="actionType === 'edit'"
         :loading="loading.fetch"
         @change="handleLocaleChange"
       />
 
       <form-wrapper :validator="$v.form">
-        <form @submit.prevent="onSubmit">
+        <v-form @submit.prevent="onSubmit">
           <!-- MAIN INFO -->
           <v-card>
             <v-card-title>{{ $t("heading.main_info") }}</v-card-title>
@@ -38,6 +38,7 @@
                           :imgId="form.main_media && form.main_media.id"
                           @fileSelected="handleImgSelect"
                           v-bind="attrs"
+                          :max-size="2"
                         />
                       </template>
                     </form-group>
@@ -90,33 +91,37 @@
           <demos
             :demo-types="options['demo-types']"
             :added-demos="form.demos"
-            @AddDemo="addDemo"
-            @DeleteDemo="deleteDemo"
+            @AddDemo="pushToTable"
+            @DeleteDemo="removeFromTable"
           />
 
           <!-- PLATFORMS -->
           <platforms
             :platforms="options.platforms"
             :added-platforms="form.platforms"
-            @AddPlatform="addPlatform"
-            @DeletePlatform="deletePlatform"
+            @AddPlatform="pushToTable"
+            @DeletePlatform="removeFromTable"
           />
 
           <!-- CATEGORIES & TECHNOLOGIES -->
           <options
             :options="additionalOptions"
+            :selected-items="selectedOptions"
             @categoriesUpdated="form.categories = $event"
             @technologiesUpdated="form.technologies = $event"
           />
 
-          <v-btn
-            type="submit"
-            class="primary"
-            :disabled="$v.form.$invalid"
-            :loading="loading.submit"
-            >{{ $t("button.submit") }}</v-btn
-          >
-        </form>
+          <div class="d-flex justify-center">
+            <v-btn
+              x-large
+              type="submit"
+              class="primary my-5"
+              :disabled="$v.form.$invalid"
+              :loading="loading.submit"
+              >{{ $t("button.submit") }}</v-btn
+            >
+          </div>
+        </v-form>
       </form-wrapper>
     </v-container>
 
@@ -131,10 +136,9 @@
 <script>
 import { minLength, maxLength, required, requiredIf } from "vuelidate/lib/validators";
 import { minWords, maxWords } from "@/utils/validate";
-import switchLocale from "@/mixins/switchLocale";
+import { IndexData, StoreData, ShowData, UpdateData } from "@/helpers/apiMethods";
+import { deepFormData } from "@/helpers/deepFormData";
 import imgPreviewMixin from "@/mixins/imgPreview";
-import { IndexData, StoreData, ShowData } from "@/helpers/apiMethods";
-import { isEmpty } from "lodash";
 
 export default {
   name: "CreateProject",
@@ -146,7 +150,7 @@ export default {
     Options: () => import("./components/options")
   },
 
-  mixins: [switchLocale, imgPreviewMixin],
+  mixins: [imgPreviewMixin],
 
   data() {
     return {
@@ -161,17 +165,22 @@ export default {
         categories: [],
         technologies: []
       },
+
       mediaPhotos: [],
+
       options: {
         ["demo-types"]: [],
         ["store-categories"]: [],
         technologies: [],
         platforms: []
       },
+
       loading: {
         submit: false,
         fetch: false
-      }
+      },
+
+      locale: this.$store.getters.locale
     };
   },
 
@@ -188,6 +197,13 @@ export default {
       return {
         categories: this.options["store-categories"],
         technologies: this.options.technologies
+      };
+    },
+
+    selectedOptions() {
+      return {
+        categories: this.form.categories,
+        technologies: this.form.technologies
       };
     }
   },
@@ -238,22 +254,48 @@ export default {
 
     fetchProject() {
       this.loading.fetch = true;
-      ShowData({ reqName: "projects", id: this.slug }).then(res => {
-        this.form = res.data.project;
-      });
+      ShowData({ reqName: "projects", id: this.slug, locale: this.locale })
+        .then(res => {
+          this.form = res.data.project;
+          // extracting additional media files
+          this.form.media.length > 0 && (this.mediaPhotos = this.form.media);
+          this.loading.fetch = false;
+        })
+        .catch(() => {
+          this.loading.fetch = false;
+        });
     },
 
     onSubmit() {
-      let payload = new FormData();
-      for (const el in this.form) {
-        this.form[el] instanceof File && payload.append(el, this.form[el]);
-        !isEmpty(this.form[el]) && payload.append(el, this.form[el]);
-      }
+      this.actionType === "create" ? this.createProject() : this.updateProject();
+    },
+
+    createProject() {
+      const data = deepFormData(this.form);
       this.loading.submit = true;
-      StoreData({ reqName: "projects", data: payload }).then(() => {
-        this.loading.submit = false;
-        this.$router.push({ name: "Projects" });
-      });
+      StoreData({ reqName: "projects", data })
+        .then(() => {
+          this.loading.submit = false;
+          this.$router.push({ name: "Projects" });
+        })
+        .catch(() => (this.loading.submit = false));
+    },
+
+    updateProject() {
+      this.loading.submit = true;
+      UpdateData({ reqName: "projects", data: this.form, id: this.slug, locale: this.locale })
+        .then(() => {
+          this.loading.submit = false;
+          this.$router.push({ name: "Projects" });
+        })
+        .catch(() => {
+          this.loading.submit = false;
+        });
+    },
+
+    handleLocaleChange(locale) {
+      this.locale = locale;
+      this.fetchProject();
     },
 
     handleImgSelect(img) {
@@ -261,31 +303,15 @@ export default {
       this.$v.form.main_media.$touch();
     },
 
-    addDemo(newDemo) {
-      this.form.demos.push(newDemo);
-      const demoTypeIndex = this.getIndexById(newDemo.id, this.options["demo-types"]);
-      this.options["demo-types"].splice(demoTypeIndex, 1);
+    pushToTable(newItem, field, name) {
+      this.form[field].push(newItem);
+      const index = this.options[name].findIndex(el => el.id === newItem.id);
+      this.options[name].splice(index, 1);
     },
 
-    addPlatform(newPlatform) {
-      this.form.platforms.push(newPlatform);
-      // FIXME handle splice properly
-      // const platformIndex = this.getIndexById(newPlatform.id, this.options.platforms);
-      // this.options.platforms.splice(platformIndex, 1);
-    },
-
-    deleteDemo(item, i) {
-      this.form.demos.splice(i, 1);
-      this.options["demo-types"].push(item);
-    },
-
-    deletePlatform(item, i) {
-      this.form.platforms.splice(i, 1);
-      this.options.platforms.push(item);
-    },
-
-    getIndexById(id, targetArr) {
-      targetArr.forEach((el, i) => el.id === id && i);
+    removeFromTable(item, i, field, name) {
+      this.form[field].splice(i, 1);
+      this.options[name].push(item);
     }
   }
 };

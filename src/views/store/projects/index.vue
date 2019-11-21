@@ -6,7 +6,13 @@
       action-button-text="create"
       @ButtonClicked="$router.push({ name: 'ProjectCreate' })"
     />
-    <v-data-table :headers="headers" :items="items" hide-default-footer :loading="loading.table">
+    <v-data-table
+      :headers="headers"
+      :items="items"
+      hide-default-footer
+      disable-pagination
+      :loading="loading.table"
+    >
       <template v-slot:item="{ item, index }">
         <tr>
           <td>{{ item.name }}</td>
@@ -20,9 +26,17 @@
             /></v-avatar>
           </td>
 
-          <td>{{ item.short_description ? item.short_description : item.description }}</td>
           <td>
-            <v-btn :title="$t('label.features')" @click="handleFeatures(item)" icon fab small>
+            <read-more
+              class="read-more"
+              :text="item.short_description ? item.short_description : 'No description available'"
+              :max-chars="38"
+              less-str="read less"
+            />
+          </td>
+
+          <td>
+            <v-btn :title="$t('label.features')" @click="handleFeatures(item.id)" icon fab small>
               <v-icon class="edit">mdi-star-circle-outline</v-icon>
             </v-btn>
           </td>
@@ -68,7 +82,7 @@
 
     <v-dialog v-model="featureDialog" max-width="700px">
       <global-features
-        featured-item-type="projects"
+        featured-item-type="project"
         v-if="featureDialog"
         :featured-item-id="featureId"
         @closeFeatures="featureDialog = false"
@@ -86,7 +100,7 @@
 <script>
 import indexMixin from "@/mixins/indexMixin";
 
-// TODO add pagination
+// TODO add pagination & remove "disable-pagination" prop from the table
 export default {
   name: "Projects",
 
