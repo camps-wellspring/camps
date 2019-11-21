@@ -208,7 +208,7 @@ export default {
       UpdateData({
         reqName: `${this.FeaturedItemType}-features`,
         id: this.currentFeatureId,
-        data: { ...this.feature, locale: this.locale }
+        data: { ...this.feature, locale: this.locale, _method: "PUT" }
       })
         .then(res => {
           this.features.splice(
