@@ -134,7 +134,7 @@ import { minWords, maxWords } from "@/utils/validate";
 import switchLocale from "@/mixins/switchLocale";
 import imgPreviewMixin from "@/mixins/imgPreview";
 import { IndexData, StoreData, ShowData } from "@/helpers/apiMethods";
-import { isEmpty } from "lodash";
+import { deepFormData } from "@/helpers/deepFormData";
 
 export default {
   name: "CreateProject",
@@ -244,16 +244,14 @@ export default {
     },
 
     onSubmit() {
-      let payload = new FormData();
-      for (const el in this.form) {
-        this.form[el] instanceof File && payload.append(el, this.form[el]);
-        !isEmpty(this.form[el]) && payload.append(el, this.form[el]);
-      }
+      const data = deepFormData(this.form);
       this.loading.submit = true;
-      StoreData({ reqName: "projects", data: payload }).then(() => {
-        this.loading.submit = false;
-        this.$router.push({ name: "Projects" });
-      });
+      StoreData({ reqName: "projects", data })
+        .then(() => {
+          this.loading.submit = false;
+          this.$router.push({ name: "Projects" });
+        })
+        .catch(() => (this.loading.submit = false));
     },
 
     handleImgSelect(img) {

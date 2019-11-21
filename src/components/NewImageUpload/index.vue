@@ -17,8 +17,8 @@
       v-on="$attrs"
       :title="$t('label.upload_image')"
     >
-      <!-- <v-icon dark class="icon-upload"></v-icon> -->
-      <span>{{ $t("label.hoss") }}</span>
+      <v-icon dark> mdi-cloud-upload</v-icon>
+      <!-- <span>{{ $t("label.hoss") }}</span> -->
     </v-btn>
 
     <!-- Image Preview -->
