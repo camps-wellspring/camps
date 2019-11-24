@@ -4,7 +4,11 @@
       <v-toolbar-title>{{ $t("heading.settings") }}</v-toolbar-title>
       <v-divider class="mx-2" inset vertical></v-divider>
     </v-toolbar>
-    <component :settings="settingsObject" :is="components"></component>
+    <component
+      @change_language="changeLangauage"
+      :settings="settingsObject"
+      :is="components"
+    ></component>
   </div>
 </template>
 
@@ -32,8 +36,12 @@ export default {
     this.getSettings();
   },
   methods: {
-    getSettings() {
-      IndexData({ reqName: "settings", query: { pagination: "all" } })
+    changeLangauage(locale) {
+      console.log(locale);
+      this.getSettings(locale);
+    },
+    getSettings(locale = "en") {
+      IndexData({ reqName: "settings", query: { pagination: "all" }, locale })
         .then(res => {
           const { data } = res.data;
           this.settingsObject = data.reduce((acc, current) => {

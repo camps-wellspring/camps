@@ -43,6 +43,10 @@ export default {
     fieldName: {
       type: String
     },
+    language: {
+      type: String,
+      default: "en"
+    },
     form: {
       type: Object,
       default: () => {}
@@ -56,7 +60,7 @@ export default {
       this.loadingButton = true;
       const reqData = {
         [this.fieldName]: this.form[this.fieldName],
-        locale: "en"
+        locale: this.language
       };
       StoreData({ reqName: "settings", data: reqData })
         .then(res => {
