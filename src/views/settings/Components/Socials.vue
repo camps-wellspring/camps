@@ -77,15 +77,13 @@ export default {
     selectedSettings(settings, type) {
       const setting = settings[type];
       if (setting) {
-        for (let i = 0; i < setting.length; i++) {
-          for (let j = 0; j < this.form.socials.length; j++) {
-            if (this.form.socials[j].id === setting[i].id) {
-              this.form.socials[j] = { ...setting[i] };
+        setting.map(setting => {
+          this.form.socials.map((social, index) => {
+            if (social.id === setting.id) {
+              this.$set(this.form.socials, index, setting);
             }
-          }
-        }
-
-        this.form.socials = [...this.form.socials];
+          });
+        });
       }
     }
   },
