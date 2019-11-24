@@ -83,19 +83,20 @@
           <!-- MEDIA -->
           <media
             :photos="mediaPhotos"
-            @ImgSelected="form.photos = $event"
-            @ImgDeleted="form.photos.splice($event, 1)"
+            @ImgSelected="handleMediaSelected"
+            @ImgDeleted="handleMediaDeleted"
           />
 
           <!-- DEMOS -->
           <demos
-            :demo-types="options['demo-types']"
+            :demo-types="selectItems['demo-types']"
             :added-demos="form.demos"
             @AddDemo="pushToTable"
             @DeleteDemo="removeFromTable"
           />
 
           <!-- PLATFORMS -->
+          <!-- TODO handle duplicated items -->
           <platforms
             :platforms="options.platforms"
             :added-platforms="form.platforms"
@@ -165,8 +166,12 @@ export default {
         categories: [],
         technologies: []
       },
-
       mediaPhotos: [],
+
+      addedItems: {
+        photos: [],
+        demos: []
+      },
 
       options: {
         ["demo-types"]: [],
@@ -207,10 +212,23 @@ export default {
       };
     },
 
-    platformItems() {
-      let platforms = [];
-
-      return platforms;
+    selectItems() {
+      const existingItems = {
+        ["demo-types"]: this.form.demos.map(el => el.id),
+        platforms: this.form.demos.map(el => el.id)
+      };
+      let items = {
+        ["demo-types"]: [],
+        platforms: []
+      };
+      ["demo-types", "platforms"].forEach(item => {
+        this.options[item].forEach(el => {
+          if (!existingItems[item].includes(el.id)) {
+            items[item].push(el);
+          }
+        });
+      });
+      return items;
     }
   },
 
@@ -241,7 +259,9 @@ export default {
   created() {
     this.fetchOptions();
     this.actionType === "edit" && this.fetchProject();
-    console.log("TCL: created -> this.actionType", this.actionType);
+    // setTimeout(() => {
+    //   console.log(this.demoItems);
+    // }, 2000);
   },
 
   methods: {
@@ -275,7 +295,6 @@ export default {
 
     onSubmit() {
       this.actionType === "create" ? this.createProject() : this.updateProject();
-      console.log("TCL: onSubmit -> this.actionType", this.actionType);
     },
 
     createProject() {
@@ -290,37 +309,51 @@ export default {
     },
 
     updateProject() {
-      let categories = [];
-      let technologies = [];
+      // SHAPING REQUEST PAYLOAD
+      const payload = { ...this.form };
 
-      if (this.form.categories.length > 0) {
-        if (typeof this.form.categories === "object") {
-          this.form.categories.forEach(el => categories.push(el.id));
-        } else {
-          categories = this.form.categories;
-        }
-      }
-      if (this.form.technologies.length > 0) {
-        if (typeof this.form.technologies === "object") {
-          this.form.technologies.forEach(el => technologies.push(el.id));
-        } else {
-          technologies = this.form.technologies;
-        }
+      payload.slug && delete payload.slug;
+      payload.main_media && delete payload.main_media;
+      payload.media && delete payload.media;
+      payload.photos = this.addedItems.photos;
+
+      if (this.addedItems.demos.length > 0) {
+        payload.demos = this.addedItems.demos;
+      } else {
+        delete payload.demos;
       }
 
-      const payload = {
-        name: this.form.name,
-        description: this.form.description,
-        short_description: this.form.short_description,
-        platforms: this.form.platforms,
-        categories,
-        technologies,
-        _method: "put",
-        locale: this.locale
+      //technologies & categories
+      const options = {
+        categories: [],
+        technologies: []
       };
+      for (const option in options) {
+        // when it's a type of number that means a change has occurred on it
+        if (payload[option].length > 0 && typeof payload[option][0] === "number") {
+          payload[option].forEach(id => {
+            options[option].push(id);
+          });
+          payload[option] = options[option];
+        } else {
+          delete payload[option];
+        }
+      }
 
+      // platforms
+      if (payload.platforms.length > 0) {
+        const platforms = payload.platforms.map(el => {
+          return { id: el.id, url: el.url };
+        });
+        payload.platforms = platforms;
+      }
+      const data = deepFormData(payload);
+      data.append("_method", "put");
+      data.append("locale", this.locale);
+
+      // DISPATCHING THE REQUEST =================>
       this.loading.submit = true;
-      UpdateData({ reqName: "projects", data: payload, id: this.slug, locale: this.locale })
+      UpdateData({ reqName: "projects", data, id: this.slug, locale: this.locale })
         .then(() => {
           this.loading.submit = false;
           this.$router.push({ name: "Projects" });
@@ -342,6 +375,7 @@ export default {
 
     pushToTable(newItem, field, name) {
       this.form[field].push(newItem);
+      this.addedItems[field].push(newItem);
       const index = this.options[name].findIndex(el => el.id === newItem.id);
       this.options[name].splice(index, 1);
     },
@@ -349,6 +383,15 @@ export default {
     removeFromTable(item, i, field, name) {
       this.form[field].splice(i, 1);
       this.options[name].push(item);
+    },
+
+    handleMediaSelected(imgs) {
+      this.addedItems.photos.push(...imgs);
+    },
+
+    // FIXME edit photo after deleting another
+    handleMediaDeleted(index) {
+      this.mediaPhotos.splice(index, 1);
     }
   }
 };

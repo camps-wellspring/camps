@@ -40,16 +40,12 @@
             <v-col cols="12" md="6">
               <new-image-upload
                 class="file-upload__image"
-                :imgUrl="demo.screen && demo.screen.path"
+                :imgUrl="demo.screen && demo.screen.path ? demo.screen.path : ''"
                 :imgId="demo.screen && demo.screen.id"
                 :reset="!demo.screen"
                 :max-size="2"
                 @fileSelected="demo.screen = $event.file"
               />
-            </v-col>
-
-            <v-col sm="3" class="d-flex justify-center">
-              <v-switch hide-details v-model="demo.visible" :label="$t('label.visible')" />
             </v-col>
 
             <v-col sm="3">
@@ -71,19 +67,18 @@
           <v-container fluid>
             <v-row>
               <v-col cols="12">
-                <v-simple-table>
+                <v-simple-table class="pt-0">
                   <template v-slot:default>
                     <thead>
                       <tr>
                         <th>{{ $t("table.name") }}</th>
                         <th>{{ $t("table.url") }}</th>
-                        <th>{{ $t("table.visible") }}</th>
                         <th>{{ $t("table.screen") }}</th>
                         <th>{{ $t("table.delete") }}</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-for="(item, i) in addedDemos" :key="item.id">
+                      <tr v-for="(item, i) in addedDemos" :key="item.demo_id">
                         <td>
                           <read-more
                             class="read-more"
@@ -107,9 +102,6 @@
                               :src="screenPath(item.screen)"
                             />
                           </v-avatar>
-                        </td>
-                        <td>
-                          <v-switch hide-details v-model="item.visible" />
                         </td>
                         <td>
                           <v-btn icon>
@@ -140,6 +132,7 @@
 <script>
 import { required, url } from "vuelidate/lib/validators";
 import imgPreviewMixin from "@/mixins/imgPreview";
+import { DeleteData } from "@/helpers/apiMethods";
 
 export default {
   mixins: [imgPreviewMixin],
@@ -160,8 +153,11 @@ export default {
       demo: {
         id: null,
         url: "",
-        visible: true,
         screen: null
+      },
+
+      loading: {
+        delete: false
       }
     };
   },
@@ -193,13 +189,33 @@ export default {
     },
 
     screenPath(file) {
-      return file instanceof File ? URL.createObjectURL(file) : file.path;
+      return file instanceof File ? URL.createObjectURL(file) : file && file.path;
     },
 
     // TODO emit an empty item instead
     handleItemDelete(item, i) {
-      this.$emit("DeleteDemo", item, i, "demos", "demo-types");
+      if (item.template) {
+        this.externalDelete(item, i);
+      } else {
+        this.$emit("DeleteDemo", item, i, "demos", "demo-types");
+      }
       this.$refs.demoSelect.reset();
+    },
+
+    externalDelete(item, i) {
+      this.popUp(this.$t("message.delete")).then(value => {
+        if (!value.dismiss) {
+          this.loading.delete = true;
+          DeleteData({ reqName: "demo-type-project", id: item.demo_id })
+            .then(() => {
+              this.$emit("DeleteDemo", item, i, "demos", "demo-types");
+              this.loading.delete = false;
+            })
+            .catch(() => {
+              this.loading.delete = false;
+            });
+        }
+      });
     },
 
     handleAddItem() {
@@ -207,7 +223,6 @@ export default {
       this.demo = {
         id: null,
         url: "",
-        visible: true,
         screen: null,
         name: ""
       };
