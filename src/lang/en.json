@@ -91,7 +91,8 @@
     "budget_ranges": "Budget Ranges",
     "time_ranges": "Time Ranges",
     "categories_and_technologies": "Categories & Technologies",
-    "options": "Options"
+    "options": "Options",
+    "orders": "Orders"
   },
   "table": {
     "profile": "Profile",
@@ -124,7 +125,14 @@
     "delete": "Delete",
     "range": "Range",
     "service_available": "Service Available",
-    "project_available": "Project Available"
+    "project_available": "Project Available",
+    "user_name": "User Name",
+    "user_email": "User Email",
+    "order_data_name": "Order Name",
+    "type": "Type",
+    "seen": "Seen",
+    "closed": "Closed",
+    "handle_close": "Handle Closed"
   },
   "input": {
     "user_name": "User Name",
@@ -179,7 +187,26 @@
     "create_times": "Create Times",
     "categories": "Categories",
     "technologies": "Technologies",
-    "upload_media_gallery": "Upload Media Gallery"
+    "upload_media_gallery": "Upload Media Gallery",
+    "order_details": "Order details",
+    "user_name": "User Name",
+    "user_email": "User Email",
+    "user_phone": "User Phone",
+    "open_order": "Open Order",
+    "close_order": "Close Order",
+    "show_order": "Show Order",
+    "order_data_name": "Order Name",
+    "type": "Type",
+    "message": "Message",
+    "examples": "Examples",
+    "budget_range": "Budget Range",
+    "time_range": "Time Range",
+    "attachments": "Attachments",
+    "extra_services": "Extra Services",
+    "order_info": "Order Info",
+    "status_info": "Status Info",
+    "user_info": "User Info",
+    "no": "No"
   },
   "title": {
     "edit_service": "Edit Service",

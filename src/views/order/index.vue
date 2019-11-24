@@ -58,15 +58,11 @@
             >
           </td>
           <td>
-            <v-icon
-              class="mx-1"
-              small
-              :title="$t('label.show')"
-              @click="handleShow(item)"
+            <v-icon :title="$t('label.show')" @click="handleShow(item)"
               >mdi-eye</v-icon
             >
             <v-icon
-              small
+              class="mx-1"
               :title="$t('label.delete')"
               @click="handleDelete(item, index)"
               >mdi-delete</v-icon
@@ -83,18 +79,68 @@
         <v-card-title>{{ this.$t("label.order_details") }}</v-card-title>
         <v-divider></v-divider>
 
-        <v-card-text class="py-3" v-if="order.id">
+        <v-card-text class="py-3 height-90" v-if="order.id">
           <!-- Locale -->
-          <v-row justify="center">
+          <!-- <v-row justify="center">
             <v-col cols="6">
               <locale-select @change="fireLocaleChange" />
             </v-col>
-          </v-row>
+          </v-row> -->
           <!-- Locale -->
 
-          <!-- order Data -->
-          <v-row v-for="(userInfo, index) in orderUserInfo" :key="index">
-            <v-col md="6" cols="12"> {{ $t(`label.${userInfo.key}`) }}: </v-col>
+          <!-- Order Data -->
+          <h3 class="mt-3">{{ $t("label.order_info") }}</h3>
+          <v-divider></v-divider>
+          <v-row v-for="(orderInfo, i) in orderInfo" :key="i + 6">
+            <v-col v-if="orderInfo.data" md="6" cols="12">
+              <h4>{{ $t(`label.${orderInfo.key}`) }} :</h4>
+            </v-col>
+
+            <v-col v-if="orderInfo.data" md="6" cols="12">
+              {{ orderInfo.data }}
+            </v-col>
+          </v-row>
+
+          <!-- Attachments -->
+          <v-row v-if="order.attachments.length">
+            <v-col md="6" cols="12">
+              <h4>{{ $t("label.attachments") }} :</h4>
+            </v-col>
+
+            <v-col md="6" cols="12">
+              <v-icon medium title="attachment" @click="showAttachments(order)"
+                >mdi-attachment</v-icon
+              >
+            </v-col>
+          </v-row>
+          <!-- Attachments -->
+          <!-- Order Data -->
+
+          <!-- Order Status Data -->
+          <h3 class="mt-3">{{ $t("label.status_info") }}</h3>
+          <v-divider></v-divider>
+          <v-row v-for="(statusInfo, i) in orderStatusInfo" :key="i">
+            <v-col md="6" cols="12">
+              <h4>{{ $t(`label.${statusInfo.key}`) }} :</h4>
+            </v-col>
+
+            <v-col md="6" cols="12">
+              {{
+                statusInfo.data.empty
+                  ? $t("label.no")
+                  : statusInfo.data.date.split(" ")[0]
+              }}
+            </v-col>
+          </v-row>
+          <!-- Order Status Data -->
+
+          <!-- Order User Data -->
+          <h3 class="mt-3">{{ $t("label.user_info") }}</h3>
+          <v-divider></v-divider>
+          <v-row v-for="(userInfo, index) in orderUserInfo" :key="index + 3">
+            <v-col md="6" cols="12">
+              <h4>{{ $t(`label.${userInfo.key}`) }} :</h4>
+            </v-col>
 
             <v-col
               v-if="
@@ -111,7 +157,7 @@
               }}
             </v-col>
           </v-row>
-          <!-- Order Data -->
+          <!-- Order User Data -->
         </v-card-text>
         <v-card-text class="py-3 text-center" v-else>
           <v-progress-circular
@@ -132,6 +178,36 @@
       </v-card>
     </v-dialog>
     <!-- Dialog -->
+
+    <!-- AttachmentsDialog -->
+    <DialogComponent v-model="attachmentsDialog">
+      <template #heading>
+        <v-card-title>{{ $t("heading.attachments") }}</v-card-title>
+      </template>
+      <template #body>
+        <v-row>
+          <v-col cols="12" md="3" v-for="photo in photos" :key="photo.id">
+            <v-img
+              title="photo"
+              fluid
+              aspect-ratio="1"
+              :src="photo && photo.path"
+            ></v-img>
+          </v-col>
+          <v-col cols="12" md="3" v-for="file in pdfFiles" :key="file.id">
+            <a :href="file.path" target="_blank">
+              <v-img
+                title="pdf"
+                fluid
+                aspect-ratio="1"
+                :src="require('@/assets/imgs/pdf-icon.png')"
+              ></v-img>
+            </a>
+          </v-col>
+        </v-row>
+      </template>
+    </DialogComponent>
+    <!-- AttachmentsDialog -->
   </main>
 </template>
 
@@ -160,14 +236,29 @@ export default {
       orderInfo: [],
       orderStatusInfo: [],
 
+      photos: [],
+      pdfFiles: [],
+
       currentOrderId: null,
       showOrderDialog: false,
+      attachmentsDialog: false,
       locale: Cookies.get("language")
     };
   },
   mounted() {
     this.createTableHeaders();
     this.getOrders();
+  },
+  watch: {
+    attachmentsDialog: {
+      handler(value) {
+        if (!value) {
+          this.photos = [];
+          this.pdfFiles = [];
+        }
+      },
+      immediate: true
+    }
   },
   methods: {
     createTableHeaders() {
@@ -202,13 +293,12 @@ export default {
 
       this.getOrderData();
     },
-    fireLocaleChange(locale) {
-      this.locale = locale;
-      this.orderUserInfo = [];
-      this.orderInfo = [];
-      this.orderStatusInfo = [];
-      this.getOrderData();
-    },
+    // fireLocaleChange(locale) {
+    //   this.locale = locale;
+    //   this.order = {};
+    //   this.resetOrderArrays();
+    //   this.getOrderData();
+    // },
     getOrderData() {
       ShowData({
         reqName: "orders",
@@ -227,9 +317,7 @@ export default {
     },
 
     handleShowOrderStructure() {
-      this.orderUserInfo = [];
-      this.orderInfo = [];
-      this.orderStatusInfo = [];
+      this.resetOrderArrays();
 
       // User Info
       this.orderUserInfo.push(
@@ -249,8 +337,14 @@ export default {
 
       // Status Info
       this.orderStatusInfo.push(
-        { key: "seen", data: { ...this.order.seen } },
-        { key: "closed", data: { ...this.order.closed } }
+        {
+          key: "seen",
+          data: this.order.seen ? { ...this.order.seen } : { empty: true }
+        },
+        {
+          key: "closed",
+          data: this.order.closed ? { ...this.order.closed } : { empty: true }
+        }
       );
 
       this.orderStatusInfo.forEach(info => {
@@ -261,7 +355,15 @@ export default {
       delete this.order.order_data;
 
       Object.keys(this.order).forEach(key => {
-        this.orderInfo.push({ key: key, data: { ...this.order[key] } });
+        if (key === "extra_services") {
+          let extraS = "";
+          this.order[key].forEach(extra => {
+            extraS += extra.name + " - ";
+          });
+          this.orderInfo.push({ key: key, data: extraS });
+        } else if (key != "id" && key != "attachments") {
+          this.orderInfo.push({ key: key, data: this.order[key] });
+        }
       });
     },
 
@@ -285,6 +387,19 @@ export default {
       });
     },
 
+    showAttachments({ attachments }) {
+      this.closeOrderDialog();
+      this.attachmentsDialog = true;
+
+      attachments.map(el => {
+        if (el.type === "photo") {
+          this.photos.push(el);
+        } else if (el.type === "file") {
+          this.pdfFiles.push(el);
+        }
+      });
+    },
+
     handleDelete({ id }, index) {
       this.popUp().then(value => {
         if (!value.dismiss) {
@@ -303,12 +418,15 @@ export default {
     },
     resetOrder() {
       this.order = {};
-      this.orderUserInfo = [];
-      this.orderInfo = [];
-      this.orderStatusInfo = [];
+      this.resetOrderArrays();
 
       this.locale = Cookies.get("language");
       this.currentOrderId = null;
+    },
+    resetOrderArrays() {
+      this.orderUserInfo = [];
+      this.orderInfo = [];
+      this.orderStatusInfo = [];
     }
   }
 };
