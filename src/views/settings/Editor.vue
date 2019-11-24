@@ -1,23 +1,28 @@
 <template>
   <section>
+    <label class="text-editor__label" v-text="$t(`label.${fieldName}`)"></label>
     <form-group :name="fieldName">
       <VueEditor
         class="editor"
-        :placeholder="$t(`label.${fieldName}`)"
         v-model="form[fieldName]"
         slot-scope="{ attrs }"
         v-bind="attrs"
         :editorToolbar="customToolbar"
-        v-input-validation="{ inputValue: form[fieldName], min: 3, max: 100 }"
+        v-input-validation="fieldName"
       />
     </form-group>
-    <!-- <transition name="fadeIn" mode="in-out">
-      <span v-if="checkValid()" class="editor__errors">{{
-        validationErrors.err
-      }}</span>
-    </transition> -->
+
+    <transition name="fadeIn" mode="in-out">
+      <span
+        class="editor__errors"
+        v-if="validationErrors.ErrorsKeys.includes(fieldName)"
+        >{{ validationErrors.serverError }}
+      </span>
+    </transition>
+
     <br />
     <v-btn
+      :loading="loadingButton"
       @click.prevent="handleSubmit"
       :disabled="$v.form.$invalid"
       class="primary my-3"
@@ -48,6 +53,7 @@ export default {
   },
   methods: {
     handleSubmit() {
+      this.loadingButton = true;
       const reqData = {
         [this.fieldName]: this.form[this.fieldName],
         locale: "en"
@@ -56,7 +62,8 @@ export default {
         .then(res => {
           console.log(res);
         })
-        .catch(err => console.log(err));
+        .catch(err => console.log(err))
+        .finally(() => (this.loadingButton = false));
     },
     checkValid() {
       const value = this.form[this.fieldName].length;
@@ -70,6 +77,7 @@ export default {
   },
   data() {
     return {
+      loadingButton: false,
       customToolbar: [
         ["bold", "italic", "underline", "strike"],
         [{ align: "" }, { align: "justify" }, { align: "right" }],

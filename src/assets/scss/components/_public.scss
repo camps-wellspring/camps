@@ -107,3 +107,10 @@
     text-transform: capitalize;
   }
 }
+
+.text-editor{
+    &__label{
+        color: #444;
+        font-weight: bold;
+    }
+}

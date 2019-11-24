@@ -9,6 +9,12 @@
           <v-col cols="12" md="6">
             <Editor :form="form" fieldName="global_subscription_description" />
           </v-col>
+          <v-col cols="12" md="6">
+            <Editor :form="form" fieldName="global_contact_location_1" />
+          </v-col>
+          <v-col cols="12" md="6">
+            <Editor :form="form" fieldName="global_contact_location_2" />
+          </v-col>
         </v-row>
       </form-wrapper>
     </form>
@@ -16,8 +22,8 @@
 </template>
 
 <script>
-import { minLength } from "vuelidate/lib/validators";
-import { maxWords } from "@/utils/validate";
+// import { minLength } from "vuelidate/lib/validators";
+// import { maxWords } from "@/utils/validate";
 
 export default {
   name: "Global",
@@ -39,7 +45,9 @@ export default {
     return {
       form: {
         global_start_project_description: "",
-        global_subscription_description: ""
+        global_subscription_description: "",
+        global_contact_location_1: "",
+        global_contact_location_2: ""
       }
     };
   },
@@ -53,10 +61,7 @@ export default {
   },
   validations: {
     form: {
-      global_start_project_description: {
-        minLength: minLength(3),
-        maxWords: maxWords(100)
-      }
+      global_start_project_description: {}
     }
   },
   watch: {
@@ -65,6 +70,8 @@ export default {
         if (settings) {
           this.selectedSettings(settings, "global_start_project_description");
           this.selectedSettings(settings, "global_subscription_description");
+          this.selectedSettings(settings, "global_contact_location_1");
+          this.selectedSettings(settings, "global_contact_location_2");
         }
       },
       immediate: true
