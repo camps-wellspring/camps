@@ -205,6 +205,27 @@ export const asyncRouterMap = [
     ]
   },
   {
+    path: "/order",
+    component: Layout,
+    redirect: "/order/list",
+    meta: {
+      title: "order",
+      icon: "mdi-account-circle"
+    },
+    children: [
+      {
+        path: "list",
+        component: () => import("@/views/order/index"),
+        name: "OrderList",
+
+        meta: {
+          title: "order_list",
+          icon: "mdi-account-circle"
+        }
+      }
+    ]
+  },
+  {
     path: "/services",
     component: Layout,
     redirect: "/services/list",
