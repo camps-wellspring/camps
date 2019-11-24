@@ -1,6 +1,7 @@
 import Vue from "vue";
 const validationErrors = Vue.observable({
-  err: ""
+  serverError: "",
+  ErrorsKeys: []
 });
 Vue.mixin({
   data() {
@@ -21,20 +22,25 @@ Vue.directive("toggle-attr", {
 
 Vue.directive("input-validation", {
   update(el, bind, vnode) {
-    // console.log(vnode.context.$store);
     const {
-      value: { inputValue, max, min }
-    } = bind;
+      getters: { serverErrors }
+    } = vnode.context.$store;
+    const { value } = bind;
 
-    if (inputValue.length < min) {
-      el.style.border = "1px solid rgb(197, 89, 0)";
-      //   validationErrors.err = `this field must be more than ${min} characters`;
-    } else if (inputValue.length > max) {
-      el.style.border = "1px solid rgb(197, 89, 0)";
-      //   validationErrors.err = `this field must be less than ${max} characters`;
+    if (serverErrors !== null) {
+      if (validationErrors.ErrorsKeys.includes(value)) {
+        el.style.border = "1px solid rgb(197, 89, 0)";
+      } else {
+        el.style.border = "1px solid transparent";
+      }
+      const ErrorsKeys = Object.keys(serverErrors);
+
+      validationErrors.ErrorsKeys = ErrorsKeys;
+      validationErrors.serverError = serverErrors[value][0];
     } else {
+      validationErrors.ErrorsKeys = [];
+      validationErrors.serverError = [];
       el.style.border = "1px solid transparent";
-      //   validationErrors.err = "";
     }
   }
 });
