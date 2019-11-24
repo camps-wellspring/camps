@@ -23,8 +23,8 @@ export default {
   name: "Global",
   props: {
     settings: {
-      type: Array,
-      default: () => []
+      type: Object,
+      default: () => {}
     }
   },
   components: {
@@ -45,9 +45,9 @@ export default {
   },
   methods: {
     selectedSettings(settings, type) {
-      const setting = settings.filter(el => el.type === type)[0];
+      const setting = settings[type];
       if (setting) {
-        this.form[setting.type] = setting.value;
+        this.form[type] = setting;
       }
     }
   },
@@ -65,7 +65,6 @@ export default {
         if (settings) {
           this.selectedSettings(settings, "global_start_project_description");
           this.selectedSettings(settings, "global_subscription_description");
-          //   console.log(setting, "setting");
         }
       },
       immediate: true

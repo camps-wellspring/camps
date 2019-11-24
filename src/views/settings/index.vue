@@ -4,7 +4,7 @@
       <v-toolbar-title>{{ $t("heading.settings") }}</v-toolbar-title>
       <v-divider class="mx-2" inset vertical></v-divider>
     </v-toolbar>
-    <component :settings="settings" :is="components"></component>
+    <component :settings="settingsObject" :is="components"></component>
   </div>
 </template>
 
@@ -24,7 +24,8 @@ export default {
   data() {
     return {
       components: "",
-      settings: []
+      settings: [],
+      settingsObject: {}
     };
   },
   mounted() {
@@ -35,6 +36,11 @@ export default {
       IndexData({ reqName: "settings", query: { pagination: "all" } })
         .then(res => {
           const { data } = res.data;
+          this.settingsObject = data.reduce((acc, current) => {
+            acc[current.type] = current.value;
+            return acc;
+          }, {});
+
           this.settings = data;
         })
         .catch(err => console.log(err));

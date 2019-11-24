@@ -60,7 +60,6 @@
   }
 }
 
-
 .fadeIn-enter-active,
 .fadeIn-leave-active {
   transition: opacity 0.5s;
@@ -70,10 +69,9 @@
   opacity: 0;
 }
 
-
 .input_wrpper {
-    position: relative;
-  }
+  position: relative;
+}
 //   .input_wrpper .btn {
 //     position: absolute;
 //     right: 0;
@@ -100,4 +98,12 @@
 
 .color-chip {
   width: 2rem;
+}
+
+.editor {
+  border: 1px solid transparent;
+  &__errors {
+    color: rgb(197, 89, 0);
+    text-transform: capitalize;
+  }
 }

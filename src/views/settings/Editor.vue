@@ -2,22 +2,34 @@
   <section>
     <form-group :name="fieldName">
       <VueEditor
+        class="editor"
         :placeholder="$t(`label.${fieldName}`)"
         v-model="form[fieldName]"
         slot-scope="{ attrs }"
         v-bind="attrs"
         :editorToolbar="customToolbar"
-        @selection-change="$v.form[fieldName].$touch()"
+        v-input-validation="{ inputValue: form[fieldName], min: 3, max: 100 }"
       />
     </form-group>
-    <v-btn :disabled="$v.form.$invalid" class="primary my-3" type="submit">{{
-      $t("button.save")
-    }}</v-btn>
+    <!-- <transition name="fadeIn" mode="in-out">
+      <span v-if="checkValid()" class="editor__errors">{{
+        validationErrors.err
+      }}</span>
+    </transition> -->
+    <br />
+    <v-btn
+      @click.prevent="handleSubmit"
+      :disabled="$v.form.$invalid"
+      class="primary my-3"
+      type="submit"
+      >{{ $t("button.save") }}</v-btn
+    >
   </section>
 </template>
 
 <script>
 import { VueEditor } from "vue2-editor";
+import { StoreData } from "@/helpers/apiMethods";
 
 export default {
   name: "Editor",
@@ -33,6 +45,28 @@ export default {
   },
   components: {
     VueEditor
+  },
+  methods: {
+    handleSubmit() {
+      const reqData = {
+        [this.fieldName]: this.form[this.fieldName],
+        locale: "en"
+      };
+      StoreData({ reqName: "settings", data: reqData })
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => console.log(err));
+    },
+    checkValid() {
+      const value = this.form[this.fieldName].length;
+
+      if (value < 3 || value > 100) {
+        return true;
+      } else {
+        return false;
+      }
+    }
   },
   data() {
     return {
