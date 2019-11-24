@@ -23,7 +23,9 @@
         <!-- <span class="upload_icon">Hoss</span> -->
       </v-btn>
       <div class="image__placeholder">
-        <span class="file-upload__image__placeholder ">{{ $t("label.upload_media_gallery") }}</span>
+        <span class="file-upload__image__placeholder ">{{
+          $t("label.upload_media_gallery")
+        }}</span>
       </div>
     </section>
 
