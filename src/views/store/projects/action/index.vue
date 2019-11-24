@@ -205,6 +205,12 @@ export default {
         categories: this.form.categories,
         technologies: this.form.technologies
       };
+    },
+
+    platformItems() {
+      let platforms = [];
+
+      return platforms;
     }
   },
 
