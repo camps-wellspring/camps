@@ -91,7 +91,7 @@ export default {
         name: {
           required,
           minLength: minLength(3),
-          maxLength: maxLength(20)
+          maxLength: maxLength(50)
         },
         color: {
           required: requiredIf(() => this.actionType === "create")

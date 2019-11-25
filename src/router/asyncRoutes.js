@@ -205,6 +205,27 @@ export const asyncRouterMap = [
     ]
   },
   {
+    path: "/order",
+    component: Layout,
+    redirect: "/order/list",
+    meta: {
+      title: "order",
+      icon: "mdi-account-circle"
+    },
+    children: [
+      {
+        path: "list",
+        component: () => import("@/views/order/index"),
+        name: "OrderList",
+
+        meta: {
+          title: "order_list",
+          icon: "mdi-account-circle"
+        }
+      }
+    ]
+  },
+  {
     path: "/services",
     component: Layout,
     redirect: "/services/list",
@@ -327,6 +348,89 @@ export const asyncRouterMap = [
 
         meta: {
           title: "topics",
+          icon: "mdi-account-circle"
+        }
+      }
+    ]
+  },
+  {
+    path: "/settings",
+    component: Layout,
+    redirect: "/settings/global",
+    alwaysShow: true,
+    meta: {
+      title: "settings",
+      icon: "mdi-account-circle"
+    },
+    children: [
+      {
+        path: "global",
+        component: () => import("@/views/settings"),
+        name: "global",
+
+        meta: {
+          title: "global",
+          icon: "mdi-account-circle"
+        }
+      },
+      {
+        path: "home-page",
+        component: () => import("@/views/settings"),
+        name: "home_page",
+
+        meta: {
+          title: "Home",
+          icon: "mdi-account-circle"
+        }
+      },
+      {
+        path: "about-page",
+        component: () => import("@/views/settings"),
+        name: "about_page",
+
+        meta: {
+          title: "About",
+          icon: "mdi-account-circle"
+        }
+      },
+      {
+        path: "contact-page",
+        component: () => import("@/views/settings"),
+        name: "contact_page",
+
+        meta: {
+          title: "Contacts",
+          icon: "mdi-account-circle"
+        }
+      },
+      {
+        path: "managers-page",
+        component: () => import("@/views/settings"),
+        name: "managers_page",
+
+        meta: {
+          title: "Managers",
+          icon: "mdi-account-circle"
+        }
+      },
+      {
+        path: "service-page",
+        component: () => import("@/views/settings"),
+        name: "service_page",
+
+        meta: {
+          title: "Service",
+          icon: "mdi-account-circle"
+        }
+      },
+
+      {
+        path: "socials",
+        component: () => import("@/views/settings"),
+        name: "socials_page",
+
+        meta: {
+          title: "socials",
           icon: "mdi-account-circle"
         }
       }

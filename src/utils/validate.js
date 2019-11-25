@@ -18,7 +18,5 @@ export function isValidImgSize(fileSize, maxSize) {
   }
 }
 
-export const minWords = value => text =>
-  text ? text.split(" ").length >= value : true;
-export const maxWords = value => text =>
-  text ? text.split(" ").length <= value : true;
+export const minWords = value => text => (text ? text.split(" ").length >= value : true);
+export const maxWords = value => text => (text ? text.split(" ").length <= value : true);

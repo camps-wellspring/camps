@@ -6,7 +6,13 @@
       action-button-text="create"
       @ButtonClicked="$router.push({ name: 'ProjectCreate' })"
     />
-    <v-data-table :headers="headers" :items="items" hide-default-footer :loading="loading.table">
+    <v-data-table
+      :headers="headers"
+      :items="items"
+      hide-default-footer
+      disable-pagination
+      :loading="loading.table"
+    >
       <template v-slot:item="{ item, index }">
         <tr>
           <td>{{ item.name }}</td>
@@ -14,8 +20,8 @@
           <td class="table-logo">
             <v-avatar class="square">
               <img
-                :src="item[config.imgType].path"
-                :alt="item[config.imgType].description"
+                :src="item[config.imgType] && item[config.imgType].path"
+                :alt="item[config.imgType] && item[config.imgType].description"
                 @click="handleImgPreview(item[config.imgType].path)"
             /></v-avatar>
           </td>
@@ -24,7 +30,7 @@
             <read-more
               class="read-more"
               :text="item.short_description ? item.short_description : 'No description available'"
-              :max-chars="38"
+              :max-chars="35"
               less-str="read less"
             />
           </td>
@@ -94,7 +100,7 @@
 <script>
 import indexMixin from "@/mixins/indexMixin";
 
-// TODO add pagination
+// TODO add pagination & remove "disable-pagination" prop from the table
 export default {
   name: "Projects",
 
