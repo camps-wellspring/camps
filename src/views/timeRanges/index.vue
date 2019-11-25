@@ -22,24 +22,24 @@
           <!-- <td>{{ item.min }}</td> -->
           <td class="toggle-adjust">
             <toggle-service
+              v-if="item.id !== 0"
               :is-edit="true"
               model-name="time-ranges"
               :model-id="item.id"
               field="project_available"
               v-model="item.is_project_available"
               :validate="true"
-              :isDisabled="item.id === 0"
             />
           </td>
           <td class="toggle-adjust">
             <toggle-service
+              v-if="item.id !== 0"
               :is-edit="true"
               model-name="time-ranges"
               :model-id="item.id"
               field="service_available"
               v-model="item.is_service_available"
               :validate="true"
-              :isDisabled="item.id === 0"
             />
           </td>
           <td>
