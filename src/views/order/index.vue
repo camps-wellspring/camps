@@ -8,8 +8,10 @@
     <v-data-table
       :headers="headers"
       :items="orders"
-      hide-default-footer
+      :items-per-page="20"
+      :mobile-breakpoint="0"
       :loading="tableLoading"
+      hide-default-footer
     >
       <template v-slot:item="{ item, index }">
         <tr>
@@ -72,6 +74,18 @@
       </template>
     </v-data-table>
     <!-- Table -->
+
+    <!-- pagination -->
+    <div class="text-xs-center pt-2">
+      <v-pagination
+        v-if="orders.length > 0 && pagination.last_page > 1"
+        v-model="pagination.current_page"
+        :length="pagination.last_page"
+        :total-visible="20"
+        @input="handlePagination"
+      ></v-pagination>
+    </div>
+    <!-- pagination -->
 
     <!-- Dialog -->
     <v-dialog v-model="showOrderDialog" max-width="700px">
@@ -242,14 +256,26 @@ export default {
       currentOrderId: null,
       showOrderDialog: false,
       attachmentsDialog: false,
-      locale: Cookies.get("language")
+      locale: Cookies.get("language"),
+
+      pagination: {},
+      queries: {}
     };
   },
   mounted() {
     this.createTableHeaders();
-    this.getOrders();
+    // this.getOrders();
   },
   watch: {
+    $route: {
+      handler(route) {
+        this.queries = {
+          ...route.query
+        };
+        this.getOrders();
+      },
+      immediate: true
+    },
     attachmentsDialog: {
       handler(value) {
         if (!value) {
@@ -258,6 +284,13 @@ export default {
         }
       },
       immediate: true
+    },
+    showOrderDialog: {
+      handler(value) {
+        if (!value) {
+          this.getOrders();
+        }
+      }
     }
   },
   methods: {
@@ -277,8 +310,10 @@ export default {
     getOrders() {
       IndexData({ reqName: `orders` })
         .then(res => {
-          const { data } = res.data;
+          const { data, meta } = res.data;
           this.orders = data;
+          this.pagination = meta;
+          console.log("test meta", meta);
         })
         .catch(err => {
           console.log(err);
@@ -360,6 +395,7 @@ export default {
           this.order[key].forEach(extra => {
             extraS += extra.name + " - ";
           });
+          extraS = extraS.slice(0, -2);
           this.orderInfo.push({ key: key, data: extraS });
         } else if (key != "id" && key != "attachments") {
           this.orderInfo.push({ key: key, data: this.order[key] });
@@ -412,6 +448,10 @@ export default {
       });
     },
 
+    handlePagination(value) {
+      this.queries.page = value;
+      this.$router.push({ query: this.queries });
+    },
     closeOrderDialog() {
       this.showOrderDialog = false;
       this.resetOrder();

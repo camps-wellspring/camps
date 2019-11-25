@@ -9,7 +9,13 @@
     <!-- Toolbar -->
 
     <!-- Table -->
-    <v-data-table :headers="headers" :items="times" hide-default-footer :loading="tableLoading">
+    <v-data-table
+      :headers="headers"
+      :items="times"
+      :mobile-breakpoint="0"
+      :loading="tableLoading"
+      hide-default-footer
+    >
       <template v-slot:item="{ item, index }">
         <tr>
           <td>{{ item.text }} {{ $t("label.months") }}</td>
@@ -35,7 +41,11 @@
             />
           </td>
           <td>
-            <v-icon class="edit" small :title="$t('label.edit')" @click="handleEdit(item, index)"
+            <v-icon
+              class="edit"
+              small
+              :title="$t('label.edit')"
+              @click="handleEdit(item, index)"
               >mdi-pencil</v-icon
             >
             <v-icon
@@ -93,7 +103,12 @@
                 </v-col>
 
                 <v-col v-if="!editMode" md="2" cols="12" class="text-end">
-                  <v-btn color="primary" :disabled="$v.$invalid" @click="addTime" x-large>
+                  <v-btn
+                    color="primary"
+                    :disabled="$v.$invalid"
+                    @click="addTime"
+                    x-large
+                  >
                     {{ $t("label.add") }}
                   </v-btn>
                 </v-col>
@@ -107,10 +122,16 @@
         <v-card-actions class="py-4 mx-2">
           <v-spacer></v-spacer>
 
-          <v-btn color="secondary" @click="closeTimesDialog">{{ this.$t("button.cancel") }}</v-btn>
-          <v-btn color="primary" :loading="loading.save" :disabled="saveValidation" @click="save">{{
-            this.$t("button.save")
+          <v-btn color="secondary" @click="closeTimesDialog">{{
+            this.$t("button.cancel")
           }}</v-btn>
+          <v-btn
+            color="primary"
+            :loading="loading.save"
+            :disabled="saveValidation"
+            @click="save"
+            >{{ this.$t("button.save") }}</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -121,7 +142,13 @@
 <script>
 import TableHeaders from "@/helpers/TableHeaders";
 import { required, minValue, maxValue } from "vuelidate/lib/validators";
-import { IndexData, ShowData, StoreData, UpdateData, DeleteData } from "@/helpers/apiMethods";
+import {
+  IndexData,
+  ShowData,
+  StoreData,
+  UpdateData,
+  DeleteData
+} from "@/helpers/apiMethods";
 import Cookies from "js-cookie";
 
 export default {
@@ -151,7 +178,8 @@ export default {
   computed: {
     saveValidation() {
       return (
-        (!this.editMode && this.selectedTimes.length === 0) || (this.editMode && this.$v.$invalid)
+        (!this.editMode && this.selectedTimes.length === 0) ||
+        (this.editMode && this.$v.$invalid)
       );
     }
   },

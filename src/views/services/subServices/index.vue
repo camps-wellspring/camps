@@ -12,8 +12,10 @@
     <v-data-table
       :headers="headers"
       :items="subServices"
-      hide-default-footer
+      :items-per-page="20"
+      :mobile-breakpoint="0"
       :loading="tableLoading"
+      hide-default-footer
     >
       <template v-slot:item="{ item, index }">
         <tr>
@@ -56,7 +58,11 @@
             />
           </td>
           <td>
-            <v-icon class="edit" small :title="$t('label.edit')" @click="handleEdit(item, index)"
+            <v-icon
+              class="edit"
+              small
+              :title="$t('label.edit')"
+              @click="handleEdit(item, index)"
               >mdi-pencil</v-icon
             >
             <v-icon
@@ -88,7 +94,9 @@
     <v-dialog v-model="showSubServiceDialog" max-width="700px">
       <v-card>
         <v-card-title>{{
-          editMode ? this.$t("label.edit_sub_service") : this.$t("label.create_sub_service")
+          editMode
+            ? this.$t("label.edit_sub_service")
+            : this.$t("label.create_sub_service")
         }}</v-card-title>
         <v-divider></v-divider>
 
@@ -182,7 +190,13 @@
 <script>
 import TableHeaders from "@/helpers/TableHeaders";
 import { required, minLength, maxLength } from "vuelidate/lib/validators";
-import { IndexData, ShowData, StoreData, UpdateData, DeleteData } from "@/helpers/apiMethods";
+import {
+  IndexData,
+  ShowData,
+  StoreData,
+  UpdateData,
+  DeleteData
+} from "@/helpers/apiMethods";
 import Cookies from "js-cookie";
 
 export default {
@@ -216,7 +230,10 @@ export default {
       },
 
       imageOverlay: false,
-      currentPreviewImage: ""
+      currentPreviewImage: "",
+
+      pagination: {},
+      queries: {}
     };
   },
   mounted() {
@@ -236,7 +253,13 @@ export default {
   },
   methods: {
     createTableHeaders() {
-      const headersList = ["icon", "name", "description", "visibility", "actions"];
+      const headersList = [
+        "icon",
+        "name",
+        "description",
+        "visibility",
+        "actions"
+      ];
       this.headers = TableHeaders(headersList);
     },
     getSubServices() {
@@ -349,7 +372,11 @@ export default {
         data: formData
       })
         .then(res => {
-          this.subServices.splice(this.currentSubServiceIndex, 1, res.data.sub_service);
+          this.subServices.splice(
+            this.currentSubServiceIndex,
+            1,
+            res.data.sub_service
+          );
 
           if (!this.loading.media) {
             this.loading.save = false;
