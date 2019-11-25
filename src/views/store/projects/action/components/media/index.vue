@@ -35,7 +35,9 @@ export default {
   methods: {
     getPhotos() {
       if (this.photos) {
-        return this.photos;
+        const photos = this.photos;
+        this.photos.forEach((photo, i) => photo.main && photos.splice(i, 1));
+        return photos;
       }
     }
   }

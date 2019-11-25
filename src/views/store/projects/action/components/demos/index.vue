@@ -219,7 +219,7 @@ export default {
     },
 
     handleAddItem() {
-      this.$emit("AddDemo", this.demo, "demos", "demo-types");
+      this.$emit("AddDemo", this.demo, "demos");
       this.demo = {
         id: null,
         url: "",

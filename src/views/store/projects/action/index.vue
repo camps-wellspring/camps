@@ -8,7 +8,7 @@
       />
 
       <form-wrapper :validator="$v.form">
-        <v-form @submit.prevent="onSubmit">
+        <v-form>
           <!-- MAIN INFO -->
           <v-card>
             <v-card-title>{{ $t("heading.main_info") }}</v-card-title>
@@ -115,7 +115,7 @@
           <div class="d-flex justify-center">
             <v-btn
               x-large
-              type="submit"
+              @click="onSubmit"
               class="primary my-5"
               :disabled="$v.form.$invalid"
               :loading="loading.submit"
@@ -170,7 +170,8 @@ export default {
       mediaPhotos: [],
       addedItems: {
         photos: [],
-        demos: []
+        demos: [],
+        platforms: []
       },
 
       options: {
@@ -296,6 +297,7 @@ export default {
     },
 
     createProject() {
+      this.addedItems.photos.length > 0 && (this.form.photos = this.addedItems.photos);
       const data = deepFormData(this.form);
       this.loading.submit = true;
       StoreData({ reqName: "projects", data })
@@ -368,11 +370,9 @@ export default {
       this.$v.form.main_media.$touch();
     },
 
-    pushToTable(newItem, field, name) {
+    pushToTable(newItem, field) {
       this.form[field].push(newItem);
       this.addedItems[field].push(newItem);
-      const index = this.options[name].findIndex(el => el.id === newItem.id);
-      this.options[name].splice(index, 1);
     },
 
     removeFromTable(item, i, field, name) {
@@ -381,7 +381,7 @@ export default {
     },
 
     handleMediaSelected(imgs) {
-      this.addedItems.photos.push(...imgs);
+      this.addedItems.photos = imgs;
     },
 
     handleMediaDeleted(index) {

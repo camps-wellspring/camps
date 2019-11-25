@@ -151,7 +151,7 @@ export default {
     },
 
     handleAddItem() {
-      this.$emit("AddPlatform", this.platform, "platforms", "platforms");
+      this.$emit("AddPlatform", this.platform, "platforms");
       this.platform = {
         id: null,
         url: "",
