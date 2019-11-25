@@ -33,10 +33,10 @@
               v-if="item.closed"
               :title="$t('label.open_order')"
               @click="handleCloseOrder(item)"
-              >mdi-close-outline</v-icon
+              >mdi-lock</v-icon
             >
             <v-icon v-else :title="$t('label.close_order')" @click="handleCloseOrder(item)"
-              >mdi-check-outline</v-icon
+              >mdi-lock-open-variant</v-icon
             >
           </td>
           <td>
