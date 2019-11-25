@@ -8,7 +8,7 @@
       />
 
       <form-wrapper :validator="$v.form">
-        <v-form @submit.prevent="onSubmit">
+        <v-form>
           <!-- MAIN INFO -->
           <v-card>
             <v-card-title>{{ $t("heading.main_info") }}</v-card-title>
@@ -19,7 +19,7 @@
                     <form-group name="name">
                       <template slot-scope="{ attrs }">
                         <v-text-field
-                          v-model="form.name"
+                          v-model.trim="form.name"
                           v-bind="attrs"
                           outlined
                           :label="$t('label.name')"
@@ -115,7 +115,7 @@
           <div class="d-flex justify-center">
             <v-btn
               x-large
-              type="submit"
+              @click="onSubmit"
               class="primary my-5"
               :disabled="$v.form.$invalid"
               :loading="loading.submit"
@@ -166,11 +166,12 @@ export default {
         categories: [],
         technologies: []
       },
-      mediaPhotos: [],
 
+      mediaPhotos: [],
       addedItems: {
         photos: [],
-        demos: []
+        demos: [],
+        platforms: []
       },
 
       options: {
@@ -217,15 +218,13 @@ export default {
         ["demo-types"]: this.form.demos.map(el => el.id),
         platforms: this.form.demos.map(el => el.id)
       };
-      let items = {
+      const items = {
         ["demo-types"]: [],
         platforms: []
       };
       ["demo-types", "platforms"].forEach(item => {
         this.options[item].forEach(el => {
-          if (!existingItems[item].includes(el.id)) {
-            items[item].push(el);
-          }
+          !existingItems[item].includes(el.id) && items[item].push(el);
         });
       });
       return items;
@@ -260,7 +259,7 @@ export default {
     this.fetchOptions();
     this.actionType === "edit" && this.fetchProject();
     // setTimeout(() => {
-    //   console.log(this.demoItems);
+    //   console.log(this.selectItems);
     // }, 2000);
   },
 
@@ -298,6 +297,7 @@ export default {
     },
 
     createProject() {
+      this.addedItems.photos.length > 0 && (this.form.photos = this.addedItems.photos);
       const data = deepFormData(this.form);
       this.loading.submit = true;
       StoreData({ reqName: "projects", data })
@@ -311,19 +311,17 @@ export default {
     updateProject() {
       // SHAPING REQUEST PAYLOAD
       const payload = { ...this.form };
-
       payload.slug && delete payload.slug;
       payload.main_media && delete payload.main_media;
       payload.media && delete payload.media;
       payload.photos = this.addedItems.photos;
-
+      // demos
       if (this.addedItems.demos.length > 0) {
         payload.demos = this.addedItems.demos;
       } else {
         delete payload.demos;
       }
-
-      //technologies & categories
+      // technologies & categories
       const options = {
         categories: [],
         technologies: []
@@ -339,7 +337,6 @@ export default {
           delete payload[option];
         }
       }
-
       // platforms
       if (payload.platforms.length > 0) {
         const platforms = payload.platforms.map(el => {
@@ -347,11 +344,11 @@ export default {
         });
         payload.platforms = platforms;
       }
+      // generating formData obj
       const data = deepFormData(payload);
       data.append("_method", "put");
       data.append("locale", this.locale);
-
-      // DISPATCHING THE REQUEST =================>
+      // DISPATCHING THE REQUEST
       this.loading.submit = true;
       UpdateData({ reqName: "projects", data, id: this.slug, locale: this.locale })
         .then(() => {
@@ -373,11 +370,9 @@ export default {
       this.$v.form.main_media.$touch();
     },
 
-    pushToTable(newItem, field, name) {
+    pushToTable(newItem, field) {
       this.form[field].push(newItem);
       this.addedItems[field].push(newItem);
-      const index = this.options[name].findIndex(el => el.id === newItem.id);
-      this.options[name].splice(index, 1);
     },
 
     removeFromTable(item, i, field, name) {
@@ -386,10 +381,9 @@ export default {
     },
 
     handleMediaSelected(imgs) {
-      this.addedItems.photos.push(...imgs);
+      this.addedItems.photos = imgs;
     },
 
-    // FIXME edit photo after deleting another
     handleMediaDeleted(index) {
       this.mediaPhotos.splice(index, 1);
     }

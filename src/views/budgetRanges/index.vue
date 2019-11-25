@@ -9,7 +9,13 @@
     <!-- Toolbar -->
 
     <!-- Table -->
-    <v-data-table :headers="headers" :items="budgets" hide-default-footer :loading="tableLoading">
+    <v-data-table
+      :headers="headers"
+      :items="budgets"
+      :mobile-breakpoint="0"
+      :loading="tableLoading"
+      hide-default-footer
+    >
       <template v-slot:item="{ item, index }">
         <tr>
           <td>{{ item.text }} {{ $t("label.sar") }}</td>
@@ -22,6 +28,7 @@
               field="project_available"
               v-model="item.is_project_available"
               :validate="true"
+              :isDisabled="item.id === 0"
             />
           </td>
           <td class="toggle-adjust">
@@ -32,14 +39,21 @@
               field="service_available"
               v-model="item.is_service_available"
               :validate="true"
+              :isDisabled="item.id === 0"
             />
           </td>
           <td>
-            <v-icon class="edit" small :title="$t('label.edit')" @click="handleEdit(item, index)"
+            <v-icon
+              class="edit"
+              small
+              :disabled="item.id === 0"
+              :title="$t('label.edit')"
+              @click="handleEdit(item, index)"
               >mdi-pencil</v-icon
             >
             <v-icon
               class="delete"
+              :disabled="item.id === 0"
               :title="$t('label.delete')"
               small
               @click="handleDelete(item, index)"
@@ -55,13 +69,15 @@
     <v-dialog v-model="showBudgetsDialog" max-width="700px">
       <v-card>
         <v-card-title>{{
-          editMode ? this.$t("label.edit_budgets") : this.$t("label.create_budgets")
+          editMode
+            ? this.$t("label.edit_budgets")
+            : this.$t("label.create_budgets")
         }}</v-card-title>
         <v-divider></v-divider>
 
         <v-card-text class="py-3">
           <!-- Form -->
-          <v-form v-if="showBudgetsDialog">
+          <v-form v-if="showBudgetsDialog" @submit.prevent="addBudget">
             <form-wrapper :validator="$v.budget">
               <v-row>
                 <v-col cols="12" v-if="!editMode">
@@ -93,7 +109,12 @@
                 </v-col>
 
                 <v-col v-if="!editMode" md="2" cols="12" class="text-end">
-                  <v-btn color="primary" :disabled="$v.$invalid" @click="addBudget" x-large>
+                  <v-btn
+                    color="primary"
+                    :disabled="$v.$invalid || !budget.min"
+                    type="submit"
+                    x-large
+                  >
                     {{ $t("label.add") }}
                   </v-btn>
                 </v-col>
@@ -110,9 +131,13 @@
           <v-btn color="secondary" @click="closeBudgetsDialog">{{
             this.$t("button.cancel")
           }}</v-btn>
-          <v-btn color="primary" :loading="loading.save" :disabled="saveValidation" @click="save">{{
-            this.$t("button.save")
-          }}</v-btn>
+          <v-btn
+            color="primary"
+            :loading="loading.save"
+            :disabled="saveValidation"
+            @click="save"
+            >{{ this.$t("button.save") }}</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -122,8 +147,14 @@
 
 <script>
 import TableHeaders from "@/helpers/TableHeaders";
-import { required, minValue } from "vuelidate/lib/validators";
-import { IndexData, ShowData, StoreData, UpdateData, DeleteData } from "@/helpers/apiMethods";
+import { minValue } from "vuelidate/lib/validators";
+import {
+  IndexData,
+  ShowData,
+  StoreData,
+  UpdateData,
+  DeleteData
+} from "@/helpers/apiMethods";
 import Cookies from "js-cookie";
 
 export default {
@@ -153,7 +184,8 @@ export default {
   computed: {
     saveValidation() {
       return (
-        (!this.editMode && this.selectedBudgets.length === 0) || (this.editMode && this.$v.$invalid)
+        (!this.editMode && this.selectedBudgets.length === 0) ||
+        (this.editMode && this.$v.$invalid)
       );
     }
   },
@@ -181,7 +213,7 @@ export default {
           this.budgets = data;
 
           // to remove the more
-          this.budgets.pop();
+          //   this.budgets.pop();
         })
         .catch(err => {
           console.log(err);
@@ -265,7 +297,11 @@ export default {
         data: formData
       })
         .then(res => {
-          this.budgets.splice(this.currentBudgetIndex, 1, res.data.budget_range);
+          this.budgets.splice(
+            this.currentBudgetIndex,
+            1,
+            res.data.budget_range
+          );
 
           this.loading.save = false;
           this.getBudgets();
@@ -310,7 +346,6 @@ export default {
     return {
       budget: {
         min: {
-          required,
           minValue: minValue(1)
         }
       }

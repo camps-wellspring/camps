@@ -9,7 +9,13 @@
     <!-- Toolbar -->
 
     <!-- Table -->
-    <v-data-table :headers="headers" :items="times" hide-default-footer :loading="tableLoading">
+    <v-data-table
+      :headers="headers"
+      :items="times"
+      :mobile-breakpoint="0"
+      :loading="tableLoading"
+      hide-default-footer
+    >
       <template v-slot:item="{ item, index }">
         <tr>
           <td>{{ item.text }} {{ $t("label.months") }}</td>
@@ -22,6 +28,7 @@
               field="project_available"
               v-model="item.is_project_available"
               :validate="true"
+              :isDisabled="item.id === 0"
             />
           </td>
           <td class="toggle-adjust">
@@ -32,16 +39,23 @@
               field="service_available"
               v-model="item.is_service_available"
               :validate="true"
+              :isDisabled="item.id === 0"
             />
           </td>
           <td>
-            <v-icon class="edit" small :title="$t('label.edit')" @click="handleEdit(item, index)"
+            <v-icon
+              class="edit"
+              small
+              :disabled="item.id === 0"
+              :title="$t('label.edit')"
+              @click="handleEdit(item, index)"
               >mdi-pencil</v-icon
             >
             <v-icon
-              class="delete"
-              :title="$t('label.delete')"
               small
+              class="delete"
+              :disabled="item.id === 0"
+              :title="$t('label.delete')"
               @click="handleDelete(item, index)"
               >mdi-delete</v-icon
             >
@@ -61,7 +75,7 @@
 
         <v-card-text class="py-3">
           <!-- Form -->
-          <v-form v-if="showTimesDialog">
+          <v-form v-if="showTimesDialog" @submit.prevent="addTime">
             <form-wrapper :validator="$v.time">
               <v-row>
                 <v-col cols="12" v-if="!editMode">
@@ -93,7 +107,12 @@
                 </v-col>
 
                 <v-col v-if="!editMode" md="2" cols="12" class="text-end">
-                  <v-btn color="primary" :disabled="$v.$invalid" @click="addTime" x-large>
+                  <v-btn
+                    color="primary"
+                    :disabled="$v.$invalid || !time.min"
+                    type="submit"
+                    x-large
+                  >
                     {{ $t("label.add") }}
                   </v-btn>
                 </v-col>
@@ -107,10 +126,16 @@
         <v-card-actions class="py-4 mx-2">
           <v-spacer></v-spacer>
 
-          <v-btn color="secondary" @click="closeTimesDialog">{{ this.$t("button.cancel") }}</v-btn>
-          <v-btn color="primary" :loading="loading.save" :disabled="saveValidation" @click="save">{{
-            this.$t("button.save")
+          <v-btn color="secondary" @click="closeTimesDialog">{{
+            this.$t("button.cancel")
           }}</v-btn>
+          <v-btn
+            color="primary"
+            :loading="loading.save"
+            :disabled="saveValidation"
+            @click="save"
+            >{{ this.$t("button.save") }}</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -120,8 +145,14 @@
 
 <script>
 import TableHeaders from "@/helpers/TableHeaders";
-import { required, minValue, maxValue } from "vuelidate/lib/validators";
-import { IndexData, ShowData, StoreData, UpdateData, DeleteData } from "@/helpers/apiMethods";
+import { minValue, maxValue } from "vuelidate/lib/validators";
+import {
+  IndexData,
+  ShowData,
+  StoreData,
+  UpdateData,
+  DeleteData
+} from "@/helpers/apiMethods";
 import Cookies from "js-cookie";
 
 export default {
@@ -151,7 +182,8 @@ export default {
   computed: {
     saveValidation() {
       return (
-        (!this.editMode && this.selectedTimes.length === 0) || (this.editMode && this.$v.$invalid)
+        (!this.editMode && this.selectedTimes.length === 0) ||
+        (this.editMode && this.$v.$invalid)
       );
     }
   },
@@ -179,7 +211,7 @@ export default {
           this.times = data;
 
           // to remove the more
-          this.times.pop();
+          //   this.times.pop();
         })
         .catch(err => {
           console.log(err);
@@ -308,7 +340,6 @@ export default {
     return {
       time: {
         min: {
-          required,
           minValue: minValue(1),
           maxValue: maxValue(100000)
         }
