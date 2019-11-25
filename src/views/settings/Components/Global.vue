@@ -7,32 +7,16 @@
       <form-wrapper :validator="$v.form">
         <v-row>
           <v-col cols="12" md="6">
-            <Editor
-              :language="locale"
-              :form="form"
-              fieldName="global_start_project_description"
-            />
+            <Editor :language="locale" :form="form" fieldName="global_start_project_description" />
           </v-col>
           <v-col cols="12" md="6">
-            <Editor
-              :language="locale"
-              :form="form"
-              fieldName="global_subscription_description"
-            />
+            <Editor :language="locale" :form="form" fieldName="global_subscription_description" />
           </v-col>
           <v-col cols="12" md="6">
-            <Editor
-              :language="locale"
-              :form="form"
-              fieldName="global_contact_location_1"
-            />
+            <Editor :language="locale" :form="form" fieldName="global_contact_location_1" />
           </v-col>
           <v-col cols="12" md="6">
-            <Editor
-              :language="locale"
-              :form="form"
-              fieldName="global_contact_location_2"
-            />
+            <Editor :language="locale" :form="form" fieldName="global_contact_location_2" />
           </v-col>
         </v-row>
       </form-wrapper>

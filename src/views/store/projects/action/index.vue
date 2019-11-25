@@ -19,7 +19,7 @@
                     <form-group name="name">
                       <template slot-scope="{ attrs }">
                         <v-text-field
-                          v-model="form.name"
+                          v-model.trim="form.name"
                           v-bind="attrs"
                           outlined
                           :label="$t('label.name')"
@@ -166,8 +166,8 @@ export default {
         categories: [],
         technologies: []
       },
-      mediaPhotos: [],
 
+      mediaPhotos: [],
       addedItems: {
         photos: [],
         demos: []
@@ -217,15 +217,13 @@ export default {
         ["demo-types"]: this.form.demos.map(el => el.id),
         platforms: this.form.demos.map(el => el.id)
       };
-      let items = {
+      const items = {
         ["demo-types"]: [],
         platforms: []
       };
       ["demo-types", "platforms"].forEach(item => {
         this.options[item].forEach(el => {
-          if (!existingItems[item].includes(el.id)) {
-            items[item].push(el);
-          }
+          !existingItems[item].includes(el.id) && items[item].push(el);
         });
       });
       return items;
@@ -260,7 +258,7 @@ export default {
     this.fetchOptions();
     this.actionType === "edit" && this.fetchProject();
     // setTimeout(() => {
-    //   console.log(this.demoItems);
+    //   console.log(this.selectItems);
     // }, 2000);
   },
 
@@ -311,19 +309,17 @@ export default {
     updateProject() {
       // SHAPING REQUEST PAYLOAD
       const payload = { ...this.form };
-
       payload.slug && delete payload.slug;
       payload.main_media && delete payload.main_media;
       payload.media && delete payload.media;
       payload.photos = this.addedItems.photos;
-
+      // demos
       if (this.addedItems.demos.length > 0) {
         payload.demos = this.addedItems.demos;
       } else {
         delete payload.demos;
       }
-
-      //technologies & categories
+      // technologies & categories
       const options = {
         categories: [],
         technologies: []
@@ -339,7 +335,6 @@ export default {
           delete payload[option];
         }
       }
-
       // platforms
       if (payload.platforms.length > 0) {
         const platforms = payload.platforms.map(el => {
@@ -347,11 +342,11 @@ export default {
         });
         payload.platforms = platforms;
       }
+      // generating formData obj
       const data = deepFormData(payload);
       data.append("_method", "put");
       data.append("locale", this.locale);
-
-      // DISPATCHING THE REQUEST =================>
+      // DISPATCHING THE REQUEST
       this.loading.submit = true;
       UpdateData({ reqName: "projects", data, id: this.slug, locale: this.locale })
         .then(() => {
@@ -389,7 +384,6 @@ export default {
       this.addedItems.photos.push(...imgs);
     },
 
-    // FIXME edit photo after deleting another
     handleMediaDeleted(index) {
       this.mediaPhotos.splice(index, 1);
     }

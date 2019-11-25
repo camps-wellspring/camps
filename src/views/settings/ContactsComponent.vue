@@ -1,12 +1,7 @@
 <template>
   <form-wrapper :validator="$v.form">
     <v-row>
-      <v-col
-        cols="12"
-        md="6"
-        v-for="contact in $v.form.contacts.$each.$iter"
-        :key="contact.id"
-      >
+      <v-col cols="12" md="6" v-for="contact in $v.form.contacts.$each.$iter" :key="contact.id">
         <form-group name="contacts" :validator="contact.value">
           <v-text-field
             slot-scope="{ attrs }"
@@ -17,9 +12,7 @@
             @input="contact.value.$touch()"
           ></v-text-field>
         </form-group>
-        <v-btn @click.prevent="handleSubmit" class="primary">{{
-          $t("button.save")
-        }}</v-btn>
+        <v-btn @click.prevent="handleSubmit" class="primary">{{ $t("button.save") }}</v-btn>
       </v-col>
     </v-row>
   </form-wrapper>

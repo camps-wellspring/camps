@@ -13,9 +13,7 @@
     </form-group>
 
     <transition name="fadeIn" mode="in-out">
-      <span
-        class="editor__errors"
-        v-if="validationErrors.ErrorsKeys.includes(fieldName)"
+      <span class="editor__errors" v-if="validationErrors.ErrorsKeys.includes(fieldName)"
         >{{ validationErrors.serverError }}
       </span>
     </transition>

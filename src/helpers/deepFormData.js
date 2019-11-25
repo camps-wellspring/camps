@@ -1,7 +1,7 @@
 //* CONSTRUCTING A ONE-LEVEL-DEEP FORMDATA OBJECT FROM A GIVEN NORMAL OBJECT (form)
 //* quick-n-dirty solution
 // ================================================================================
-//! works only with:
+//! worked & tested with:
 //? flat arrays
 //? arrays of flat objects
 //? arrays of flat objects that contain files
@@ -21,11 +21,7 @@ export const deepFormData = form => {
       // if the property is an array
       if (form[el] instanceof Array) {
         // if THAT array is an array of objects (contains at least one object)
-        if (
-          form[el].some(
-            val => typeof val === "object" && !(val instanceof File)
-          )
-        ) {
+        if (form[el].some(val => typeof val === "object" && !(val instanceof File))) {
           // flattening each object in that array
           form[el].forEach((obj, i) => {
             for (const prop in obj) {

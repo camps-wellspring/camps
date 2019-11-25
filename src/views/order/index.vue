@@ -5,12 +5,7 @@
     <!-- Toolbar -->
 
     <!-- Table -->
-    <v-data-table
-      :headers="headers"
-      :items="orders"
-      hide-default-footer
-      :loading="tableLoading"
-    >
+    <v-data-table :headers="headers" :items="orders" hide-default-footer :loading="tableLoading">
       <template v-slot:item="{ item, index }">
         <tr>
           <td>{{ item.user_name }}</td>
@@ -18,12 +13,7 @@
           <td>{{ item.type }}</td>
           <td>{{ item.order_data_name }}</td>
           <td>
-            <v-chip
-              v-if="item.seen"
-              class="ma-2"
-              color="green"
-              text-color="white"
-            >
+            <v-chip v-if="item.seen" class="ma-2" color="green" text-color="white">
               {{ item.seen.date.split(" ")[0] }}
             </v-chip>
             <v-chip v-else class="ma-2" color="red" text-color="white">
@@ -31,12 +21,7 @@
             </v-chip>
           </td>
           <td>
-            <v-chip
-              v-if="item.closed"
-              class="ma-2"
-              color="green"
-              text-color="white"
-            >
+            <v-chip v-if="item.closed" class="ma-2" color="green" text-color="white">
               {{ item.closed.date.split(" ")[0] }}
             </v-chip>
             <v-chip v-else class="ma-2" color="red" text-color="white">
@@ -50,21 +35,13 @@
               @click="handleCloseOrder(item)"
               >mdi-close-outline</v-icon
             >
-            <v-icon
-              v-else
-              :title="$t('label.close_order')"
-              @click="handleCloseOrder(item)"
+            <v-icon v-else :title="$t('label.close_order')" @click="handleCloseOrder(item)"
               >mdi-check-outline</v-icon
             >
           </td>
           <td>
-            <v-icon :title="$t('label.show')" @click="handleShow(item)"
-              >mdi-eye</v-icon
-            >
-            <v-icon
-              class="mx-1"
-              :title="$t('label.delete')"
-              @click="handleDelete(item, index)"
+            <v-icon :title="$t('label.show')" @click="handleShow(item)">mdi-eye</v-icon>
+            <v-icon class="mx-1" :title="$t('label.delete')" @click="handleDelete(item, index)"
               >mdi-delete</v-icon
             >
           </td>
@@ -125,11 +102,7 @@
             </v-col>
 
             <v-col md="6" cols="12">
-              {{
-                statusInfo.data.empty
-                  ? $t("label.no")
-                  : statusInfo.data.date.split(" ")[0]
-              }}
+              {{ statusInfo.data.empty ? $t("label.no") : statusInfo.data.date.split(" ")[0] }}
             </v-col>
           </v-row>
           <!-- Order Status Data -->
@@ -160,19 +133,13 @@
           <!-- Order User Data -->
         </v-card-text>
         <v-card-text class="py-3 text-center" v-else>
-          <v-progress-circular
-            :size="100"
-            color="primary"
-            indeterminate
-          ></v-progress-circular>
+          <v-progress-circular :size="100" color="primary" indeterminate></v-progress-circular>
         </v-card-text>
 
         <v-divider class="mx-4"></v-divider>
         <v-card-actions class="py-4 mx-2">
           <v-spacer></v-spacer>
-          <v-btn color="primary" @click="closeOrderDialog">{{
-            this.$t("button.close")
-          }}</v-btn>
+          <v-btn color="primary" @click="closeOrderDialog">{{ this.$t("button.close") }}</v-btn>
           <v-spacer></v-spacer>
         </v-card-actions>
       </v-card>
@@ -187,12 +154,7 @@
       <template #body>
         <v-row>
           <v-col cols="12" md="3" v-for="photo in photos" :key="photo.id">
-            <v-img
-              title="photo"
-              fluid
-              aspect-ratio="1"
-              :src="photo && photo.path"
-            ></v-img>
+            <v-img title="photo" fluid aspect-ratio="1" :src="photo && photo.path"></v-img>
           </v-col>
           <v-col cols="12" md="3" v-for="file in pdfFiles" :key="file.id">
             <a :href="file.path" target="_blank">
@@ -214,12 +176,7 @@
 <script>
 import TableHeaders from "@/helpers/TableHeaders";
 // import { required, minLength, maxLength } from "vuelidate/lib/validators";
-import {
-  IndexData,
-  ShowData,
-  UpdateData,
-  DeleteData
-} from "@/helpers/apiMethods";
+import { IndexData, ShowData, UpdateData, DeleteData } from "@/helpers/apiMethods";
 import Cookies from "js-cookie";
 
 export default {
@@ -325,9 +282,7 @@ export default {
         { key: "user_email", data: this.order.user_email },
         {
           key: "user_phone",
-          data: this.order.user_phone
-            ? { ...this.order.user_phone }
-            : { empty: true }
+          data: this.order.user_phone ? { ...this.order.user_phone } : { empty: true }
         }
       );
 
