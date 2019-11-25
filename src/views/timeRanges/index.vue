@@ -28,6 +28,7 @@
               field="project_available"
               v-model="item.is_project_available"
               :validate="true"
+              :isDisabled="item.id === 0"
             />
           </td>
           <td class="toggle-adjust">
@@ -38,20 +39,23 @@
               field="service_available"
               v-model="item.is_service_available"
               :validate="true"
+              :isDisabled="item.id === 0"
             />
           </td>
           <td>
             <v-icon
               class="edit"
               small
+              :disabled="item.id === 0"
               :title="$t('label.edit')"
               @click="handleEdit(item, index)"
               >mdi-pencil</v-icon
             >
             <v-icon
-              class="delete"
-              :title="$t('label.delete')"
               small
+              class="delete"
+              :disabled="item.id === 0"
+              :title="$t('label.delete')"
               @click="handleDelete(item, index)"
               >mdi-delete</v-icon
             >
@@ -105,7 +109,7 @@
                 <v-col v-if="!editMode" md="2" cols="12" class="text-end">
                   <v-btn
                     color="primary"
-                    :disabled="$v.$invalid"
+                    :disabled="$v.$invalid || !time.min"
                     type="submit"
                     x-large
                   >
@@ -141,7 +145,7 @@
 
 <script>
 import TableHeaders from "@/helpers/TableHeaders";
-import { required, minValue, maxValue } from "vuelidate/lib/validators";
+import { minValue, maxValue } from "vuelidate/lib/validators";
 import {
   IndexData,
   ShowData,
@@ -207,7 +211,7 @@ export default {
           this.times = data;
 
           // to remove the more
-          this.times.pop();
+          //   this.times.pop();
         })
         .catch(err => {
           console.log(err);
@@ -336,7 +340,6 @@ export default {
     return {
       time: {
         min: {
-          required,
           minValue: minValue(1),
           maxValue: maxValue(100000)
         }

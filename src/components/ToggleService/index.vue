@@ -1,5 +1,10 @@
 <template>
-  <v-switch hide-details @change="handleToggle" v-model="toggleValue"></v-switch>
+  <v-switch
+    hide-details
+    :disabled="isDisabled"
+    @change="handleToggle"
+    v-model="toggleValue"
+  ></v-switch>
 </template>
 
 <script>
@@ -25,6 +30,10 @@ export default {
     },
     value: {},
     validate: {
+      type: Boolean,
+      default: false
+    },
+    isDisabled: {
       type: Boolean,
       default: false
     }
