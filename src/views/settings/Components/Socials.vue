@@ -1,7 +1,12 @@
 <template>
   <form-wrapper :validator="$v.form">
     <v-row>
-      <v-col cols="12" md="6" v-for="social in $v.form.socials.$each.$iter" :key="social.id">
+      <v-col
+        cols="12"
+        md="6"
+        v-for="social in $v.form.socials.$each.$iter"
+        :key="social.id"
+      >
         <form-group name="socials" :validator="social.url">
           <v-text-field
             slot-scope="{ attrs }"
