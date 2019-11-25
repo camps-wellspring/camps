@@ -13,7 +13,7 @@
               slot-scope="{ attrs }"
               v-bind="attrs"
               outlined
-              :label="$t(`label.${nubmerField.$model.icon}`)"
+              :label="$t(`label.${nubmerField.$model.name}`)"
               v-model="nubmerField.$model.value"
               @input="nubmerField.value.$touch()"
             ></v-text-field>
@@ -30,7 +30,7 @@
               slot-scope="{ attrs }"
               v-bind="attrs"
               outlined
-              :label="$t(`label.${urlInput.$model.icon}`)"
+              :label="$t(`label.${urlInput.$model.name}`)"
               v-model="urlInput.$model.value"
               @input="urlInput.value.$touch()"
             ></v-text-field>
@@ -47,7 +47,7 @@
               slot-scope="{ attrs }"
               v-bind="attrs"
               outlined
-              :label="$t(`label.${emailInput.$model.icon}`)"
+              :label="$t(`label.${emailInput.$model.name}`)"
               v-model="emailInput.$model.value"
               @input="emailInput.value.$touch()"
             ></v-text-field>
@@ -87,14 +87,14 @@ export default {
     return {
       form: {
         numbersFields: [
-          { id: 1, value: "", icon: "phone" },
-          { id: 3, value: "", icon: "whats_app" },
-          { id: 5, value: "", icon: "imo" }
+          { id: 1, value: "", name: "phone" },
+          { id: 3, value: "", name: "whatsapp" },
+          { id: 5, value: "", name: "imo" }
         ],
-        urlsInputs: [{ id: 4, value: "", icon: "skype" }],
+        urlsInputs: [{ id: 4, value: "", name: "skype" }],
         emailsInput: [
-          { id: 2, value: "", icon: "email" },
-          { id: 6, value: "", icon: "facetime" }
+          { id: 2, value: "", name: "email" },
+          { id: 6, value: "", name: "facetime" }
         ]
       }
     };
