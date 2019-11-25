@@ -308,7 +308,7 @@ export default {
       this.headers = TableHeaders(headersList);
     },
     getOrders() {
-      IndexData({ reqName: `orders` })
+      IndexData({ reqName: `orders`, query: this.queries })
         .then(res => {
           const { data, meta } = res.data;
           this.orders = data;

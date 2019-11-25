@@ -263,7 +263,10 @@ export default {
       this.headers = TableHeaders(headersList);
     },
     getSubServices() {
-      IndexData({ reqName: `sub-services?service_id=${this.serviceId}` })
+      IndexData({
+        reqName: `sub-services?service_id=${this.serviceId}`,
+        query: this.queries
+      })
         .then(res => {
           const { data, meta } = res.data;
           this.subServices = data;
