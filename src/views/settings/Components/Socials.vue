@@ -77,8 +77,9 @@ export default {
     selectedSettings(settings, type) {
       const setting = settings[type];
       if (setting) {
-        setting.map(setting => {
-          this.form.socials.map((social, index) => {
+        // important
+        setting.forEach(setting => {
+          this.form.socials.forEach((social, index) => {
             if (social.id === setting.id) {
               this.$set(this.form.socials, index, setting);
             }

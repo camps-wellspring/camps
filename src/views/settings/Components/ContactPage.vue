@@ -9,7 +9,7 @@
         </v-row>
       </form-wrapper>
     </form>
-    <ContactsComponent />
+    <ContactsComponent :settings="settings" />
   </v-container>
 </template>
 
