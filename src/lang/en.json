@@ -38,6 +38,7 @@
         "numeric": "must be numbers",
         "email": "%{attribute} is not valid Email Address",
         "url": " not valid Url"
+       
     },
     "message": {
         "no_results": "No results found.",
@@ -235,7 +236,9 @@
         "order_info": "Order Info",
         "status_info": "Status Info",
         "user_info": "User Info",
-        "no": "No"
+        "no": "No",
+        "facetime":"Facetime",
+        "imo":"Imo"
     },
     "title": {
         "edit_service": "Edit Service",

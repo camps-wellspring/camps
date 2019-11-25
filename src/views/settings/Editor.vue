@@ -22,7 +22,7 @@
     <v-btn
       :loading="loadingButton"
       @click.prevent="handleSubmit"
-      :disabled="$v.form.$invalid"
+      :disabled="form[fieldName] === ''"
       class="primary my-3"
       type="submit"
       >{{ $t("button.save") }}</v-btn
@@ -61,9 +61,6 @@ export default {
         locale: this.language
       };
       StoreData({ reqName: "settings", data: reqData })
-        .then(res => {
-          console.log(res);
-        })
         .catch(err => console.log(err))
         .finally(() => (this.loadingButton = false));
     },
