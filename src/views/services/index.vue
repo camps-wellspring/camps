@@ -182,6 +182,15 @@ export default {
   components: {
     GlobalFeatures
   },
+  watch: {
+    showFeaturesDialog: {
+      handler(newValue) {
+        if (!newValue) {
+          this.getServices();
+        }
+      }
+    }
+  },
   //   watch: {
   //     $route: {
   //       handler(route) {
