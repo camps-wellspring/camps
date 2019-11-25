@@ -73,7 +73,7 @@
 
         <v-card-text class="py-3">
           <!-- Form -->
-          <v-form v-if="showBudgetsDialog">
+          <v-form v-if="showBudgetsDialog" @submit.prevent="addBudget">
             <form-wrapper :validator="$v.budget">
               <v-row>
                 <v-col cols="12" v-if="!editMode">
@@ -108,7 +108,7 @@
                   <v-btn
                     color="primary"
                     :disabled="$v.$invalid"
-                    @click="addBudget"
+                    type="submit"
                     x-large
                   >
                     {{ $t("label.add") }}

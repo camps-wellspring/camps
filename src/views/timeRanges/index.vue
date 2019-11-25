@@ -71,7 +71,7 @@
 
         <v-card-text class="py-3">
           <!-- Form -->
-          <v-form v-if="showTimesDialog">
+          <v-form v-if="showTimesDialog" @submit.prevent="addTime">
             <form-wrapper :validator="$v.time">
               <v-row>
                 <v-col cols="12" v-if="!editMode">
@@ -106,7 +106,7 @@
                   <v-btn
                     color="primary"
                     :disabled="$v.$invalid"
-                    @click="addTime"
+                    type="submit"
                     x-large
                   >
                     {{ $t("label.add") }}
