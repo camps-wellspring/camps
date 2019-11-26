@@ -38,7 +38,6 @@
         "numeric": "must be numbers",
         "email": "%{attribute} is not valid Email Address",
         "url": " not valid Url"
-       
     },
     "message": {
         "no_results": "No results found.",
@@ -217,7 +216,7 @@
         "facebook": "Facebook",
         "twitter": "Twitter",
         "linkedin": "Linkedin",
-        "youtube": "Youtube",
+        "video": "Video",
         "snapchat": "Snapchat",
         "instagram": "Instagram",
         "order_details": "Order details",

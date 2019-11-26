@@ -106,12 +106,12 @@ export default {
     },
     imgUrl: {
       handler(newValue) {
-        console.log("image >>", newValue);
         if (newValue) {
           this.imageName = this.$t("label.show_image");
           this.ImageUrl = newValue;
         }
-      }
+      },
+      immediate: true
     }
   },
   computed: {
@@ -153,7 +153,7 @@ export default {
             this.validateDimentions(imageFile)
               .then(() => {
                 this.readImage(imageFile);
-                console.log("imageFile", imageFile);
+              
               })
               .catch(() => {
                 this.errorType = "DIMENSIONS";

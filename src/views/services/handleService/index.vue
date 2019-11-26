@@ -126,6 +126,7 @@
 <script>
 import { required, minLength, maxLength } from "vuelidate/lib/validators";
 import { ShowData, StoreData, UpdateData } from "@/helpers/apiMethods";
+import { maxWords } from "@/utils/validate";
 import Cookies from "js-cookie";
 
 export default {
@@ -229,7 +230,11 @@ export default {
         data: formData
       })
         .then(() => {
-          this.popUp(this.$t("message.services_should_have_subs"), "info", true).then(value => {
+          this.popUp(
+            this.$t("message.services_should_have_subs"),
+            "info",
+            true
+          ).then(value => {
             if (!value.dismiss) {
               this.$router.push({ name: "ServicesList" });
               this.loading.save = false;
@@ -320,11 +325,13 @@ export default {
         },
         short_description: {
           required,
-          minLength: minLength(3)
+          minLength: minLength(3),
+          maxWords: maxWords(50)
         },
         description: {
           required,
-          minLength: minLength(3)
+          minLength: minLength(3),
+          maxWords: maxWords(500)
         }
       }
     };
