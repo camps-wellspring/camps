@@ -153,7 +153,7 @@ export default {
             this.validateDimentions(imageFile)
               .then(() => {
                 this.readImage(imageFile);
-                console.log("imageFile", imageFile);
+              
               })
               .catch(() => {
                 this.errorType = "DIMENSIONS";
