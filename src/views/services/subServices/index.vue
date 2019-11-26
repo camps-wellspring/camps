@@ -198,6 +198,7 @@ import {
   DeleteData
 } from "@/helpers/apiMethods";
 import Cookies from "js-cookie";
+import { maxWords } from "@/utils/validate";
 
 export default {
   name: "sub_services",
@@ -460,7 +461,8 @@ export default {
         },
         short_description: {
           required,
-          minLength: minLength(3)
+          minLength: minLength(3),
+          maxWords: maxWords(50)
         }
       }
     };

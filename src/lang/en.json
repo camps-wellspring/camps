@@ -38,7 +38,6 @@
         "numeric": "must be numbers",
         "email": "%{attribute} is not valid Email Address",
         "url": " not valid Url"
-       
     },
     "message": {
         "no_results": "No results found.",
