@@ -3,7 +3,7 @@
     <v-col cols="12">
       <new-image-upload
         class="file-upload__image"
-        :imgUrl="about_photo ? about_photo.path : ''"
+        :imgUrl="about_photo && about_photo.path"
         @fileSelected="uploadPhoto"
         :maxSize="imageSize"
       />
@@ -43,25 +43,18 @@ export default {
   },
   methods: {
     uploadPhoto({ file }) {
-      console.log(file);
       const formData = new FormData();
       formData.append("about_photo", file);
       StoreData({ reqName: "settings", data: formData }).catch(err =>
         console.log(err)
       );
-    },
-    selectedSettings(settings, type) {
-      const setting = settings[type];
-      if (setting) {
-        this.about_photo = setting;
-      }
     }
   },
   watch: {
     settings: {
       handler(settings) {
         if (settings) {
-          this.selectedSettings(settings, "about_photo");
+          this.about_photo = settings["about_photo"];
         }
       },
       immediate: true

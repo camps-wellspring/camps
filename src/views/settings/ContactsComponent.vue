@@ -1,77 +1,68 @@
 <template>
-  <form-wrapper :validator="$v.form">
-    <v-row>
-      <v-col
-        cols="12"
-        md="6"
-        v-for="nubmerField in $v.form.numbersFields.$each.$iter"
-        :key="nubmerField.id"
-      >
-        <form-group name="numbersFields" :validator="nubmerField.value">
-          <v-text-field
-            slot-scope="{ attrs }"
-            v-bind="attrs"
-            outlined
-            :label="$t(`label.${nubmerField.$model.icon}`)"
-            v-model="nubmerField.$model.value"
-            @input="nubmerField.value.$touch()"
-          ></v-text-field>
-        </form-group>
+  <v-container>
+    <form-wrapper :validator="$v.form">
+      <v-row>
+        <v-col
+          cols="12"
+          md="6"
+          v-for="nubmerField in $v.form.numbersFields.$each.$iter"
+          :key="nubmerField.id"
+        >
+          <form-group name="numbersFields" :validator="nubmerField.value">
+            <v-text-field
+              slot-scope="{ attrs }"
+              v-bind="attrs"
+              outlined
+              :label="$t(`label.${nubmerField.$model.name}`)"
+              v-model="nubmerField.$model.value"
+              @input="nubmerField.value.$touch()"
+            ></v-text-field>
+          </form-group>
+        </v-col>
+        <v-col
+          cols="12"
+          md="6"
+          v-for="urlInput in $v.form.urlsInputs.$each.$iter"
+          :key="urlInput.id"
+        >
+          <form-group name="urlsInputs" :validator="urlInput.value">
+            <v-text-field
+              slot-scope="{ attrs }"
+              v-bind="attrs"
+              outlined
+              :label="$t(`label.${urlInput.$model.name}`)"
+              v-model="urlInput.$model.value"
+              @input="urlInput.value.$touch()"
+            ></v-text-field>
+          </form-group>
+        </v-col>
+        <v-col
+          cols="12"
+          md="6"
+          v-for="emailInput in $v.form.emailsInput.$each.$iter"
+          :key="emailInput.id"
+        >
+          <form-group name="urlsInputs" :validator="emailInput.value">
+            <v-text-field
+              slot-scope="{ attrs }"
+              v-bind="attrs"
+              outlined
+              :label="$t(`label.${emailInput.$model.name}`)"
+              v-model="emailInput.$model.value"
+              @input="emailInput.value.$touch()"
+            ></v-text-field>
+          </form-group>
+        </v-col>
         <v-btn
-          :disabled="nubmerField.value.$invalid"
+          :disabled="$v.form.$invalid"
           @click.prevent="handleSubmit"
           class="primary"
-          >{{ $t("button.save") }}</v-btn
         >
-      </v-col>
-      <v-col
-        cols="12"
-        md="6"
-        v-for="urlInput in $v.form.urlsInputs.$each.$iter"
-        :key="urlInput.id"
-      >
-        <form-group name="urlsInputs" :validator="urlInput.value">
-          <v-text-field
-            slot-scope="{ attrs }"
-            v-bind="attrs"
-            outlined
-            :label="$t(`label.${urlInput.$model.icon}`)"
-            v-model="urlInput.$model.value"
-            @input="urlInput.value.$touch()"
-          ></v-text-field>
-        </form-group>
-        <v-btn
-          @click.prevent="handleSubmit"
-          :disabled="urlInput.value.$invalid"
-          class="primary"
-          >{{ $t("button.save") }}</v-btn
-        >
-      </v-col>
-      <v-col
-        cols="12"
-        md="6"
-        v-for="emailInput in $v.form.emailsInput.$each.$iter"
-        :key="emailInput.id"
-      >
-        <form-group name="urlsInputs" :validator="emailInput.value">
-          <v-text-field
-            slot-scope="{ attrs }"
-            v-bind="attrs"
-            outlined
-            :label="$t(`label.${emailInput.$model.icon}`)"
-            v-model="emailInput.$model.value"
-            @input="emailInput.value.$touch()"
-          ></v-text-field>
-        </form-group>
-        <v-btn
-          :disabled="emailInput.value.$invalid"
-          @click.prevent="handleSubmit"
-          class="primary"
-          >{{ $t("button.save") }}</v-btn
-        >
-      </v-col>
-    </v-row>
-  </form-wrapper>
+          {{ $t("button.save") }}
+        </v-btn>
+      </v-row>
+    </form-wrapper>
+  </v-container>
 </template>
 
 <script>
@@ -96,14 +87,14 @@ export default {
     return {
       form: {
         numbersFields: [
-          { id: 1, value: "", icon: "phone" },
-          { id: 3, value: "", icon: "whats_app" },
-          { id: 5, value: "", icon: "imo" }
+          { id: 1, value: "", name: "phone" },
+          { id: 3, value: "", name: "whatsapp" },
+          { id: 5, value: "", name: "imo" }
         ],
-        urlsInputs: [{ id: 4, value: "", icon: "skype" }],
+        urlsInputs: [{ id: 4, value: "", name: "skype" }],
         emailsInput: [
-          { id: 2, value: "", icon: "email" },
-          { id: 6, value: "", icon: "facetime" }
+          { id: 2, value: "", name: "email" },
+          { id: 6, value: "", name: "facetime" }
         ]
       }
     };

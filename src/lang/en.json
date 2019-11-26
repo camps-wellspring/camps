@@ -142,7 +142,9 @@
         "user_phone": "User Phone",
         "topic_id": "Topic",
         "message": "Message",
-        "name": "Name"
+        "name": "Name",
+        "global_contact_location_1":"First  Location",
+        "global_contact_location_2":"Second  Location"
     },
     "label": {
         "hoss": "Hoss",
@@ -210,11 +212,11 @@
         "phone": "Phone",
         "email": "Email",
         "skype": "Skype",
-        "whats_app": "Whats Up",
+        "whatsapp": "Whats Up",
         "facebook": "Facebook",
         "twitter": "Twitter",
         "linkedin": "Linkedin",
-        "youtube": "Youtube",
+        "video": "Video",
         "snapchat": "Snapchat",
         "instagram": "Instagram",
         "order_details": "Order details",
