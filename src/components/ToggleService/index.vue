@@ -1,5 +1,9 @@
 <template>
-  <v-switch hide-details @change="handleToggle" v-model="toggleValue"></v-switch>
+  <v-switch
+    hide-details
+    @change="handleToggle"
+    v-model="toggleValue"
+  ></v-switch>
 </template>
 
 <script>

@@ -8,7 +8,7 @@
       />
 
       <form-wrapper :validator="$v.form">
-        <v-form @submit.prevent="onSubmit">
+        <v-form>
           <!-- MAIN INFO -->
           <v-card>
             <v-card-title>{{ $t("heading.main_info") }}</v-card-title>
@@ -19,7 +19,7 @@
                     <form-group name="name">
                       <template slot-scope="{ attrs }">
                         <v-text-field
-                          v-model="form.name"
+                          v-model.trim="form.name"
                           v-bind="attrs"
                           outlined
                           :label="$t('label.name')"
@@ -83,19 +83,20 @@
           <!-- MEDIA -->
           <media
             :photos="mediaPhotos"
-            @ImgSelected="form.photos = $event"
-            @ImgDeleted="form.photos.splice($event, 1)"
+            @ImgSelected="handleMediaSelected"
+            @ImgDeleted="handleMediaDeleted"
           />
 
           <!-- DEMOS -->
           <demos
-            :demo-types="options['demo-types']"
+            :demo-types="selectItems['demo-types']"
             :added-demos="form.demos"
             @AddDemo="pushToTable"
             @DeleteDemo="removeFromTable"
           />
 
           <!-- PLATFORMS -->
+          <!-- TODO handle duplicated items -->
           <platforms
             :platforms="options.platforms"
             :added-platforms="form.platforms"
@@ -114,7 +115,7 @@
           <div class="d-flex justify-center">
             <v-btn
               x-large
-              type="submit"
+              @click="onSubmit"
               class="primary my-5"
               :disabled="$v.form.$invalid"
               :loading="loading.submit"
@@ -167,6 +168,11 @@ export default {
       },
 
       mediaPhotos: [],
+      addedItems: {
+        photos: [],
+        demos: [],
+        platforms: []
+      },
 
       options: {
         ["demo-types"]: [],
@@ -205,6 +211,23 @@ export default {
         categories: this.form.categories,
         technologies: this.form.technologies
       };
+    },
+
+    selectItems() {
+      const existingItems = {
+        ["demo-types"]: this.form.demos.map(el => el.id),
+        platforms: this.form.demos.map(el => el.id)
+      };
+      const items = {
+        ["demo-types"]: [],
+        platforms: []
+      };
+      ["demo-types", "platforms"].forEach(item => {
+        this.options[item].forEach(el => {
+          !existingItems[item].includes(el.id) && items[item].push(el);
+        });
+      });
+      return items;
     }
   },
 
@@ -235,7 +258,9 @@ export default {
   created() {
     this.fetchOptions();
     this.actionType === "edit" && this.fetchProject();
-    console.log("TCL: created -> this.actionType", this.actionType);
+    // setTimeout(() => {
+    //   console.log(this.selectItems);
+    // }, 2000);
   },
 
   methods: {
@@ -269,10 +294,10 @@ export default {
 
     onSubmit() {
       this.actionType === "create" ? this.createProject() : this.updateProject();
-      console.log("TCL: onSubmit -> this.actionType", this.actionType);
     },
 
     createProject() {
+      this.addedItems.photos.length > 0 && (this.form.photos = this.addedItems.photos);
       const data = deepFormData(this.form);
       this.loading.submit = true;
       StoreData({ reqName: "projects", data })
@@ -284,37 +309,48 @@ export default {
     },
 
     updateProject() {
-      let categories = [];
-      let technologies = [];
-
-      if (this.form.categories.length > 0) {
-        if (typeof this.form.categories === "object") {
-          this.form.categories.forEach(el => categories.push(el.id));
-        } else {
-          categories = this.form.categories;
-        }
+      // SHAPING REQUEST PAYLOAD
+      const payload = { ...this.form };
+      payload.slug && delete payload.slug;
+      payload.main_media && delete payload.main_media;
+      payload.media && delete payload.media;
+      payload.photos = this.addedItems.photos;
+      // demos
+      if (this.addedItems.demos.length > 0) {
+        payload.demos = this.addedItems.demos;
+      } else {
+        delete payload.demos;
       }
-      if (this.form.technologies.length > 0) {
-        if (typeof this.form.technologies === "object") {
-          this.form.technologies.forEach(el => technologies.push(el.id));
-        } else {
-          technologies = this.form.technologies;
-        }
-      }
-
-      const payload = {
-        name: this.form.name,
-        description: this.form.description,
-        short_description: this.form.short_description,
-        platforms: this.form.platforms,
-        categories,
-        technologies,
-        _method: "put",
-        locale: this.locale
+      // technologies & categories
+      const options = {
+        categories: [],
+        technologies: []
       };
-
+      for (const option in options) {
+        // when it's a type of number that means a change has occurred on it
+        if (payload[option].length > 0 && typeof payload[option][0] === "number") {
+          payload[option].forEach(id => {
+            options[option].push(id);
+          });
+          payload[option] = options[option];
+        } else {
+          delete payload[option];
+        }
+      }
+      // platforms
+      if (payload.platforms.length > 0) {
+        const platforms = payload.platforms.map(el => {
+          return { id: el.id, url: el.url };
+        });
+        payload.platforms = platforms;
+      }
+      // generating formData obj
+      const data = deepFormData(payload);
+      data.append("_method", "put");
+      data.append("locale", this.locale);
+      // DISPATCHING THE REQUEST
       this.loading.submit = true;
-      UpdateData({ reqName: "projects", data: payload, id: this.slug, locale: this.locale })
+      UpdateData({ reqName: "projects", data, id: this.slug, locale: this.locale })
         .then(() => {
           this.loading.submit = false;
           this.$router.push({ name: "Projects" });
@@ -334,15 +370,22 @@ export default {
       this.$v.form.main_media.$touch();
     },
 
-    pushToTable(newItem, field, name) {
+    pushToTable(newItem, field) {
       this.form[field].push(newItem);
-      const index = this.options[name].findIndex(el => el.id === newItem.id);
-      this.options[name].splice(index, 1);
+      this.addedItems[field].push(newItem);
     },
 
     removeFromTable(item, i, field, name) {
       this.form[field].splice(i, 1);
       this.options[name].push(item);
+    },
+
+    handleMediaSelected(imgs) {
+      this.addedItems.photos = imgs;
+    },
+
+    handleMediaDeleted(index) {
+      this.mediaPhotos.splice(index, 1);
     }
   }
 };

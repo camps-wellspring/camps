@@ -1,71 +1,115 @@
 <template>
   <v-container>
-    <form>
-      <form-wrapper :validator="$v.form">
+    <WrappingComponent :settings="settings" :formData="form" />
+    <v-form>
+      <form-wrapper :validator="$v.locations">
         <v-row>
           <v-col cols="12" md="6">
-            <Editor :form="form" fieldName="global_start_project_description" />
+            <form-group
+              name="global_contact_location_1"
+              attribute="input.global_contact_location_1"
+            >
+              <v-textarea
+                :label="$t('label.global_contact_location_1')"
+                outlined
+                v-bind="attrs"
+                v-on="listeners"
+                slot-scope="{ attrs, listeners }"
+                v-model="locations.global_contact_location_1"
+              ></v-textarea>
+            </form-group>
+            <v-btn
+              class="primary"
+              :disabled="$v.locations.global_contact_location_1.$invalid"
+              @click.prevent="handleSubmit('global_contact_location_1')"
+              >{{ $t("button.save") }}</v-btn
+            >
           </v-col>
           <v-col cols="12" md="6">
-            <Editor :form="form" fieldName="global_subscription_description" />
+            <form-group
+              name="global_contact_location_2"
+              attribute="input.global_contact_location_2"
+            >
+              <v-textarea
+                :label="$t('label.global_contact_location_2')"
+                outlined
+                v-bind="attrs"
+                v-on="listeners"
+                slot-scope="{ attrs, listeners }"
+                v-model="locations.global_contact_location_2"
+              ></v-textarea>
+            </form-group>
+            <v-btn
+              class="primary"
+              :disabled="$v.locations.global_contact_location_2.$invalid"
+              @click.prevent="handleSubmit('global_contact_location_2')"
+              >{{ $t("button.save") }}</v-btn
+            >
           </v-col>
         </v-row>
       </form-wrapper>
-    </form>
+    </v-form>
   </v-container>
 </template>
 
 <script>
-import { minLength } from "vuelidate/lib/validators";
-import { maxWords } from "@/utils/validate";
-
+import { minLength, maxLength } from "vuelidate/lib/validators";
+import { StoreData } from "@/helpers/apiMethods";
 export default {
   name: "Global",
   props: {
     settings: {
-      type: Array,
-      default: () => []
+      type: Object,
+      default: () => {}
     }
   },
   components: {
-    Editor: () => import("../Editor")
+    WrappingComponent: () => import("./WrappingComponent")
   },
-  provide() {
-    return {
-      $v: this.$v
-    };
-  },
+
   data() {
     return {
       form: {
         global_start_project_description: "",
         global_subscription_description: ""
+      },
+      locations: {
+        global_contact_location_1: "",
+        global_contact_location_2: ""
       }
     };
   },
   methods: {
-    selectedSettings(settings, type) {
-      const setting = settings.filter(el => el.type === type)[0];
-      if (setting) {
-        this.form[setting.type] = setting.value;
-      }
+    handleSubmit(nameType) {
+      const reqData = { [nameType]: this.locations[nameType] };
+      StoreData({ reqName: "settings", data: reqData })
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => console.log(err));
     }
   },
-  validations: {
-    form: {
-      global_start_project_description: {
-        minLength: minLength(3),
-        maxWords: maxWords(100)
+  validations() {
+    return {
+      locations: {
+        global_contact_location_1: {
+          minLength: minLength(3),
+          maxLength: maxLength(50)
+        },
+        global_contact_location_2: {
+          minLength: minLength(3),
+          maxLength: maxLength(50)
+        }
       }
-    }
+    };
   },
   watch: {
     settings: {
       handler(settings) {
         if (settings) {
-          this.selectedSettings(settings, "global_start_project_description");
-          this.selectedSettings(settings, "global_subscription_description");
-          //   console.log(setting, "setting");
+          Object.keys(this.locations).map(key => {
+            this.locations[key] = settings[key];
+          });
         }
       },
       immediate: true
@@ -73,5 +117,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped></style>

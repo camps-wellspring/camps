@@ -1,23 +1,40 @@
 <template>
   <section>
+    <label class="text-editor__label" v-text="$t(`label.${fieldName}`)"></label>
     <form-group :name="fieldName">
       <VueEditor
-        :placeholder="$t(`label.${fieldName}`)"
+        class="editor"
         v-model="form[fieldName]"
         slot-scope="{ attrs }"
         v-bind="attrs"
         :editorToolbar="customToolbar"
-        @selection-change="$v.form[fieldName].$touch()"
+        v-input-validation="fieldName"
       />
     </form-group>
-    <v-btn :disabled="$v.form.$invalid" class="primary my-3" type="submit">{{
-      $t("button.save")
-    }}</v-btn>
+
+    <transition name="fadeIn" mode="in-out">
+      <span
+        class="editor__errors"
+        v-if="validationErrors.ErrorsKeys.includes(fieldName)"
+        >{{ validationErrors.serverError }}
+      </span>
+    </transition>
+
+    <br />
+    <v-btn
+      :loading="loadingButton"
+      @click.prevent="handleSubmit"
+      :disabled="form[fieldName] === ''"
+      class="primary my-3"
+      type="submit"
+      >{{ $t("button.save") }}</v-btn
+    >
   </section>
 </template>
 
 <script>
 import { VueEditor } from "vue2-editor";
+import { StoreData } from "@/helpers/apiMethods";
 
 export default {
   name: "Editor",
@@ -25,6 +42,10 @@ export default {
   props: {
     fieldName: {
       type: String
+    },
+    language: {
+      type: String,
+      default: "en"
     },
     form: {
       type: Object,
@@ -34,8 +55,30 @@ export default {
   components: {
     VueEditor
   },
+  methods: {
+    handleSubmit() {
+      this.loadingButton = true;
+      const reqData = {
+        [this.fieldName]: this.form[this.fieldName],
+        locale: this.language
+      };
+      StoreData({ reqName: "settings", data: reqData })
+        .catch(err => console.log(err))
+        .finally(() => (this.loadingButton = false));
+    },
+    checkValid() {
+      const value = this.form[this.fieldName].length;
+
+      if (value < 3 || value > 100) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  },
   data() {
     return {
+      loadingButton: false,
       customToolbar: [
         ["bold", "italic", "underline", "strike"],
         [{ align: "" }, { align: "justify" }, { align: "right" }],

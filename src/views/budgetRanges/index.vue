@@ -12,8 +12,9 @@
     <v-data-table
       :headers="headers"
       :items="budgets"
-      hide-default-footer
+      :mobile-breakpoint="0"
       :loading="tableLoading"
+      hide-default-footer
     >
       <template v-slot:item="{ item, index }">
         <tr>
@@ -21,6 +22,7 @@
           <!-- <td>{{ item.min }}</td> -->
           <td class="toggle-adjust">
             <toggle-service
+              v-if="item.id !== 0"
               :is-edit="true"
               model-name="budget-ranges"
               :model-id="item.id"
@@ -31,6 +33,7 @@
           </td>
           <td class="toggle-adjust">
             <toggle-service
+              v-if="item.id !== 0"
               :is-edit="true"
               model-name="budget-ranges"
               :model-id="item.id"
@@ -43,12 +46,14 @@
             <v-icon
               class="edit"
               small
+              :disabled="item.id === 0"
               :title="$t('label.edit')"
               @click="handleEdit(item, index)"
               >mdi-pencil</v-icon
             >
             <v-icon
               class="delete"
+              :disabled="item.id === 0"
               :title="$t('label.delete')"
               small
               @click="handleDelete(item, index)"
@@ -72,7 +77,7 @@
 
         <v-card-text class="py-3">
           <!-- Form -->
-          <v-form v-if="showBudgetsDialog">
+          <v-form v-if="showBudgetsDialog" @submit.prevent="addBudget">
             <form-wrapper :validator="$v.budget">
               <v-row>
                 <v-col cols="12" v-if="!editMode">
@@ -106,8 +111,8 @@
                 <v-col v-if="!editMode" md="2" cols="12" class="text-end">
                   <v-btn
                     color="primary"
-                    :disabled="$v.$invalid"
-                    @click="addBudget"
+                    :disabled="$v.$invalid || !budget.min"
+                    type="submit"
                     x-large
                   >
                     {{ $t("label.add") }}
@@ -142,7 +147,7 @@
 
 <script>
 import TableHeaders from "@/helpers/TableHeaders";
-import { required, minValue } from "vuelidate/lib/validators";
+import { minValue } from "vuelidate/lib/validators";
 import {
   IndexData,
   ShowData,
@@ -208,7 +213,7 @@ export default {
           this.budgets = data;
 
           // to remove the more
-          this.budgets.pop();
+          //   this.budgets.pop();
         })
         .catch(err => {
           console.log(err);
@@ -341,7 +346,6 @@ export default {
     return {
       budget: {
         min: {
-          required,
           minValue: minValue(1)
         }
       }

@@ -22,8 +22,9 @@
     <v-data-table
       :headers="headers"
       :items="services"
-      hide-default-footer
+      :mobile-breakpoint="0"
       :loading="tableLoading"
+      hide-default-footer
     >
       <template v-slot:item="{ item, index }">
         <tr>
@@ -180,6 +181,15 @@ export default {
   },
   components: {
     GlobalFeatures
+  },
+  watch: {
+    showFeaturesDialog: {
+      handler(newValue) {
+        if (!newValue) {
+          this.getServices();
+        }
+      }
+    }
   },
   //   watch: {
   //     $route: {

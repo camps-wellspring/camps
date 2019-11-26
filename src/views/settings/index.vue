@@ -4,12 +4,13 @@
       <v-toolbar-title>{{ $t("heading.settings") }}</v-toolbar-title>
       <v-divider class="mx-2" inset vertical></v-divider>
     </v-toolbar>
-    <component :settings="settings" :is="components"></component>
+    <component :settings="settingsObject" :is="components"></component>
   </div>
 </template>
 
 <script>
 import { IndexData } from "@/helpers/apiMethods";
+
 export default {
   name: "Settings",
   components: {
@@ -24,26 +25,45 @@ export default {
   data() {
     return {
       components: "",
-      settings: []
+      settings: [],
+      settingsObject: {}
     };
   },
   mounted() {
     this.getSettings();
   },
   methods: {
-    getSettings() {
-      IndexData({ reqName: "settings", query: { pagination: "all" } })
+    getSettings(locale = "en") {
+      IndexData({ reqName: "settings", query: { pagination: "all" }, locale })
         .then(res => {
           const { data } = res.data;
+          this.settingsObject = data.reduce((acc, current) => {
+            acc[current.type] = current.value;
+            return acc;
+          }, {});
+
           this.settings = data;
         })
         .catch(err => console.log(err));
+    }
+  },
+  computed: {
+    locale() {
+      return this.$store.getters.locale;
     }
   },
   watch: {
     $route: {
       handler(route) {
         this.components = route.name;
+      },
+      immediate: true
+    },
+    locale: {
+      handler(locale) {
+        if (locale !== undefined) {
+          this.getSettings(locale);
+        }
       },
       immediate: true
     }

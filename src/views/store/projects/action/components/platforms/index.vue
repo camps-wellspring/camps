@@ -54,7 +54,7 @@
           <v-container fluid>
             <v-row>
               <v-col cols="12">
-                <v-simple-table>
+                <v-simple-table class="pt-0">
                   <template v-slot:default>
                     <thead>
                       <tr>
@@ -151,7 +151,7 @@ export default {
     },
 
     handleAddItem() {
-      this.$emit("AddPlatform", this.platform, "platforms", "platforms");
+      this.$emit("AddPlatform", this.platform, "platforms");
       this.platform = {
         id: null,
         url: "",

@@ -21,7 +21,7 @@
             <v-avatar class="square">
               <img
                 :src="item[config.imgType] && item[config.imgType].path"
-                :alt="item[config.imgType].description"
+                :alt="item[config.imgType] && item[config.imgType].description"
                 @click="handleImgPreview(item[config.imgType].path)"
             /></v-avatar>
           </td>
@@ -30,7 +30,7 @@
             <read-more
               class="read-more"
               :text="item.short_description ? item.short_description : 'No description available'"
-              :max-chars="38"
+              :max-chars="35"
               less-str="read less"
             />
           </td>
