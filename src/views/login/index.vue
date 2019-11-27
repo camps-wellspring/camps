@@ -8,9 +8,13 @@
               <v-toolbar color="primary" dark flat>
                 <v-toolbar-title>Login form</v-toolbar-title>
               </v-toolbar>
-              <v-card-text>
-                <v-form>
-                  <form-group name="email" :validator="$v.email" attribute="fields.email">
+              <v-form @submit.prevent="handleLogin">
+                <v-card-text>
+                  <form-group
+                    name="email"
+                    :validator="$v.email"
+                    attribute="fields.email"
+                  >
                     <template slot-scope="{ attrs }">
                       <v-text-field
                         v-bind="attrs"
@@ -22,7 +26,11 @@
                     </template>
                   </form-group>
 
-                  <form-group name="password" :validator="$v.password" attribute="fields.password">
+                  <form-group
+                    name="password"
+                    :validator="$v.password"
+                    attribute="fields.password"
+                  >
                     <template slot-scope="{ attrs }">
                       <v-text-field
                         v-bind="attrs"
@@ -33,12 +41,14 @@
                       </v-text-field>
                     </template>
                   </form-group>
-                </v-form>
-              </v-card-text>
-              <v-card-actions>
-                <div class="flex-grow-1"></div>
-                <v-btn color="primary" @click="handleLogin"> {{ $t("form_box.login") }}</v-btn>
-              </v-card-actions>
+                </v-card-text>
+                <v-card-actions>
+                  <div class="flex-grow-1"></div>
+                  <v-btn color="primary" type="submit">
+                    {{ $t("form_box.login") }}</v-btn
+                  >
+                </v-card-actions>
+              </v-form>
             </v-card>
           </v-col>
         </v-row>
