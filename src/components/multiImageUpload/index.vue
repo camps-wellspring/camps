@@ -23,7 +23,9 @@
         <!-- <span class="upload_icon">Hoss</span> -->
       </v-btn>
       <div class="image__placeholder">
-        <span class="file-upload__image__placeholder ">{{ $t("label.upload_media_gallery") }}</span>
+        <span class="file-upload__image__placeholder ">{{
+          $t("label.upload_media_gallery")
+        }}</span>
       </div>
     </section>
 
@@ -54,7 +56,7 @@
         <!-- temporarely ----------------------------->
         <v-icon
           class="close_icon"
-          @click="deleteIamge($event, index, ShowImgs)"
+          @click="deleteIamge($event, index, ShowImgs, showImg)"
           :title="$t('label.delete')"
         >
           mdi-close
@@ -130,7 +132,7 @@ export default {
     imgsUrl: {
       handler(value) {
         const imgsPaths = value.map(el => el.path);
-        this.ShowImgs = [...this.ShowImgsCopy, ...imgsPaths];
+        this.ShowImgs = [...imgsPaths, ...this.ShowImgsCopy];
       },
       immediate: true
     }
@@ -162,7 +164,7 @@ export default {
       this.$nextTick(() => this.$refs.file.click());
     },
 
-    deleteIamge(e, index, imgs) {
+    deleteIamge($event, index, imgs, showImg) {
       this.change = false;
 
       let key = this.imgsFiles[this.imgsFiles.length];
@@ -173,8 +175,13 @@ export default {
           if (!value.dismiss) {
             deleteMedia(id)
               .then(() => {
-                this.ShowImgs.splice(index, 1);
-                // this.imgsFiles.splice(key, 1);
+                // this.ShowImgs.splice(index, 1);
+                this.ShowImgsCopy.splice(index, 1);
+                this.ShowImgsCopy = this.ShowImgsCopy.filter(
+                  el => el !== showImg
+                );
+
+                // this.imgsFiles.splice(key, 1);.
                 this.$emit("handle_delete_image", index);
               })
               .catch(err => console.log(err));
@@ -183,6 +190,8 @@ export default {
       } else {
         imgs.splice(index, 1);
         this.imgsFiles.splice(key, 1);
+        this.ShowImgsCopy = this.ShowImgsCopy.filter(el => el !== showImg);
+
         this.$refs.file.value = "";
       }
     },
