@@ -124,10 +124,11 @@ export default {
   watch: {
     reset: {
       handler(newValue) {
-        if (newValue === true) {
+        if (newValue) {
           this.resetImageFile();
         }
-      }
+      },
+      immediate: true
     },
     imgsUrl: {
       handler(value) {
@@ -284,7 +285,9 @@ export default {
       }
     },
     resetImageFile() {
-      this.imgsUrl = null;
+      // this.imgsUrl = null;
+      this.imgsFiles = [];
+      this.ShowImgsCopy = [];
       this.$refs.file.value = "";
     }
   },

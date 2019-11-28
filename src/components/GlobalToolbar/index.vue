@@ -1,5 +1,5 @@
 <template>
-  <v-toolbar flat color="white" class="main-header">
+  <v-toolbar flat class="main-header">
     <v-toolbar-title class="main-header__title">
       <a class="main-header__title__back-link" @click="$router.go(-1)">
         &lt; {{ $t("button.back") }}
@@ -12,7 +12,13 @@
     <v-spacer v-if="actionButton"></v-spacer>
     <v-toolbar-items v-if="actionButton" class="main-header__contents">
       <!-- Action Button Section -->
-      <v-btn class="button btn-height--1 my-auto mx-1" color="primary" @click="fireButtonClick">
+      <v-btn
+        :loading="loading"
+        :disabled="disabled"
+        class="button btn-height--1 my-auto mx-1"
+        color="primary"
+        @click="fireButtonClick"
+      >
         <span class="mx-2">{{ $t(`button.${actionButtonText}`) }}</span>
       </v-btn>
       <!-- Form Section -->
@@ -33,6 +39,14 @@ export default {
       default: "create"
     },
     actionButton: {
+      type: Boolean,
+      default: false
+    },
+    loading: {
+      type: Boolean,
+      default: false
+    },
+    disabled: {
       type: Boolean,
       default: false
     }
