@@ -3,7 +3,7 @@
     <global-toolbar
       title="gallery_exhibition"
       :loading="loading.submit"
-      :disabled="newPhotos.length > 0"
+      :disabled="newPhotos.length < 1"
       class="mb-12"
       action-button
       action-button-text="save"
@@ -12,10 +12,11 @@
 
     <v-container>
       <multi-image-upload
+        ref="imgUpload"
         :maxSize="4"
-        :imgsUrl="getPhotos()"
+        :imgsUrl="items"
         @fileSelected="newPhotos = $event"
-        @handle_delete_image="photos.splice($event, 1)"
+        @handle_delete_image="items.splice($event, 1)"
       />
     </v-container>
   </div>
@@ -30,7 +31,9 @@ export default {
   data() {
     return {
       items: [],
+      reset: false,
       newPhotos: [],
+
       loading: {
         fetch: false,
         submit: false
@@ -48,6 +51,8 @@ export default {
       IndexData({ reqName: "photos-galleries" })
         .then(res => {
           this.items = res.data.data;
+          this.newPhotos = [];
+          this.$refs.imgUpload.resetImageFile();
           this.loading.fetch = false;
         })
         .catch(() => {
@@ -62,14 +67,11 @@ export default {
       StoreData({ reqName: "photos-galleries", data })
         .then(() => {
           this.loading.submit = false;
+          this.fetchItems();
         })
         .catch(() => {
           this.loading.submit = false;
         });
-    },
-
-    getPhotos() {
-      return this.items;
     }
   }
 };
