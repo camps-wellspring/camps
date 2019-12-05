@@ -242,7 +242,9 @@
     "user_info": "User Info",
     "no": "No",
     "facetime": "Facetime",
-    "imo": "Imo"
+    "imo": "Imo",
+    "create_extra_service": "Create Extra Service",
+    "edit_extra_service": "Edit Extra Service"
   },
   "title": {
     "edit_service": "Edit Service",
