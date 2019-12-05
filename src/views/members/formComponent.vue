@@ -272,10 +272,6 @@ export default {
         this.$emit("toggleEdit");
       }
     });
-
-    // if (this.isEdited) {
-    //   this.form = this.editForm;
-    // }
   },
 
   validations() {

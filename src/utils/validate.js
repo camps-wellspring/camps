@@ -1,4 +1,5 @@
 import { helpers } from "vuelidate/lib/validators";
+import { async } from "q";
 export const isPhone = val => {
   if (val.test("/[0-9]{9,14}/")) {
     return true;
@@ -26,7 +27,6 @@ export const minWords = value => text =>
 //   text ? text.split(" ").length <= value : true;
 
 export const maxWords = param =>
-  helpers.withParams(
-    { type: "maxWords", maxWords: param },
-    value => value && value.split(" ").length <= param
+  helpers.withParams({ type: "maxWords", maxWords: param }, value =>
+    value ? value.split(" ").length <= param : true
   );
