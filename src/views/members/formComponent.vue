@@ -237,7 +237,7 @@ export default {
         }
       }
 
-      if (this.imageChange) {
+      if (this.imageChange && this.isEdited) {
         this.handleUpdateImage();
       }
     },
