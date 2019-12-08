@@ -71,7 +71,9 @@ export default {
     return {
       form: {
         global_start_project_description: "",
-        global_subscription_description: ""
+        global_subscription_description: "",
+        honorary_exhibition: "",
+        information_center: ""
       },
       locations: {
         global_contact_location_1: "",

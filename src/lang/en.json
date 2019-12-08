@@ -244,7 +244,9 @@
     "facetime": "Facetime",
     "imo": "Imo",
     "create_extra_service": "Create Extra Service",
-    "edit_extra_service": "Edit Extra Service"
+    "edit_extra_service": "Edit Extra Service",
+    "honorary_exhibition":"Honorary Exhibition",
+    "information_center":"Information Center"
   },
   "title": {
     "edit_service": "Edit Service",
