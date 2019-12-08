@@ -48,7 +48,7 @@ export default {
   methods: {
     fetchItems() {
       this.loading.fetch = true;
-      IndexData({ reqName: "photos-galleries" })
+      IndexData({ reqName: "photos-galleries", query: { pagination: "all" } })
         .then(res => {
           this.items = res.data.data;
           this.newPhotos = [];
