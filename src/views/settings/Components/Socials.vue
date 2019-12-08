@@ -49,7 +49,7 @@ export default {
           { id: 1, url: "", icon: "facebook" },
           { id: 2, url: "", icon: "twitter" },
           { id: 3, url: "", icon: "linkedin" },
-          { id: 4, url: "", icon: "youtube" },
+          { id: 4, url: "", icon: "video" },
           { id: 5, url: "", icon: "snapchat" },
           { id: 6, url: "", icon: "instagram" }
         ]
