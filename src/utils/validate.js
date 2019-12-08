@@ -30,3 +30,11 @@ export const maxWords = param =>
   helpers.withParams({ type: "maxWords", maxWords: param }, value =>
     value ? value.split(" ").length <= param : true
   );
+
+export const isRequired = value => {
+  if (value !== "") {
+    return true;
+  } else {
+    return false;
+  }
+};
