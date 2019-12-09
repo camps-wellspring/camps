@@ -1,7 +1,7 @@
 <template>
-  <div class="exhibition">
+  <div class="media">
     <global-toolbar
-      title="gallery_exhibition"
+      title="media"
       :loading="loading.submit"
       :disabled="newPhotos.length < 1"
       class="mb-12"
@@ -40,7 +40,7 @@
 import { IndexData, StoreData } from "@/helpers/apiMethods";
 
 export default {
-  name: "exhibition",
+  name: "media",
 
   data() {
     return {
@@ -78,7 +78,7 @@ export default {
           this.loading.fetch = false;
         })
         .catch(() => {
-          this.type === "exhibition" ? "information_center" : "exhibition";
+          this.type === "main_gallery" ? "information_center" : "main_gallery";
           this.loading.fetch = false;
         });
     },

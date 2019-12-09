@@ -154,22 +154,22 @@ export const asyncRouterMap = [
     ]
   },
   {
-    path: "/exhibition",
+    path: "/media",
     component: Layout,
     // redirect: "/",
     meta: {
-      title: "exhibition",
+      title: "media",
       icon: "mdi-account-circle"
     },
     children: [
       {
         path: "list",
-        component: () => import("@/views/exhibition"),
-        name: "Exhibition",
+        component: () => import("@/views/media"),
+        name: "media",
         // hidden: true,
 
         meta: {
-          title: "exhibition",
+          title: "media",
           icon: "mdi-account-circle"
         }
       }
