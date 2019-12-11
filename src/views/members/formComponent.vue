@@ -130,7 +130,7 @@ export default {
         main_image: ""
       },
       imageFile: "",
-      maxsize: 2.48,
+      maxsize: 4,
       btnLoading: false,
       inputChange: false,
       imageChange: false
