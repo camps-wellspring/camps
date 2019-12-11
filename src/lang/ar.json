@@ -15,7 +15,8 @@
     "contact_list": "قائمة الاتصال",
     "extra_services_list": "الخدمات الإضافية",
     "budget_ranges_list": "نطاق الميزانية",
-    "time_ranges_list": "نطاق الوقت"
+    "time_ranges_list": "نطاق الوقت",
+    "media": "المعرض"
   },
   "fields": {
     "password": "كلمة المرور",
