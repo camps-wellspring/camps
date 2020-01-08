@@ -41,9 +41,14 @@
                 >{{ $t("button.save") }}</v-btn
               >
 
-              <v-btn v-if="editMode" color="secondary" class="mx-1" @click="reset" large>{{
-                $t("button.reset")
-              }}</v-btn>
+              <v-btn
+                v-if="editMode"
+                color="secondary"
+                class="mx-1"
+                @click="reset"
+                large
+                >{{ $t("button.reset") }}</v-btn
+              >
             </v-col>
           </v-row>
         </form-wrapper>
@@ -62,10 +67,19 @@
           <tr>
             <td>
               <!-- {{ item.name }} -->
-              <read-more class="read-more" :text="item.name" :max-chars="20" less-str="read less" />
+              <read-more
+                class="read-more"
+                :text="item.name"
+                :max-chars="20"
+                less-str="read less"
+              />
             </td>
             <td>
-              <v-icon class="edit" small :title="$t('label.edit')" @click="handleEdit(item)"
+              <v-icon
+                class="edit"
+                small
+                :title="$t('label.edit')"
+                @click="handleEdit(item, index)"
                 >mdi-pencil</v-icon
               >
               <v-icon
@@ -85,14 +99,22 @@
     <v-divider class="mx-5"></v-divider>
     <v-card-actions class="py-4 mx-2">
       <v-spacer></v-spacer>
-      <v-btn color="secondary" large @click="closeFeatures">{{ $t("button.close") }}</v-btn>
+      <v-btn color="secondary" large @click="closeFeatures">{{
+        $t("button.close")
+      }}</v-btn>
     </v-card-actions>
   </v-card>
 </template>
 
 <script>
 import TableHeaders from "@/helpers/TableHeaders";
-import { IndexData, ShowData, StoreData, UpdateData, DeleteData } from "@/helpers/apiMethods";
+import {
+  IndexData,
+  ShowData,
+  StoreData,
+  UpdateData,
+  DeleteData
+} from "@/helpers/apiMethods";
 import Cookies from "js-cookie";
 import { required, minLength, maxLength } from "vuelidate/lib/validators";
 
@@ -214,11 +236,8 @@ export default {
         data: { ...this.feature, locale: this.locale, _method: "PUT" }
       })
         .then(res => {
-          this.features.splice(
-            this.currentFeatureIndex,
-            1,
-            res.data[`${this.FeaturedItemType}_feature`]
-          );
+          const itemData = res.data[`${this.FeaturedItemType}_feature`];
+          this.$set(this.features, this.currentFeatureIndex, itemData);
 
           this.loading.save = false;
           this.reset();
