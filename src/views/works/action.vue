@@ -85,6 +85,7 @@ import {
   requiredIf
 } from "vuelidate/lib/validators";
 import { StoreData, ShowData, UpdateData } from "@/helpers/apiMethods";
+import { maxWords } from "@/utils/validate";
 import Cookies from "js-cookie";
 
 export default {
@@ -291,7 +292,7 @@ export default {
         },
         description: {
           minLength: minLength(3),
-          maxLength: maxLength(500)
+          maxWords: maxWords(500)
         },
         priority: {
           required,

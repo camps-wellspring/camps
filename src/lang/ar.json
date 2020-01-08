@@ -15,7 +15,8 @@
     "contact_list": "قائمة الاتصال",
     "extra_services_list": "الخدمات الإضافية",
     "budget_ranges_list": "نطاق الميزانية",
-    "time_ranges_list": "نطاق الوقت"
+    "time_ranges_list": "نطاق الوقت",
+    "media": "المعرض"
   },
   "fields": {
     "password": "كلمة المرور",
@@ -25,8 +26,8 @@
     "required": "%{attribute} مطلوب",
     "maxLength": "%{attribute} يجب أن يكون بحد أقصى %{max} حرف",
     "minLength": "%{attribute} يجب أن يكون على الأقل %{min} حرف",
-    "minWords": "%{attribute} يجب أن يكون على الأقل %{maxWords} كلمات",
-    "maxWords": "%{attribute} يجب أن يكون أقل من %{maxWords} كلمات",
+    "minWords": "%{attribute} يجب أن يكون على الأقل %{maxWords} كلمه",
+    "maxWords": "%{attribute} يجب أن يكون أقل من %{maxWords} كلمه",
     "description": "الوصف",
     "valid": "يجب أن يكون صالح",
     "number": " يجب أن يكون أرقام",

@@ -130,7 +130,7 @@ export default {
         main_image: ""
       },
       imageFile: "",
-      maxsize: 2.48,
+      maxsize: 4,
       btnLoading: false,
       inputChange: false,
       imageChange: false
@@ -296,7 +296,7 @@ export default {
         },
         bio: {
           minLength: minLength(3),
-          maxWords: maxWords(50)
+          maxWords: maxWords(120)
           //   maxLength: maxLength(50)
         }
       }

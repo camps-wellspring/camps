@@ -2,7 +2,8 @@
   <div>
     <slot
       :attrs="{
-        errorMessages: getServerErrors || activeErrorMessages
+        errorMessages: getServerErrors || activeErrorMessages,
+        label: this.$t(`label.${name}`)
       }"
       :hasErrors="hasErrors"
       :listeners="{ input: () => preferredValidator.$touch() }"

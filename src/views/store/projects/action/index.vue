@@ -16,7 +16,7 @@
               <v-container fluid>
                 <v-row>
                   <v-col cols="12" md="6">
-                    <form-group name="name">
+                    <form-group name="name" attribute="label.name">
                       <template slot-scope="{ attrs }">
                         <v-text-field
                           v-model.trim="form.name"
@@ -30,7 +30,7 @@
                   </v-col>
 
                   <v-col cols="12" md="6">
-                    <form-group name="main_media">
+                    <form-group name="main_media" attribute="label.main_media">
                       <template slot-scope="{ attrs }">
                         <new-image-upload
                           class="file-upload__image"
@@ -45,7 +45,10 @@
                   </v-col>
 
                   <v-col cols="12">
-                    <form-group name="description">
+                    <form-group
+                      name="description"
+                      attribute="label.description"
+                    >
                       <template slot-scope="{ attrs }">
                         <v-textarea
                           v-model.trim="form.description"
@@ -61,7 +64,10 @@
                   </v-col>
 
                   <v-col cols="12">
-                    <form-group name="short_description">
+                    <form-group
+                      name="short_description"
+                      attribute="label.short_description"
+                    >
                       <template slot-scope="{ attrs }">
                         <v-textarea
                           v-model.trim="form.short_description"
@@ -135,9 +141,19 @@
 </template>
 
 <script>
-import { minLength, maxLength, required, requiredIf } from "vuelidate/lib/validators";
+import {
+  minLength,
+  maxLength,
+  required,
+  requiredIf
+} from "vuelidate/lib/validators";
 import { minWords, maxWords } from "@/utils/validate";
-import { IndexData, StoreData, ShowData, UpdateData } from "@/helpers/apiMethods";
+import {
+  IndexData,
+  StoreData,
+  ShowData,
+  UpdateData
+} from "@/helpers/apiMethods";
 import { deepFormData } from "@/helpers/deepFormData";
 import imgPreviewMixin from "@/mixins/imgPreview";
 
@@ -293,11 +309,14 @@ export default {
     },
 
     onSubmit() {
-      this.actionType === "create" ? this.createProject() : this.updateProject();
+      this.actionType === "create"
+        ? this.createProject()
+        : this.updateProject();
     },
 
     createProject() {
-      this.addedItems.photos.length > 0 && (this.form.photos = this.addedItems.photos);
+      this.addedItems.photos.length > 0 &&
+        (this.form.photos = this.addedItems.photos);
       const data = deepFormData(this.form);
       this.loading.submit = true;
       StoreData({ reqName: "projects", data })
@@ -328,7 +347,10 @@ export default {
       };
       for (const option in options) {
         // when it's a type of number that means a change has occurred on it
-        if (payload[option].length > 0 && typeof payload[option][0] === "number") {
+        if (
+          payload[option].length > 0 &&
+          typeof payload[option][0] === "number"
+        ) {
           payload[option].forEach(id => {
             options[option].push(id);
           });
@@ -350,7 +372,12 @@ export default {
       data.append("locale", this.locale);
       // DISPATCHING THE REQUEST
       this.loading.submit = true;
-      UpdateData({ reqName: "projects", data, id: this.slug, locale: this.locale })
+      UpdateData({
+        reqName: "projects",
+        data,
+        id: this.slug,
+        locale: this.locale
+      })
         .then(() => {
           this.loading.submit = false;
           this.$router.push({ name: "Projects" });
