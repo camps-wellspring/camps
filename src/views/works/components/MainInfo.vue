@@ -5,7 +5,7 @@
     <v-card-text>
       <v-row>
         <v-col cols="12" md="6">
-          <form-group name="name">
+          <form-group name="name" attribute="label.name">
             <v-text-field
               slot-scope="{ attrs, listeners }"
               v-bind="attrs"
@@ -17,7 +17,7 @@
           </form-group>
         </v-col>
         <v-col cols="12" md="6">
-          <form-group name="priority">
+          <form-group name="priority" attribute="label.priority">
             <v-text-field
               slot-scope="{ attrs, listeners }"
               v-bind="attrs"
@@ -29,14 +29,13 @@
           </form-group>
         </v-col>
         <v-col cols="12">
-          <form-group name="description">
+          <form-group name="description" attribute="label.description">
             <v-textarea
               slot-scope="{ attrs, listeners }"
               v-bind="attrs"
               v-model="form.description"
               outlined
-              auto-grow
-              row-height="40"
+              rows="20"
               :label="$t('label.description')"
               v-on="listeners"
             ></v-textarea>
