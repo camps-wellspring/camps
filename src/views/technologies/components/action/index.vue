@@ -68,7 +68,13 @@
 </template>
 
 <script>
-import { url, minLength, maxLength, required, requiredIf } from "vuelidate/lib/validators";
+import {
+  url,
+  minLength,
+  maxLength,
+  required,
+  requiredIf
+} from "vuelidate/lib/validators";
 import actionMixin from "@/mixins/actionMixin";
 
 export default {

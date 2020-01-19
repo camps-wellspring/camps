@@ -29,14 +29,24 @@
           <td>
             <read-more
               class="read-more"
-              :text="item.short_description ? item.short_description : 'No description available'"
+              :text="
+                item.short_description
+                  ? item.short_description
+                  : 'No description available'
+              "
               :max-chars="35"
               less-str="read less"
             />
           </td>
 
           <td>
-            <v-btn :title="$t('label.features')" @click="handleFeatures(item.id)" icon fab small>
+            <v-btn
+              :title="$t('label.features')"
+              @click="handleFeatures(item.id)"
+              icon
+              fab
+              small
+            >
               <v-icon class="edit">mdi-star-circle-outline</v-icon>
             </v-btn>
           </td>
@@ -66,12 +76,19 @@
           <td>
             <v-btn
               icon
-              :to="{ name: 'ProjectEdit', params: { slug: item.slug, actionType: 'edit' } }"
+              :to="{
+                name: 'ProjectEdit',
+                params: { slug: item.slug, actionType: 'edit' }
+              }"
             >
               <v-icon medium title="edit">mdi-pencil</v-icon>
             </v-btn>
             <v-btn icon>
-              <v-icon medium title="delete" @click="handleDelete(item.slug, index)">
+              <v-icon
+                medium
+                title="delete"
+                @click="handleDelete(item.slug, index)"
+              >
                 mdi-delete</v-icon
               >
             </v-btn>
@@ -112,7 +129,15 @@ export default {
 
   data() {
     return {
-      headerValues: ["name", "photo", "description", "features", "visible", "available", "actions"],
+      headerValues: [
+        "name",
+        "photo",
+        "description",
+        "features",
+        "visible",
+        "available",
+        "actions"
+      ],
       model: {
         name: "",
         description: "",

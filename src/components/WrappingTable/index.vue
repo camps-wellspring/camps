@@ -84,7 +84,7 @@ export default {
           DeleteData({ reqName: this.pathName, id: param })
             .then(() => {
               this.$delete(this.items, index);
-            }) 
+            })
             .catch(err => {
               console.log(err);
             });

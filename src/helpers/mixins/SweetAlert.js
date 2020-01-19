@@ -1,6 +1,10 @@
 export const SweetAlert = {
   methods: {
-    popUp(title = this.$t("message.warning"), type = "warning", singleButton = false) {
+    popUp(
+      title = this.$t("message.warning"),
+      type = "warning",
+      singleButton = false
+    ) {
       const swal = this.$swal.fire({
         title,
         type,

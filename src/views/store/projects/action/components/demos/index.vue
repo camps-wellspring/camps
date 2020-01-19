@@ -40,7 +40,9 @@
             <v-col cols="12" md="6">
               <new-image-upload
                 class="file-upload__image"
-                :imgUrl="demo.screen && demo.screen.path ? demo.screen.path : ''"
+                :imgUrl="
+                  demo.screen && demo.screen.path ? demo.screen.path : ''
+                "
                 :imgId="demo.screen && demo.screen.id"
                 :reset="!demo.screen"
                 :max-size="2"
@@ -105,7 +107,10 @@
                         </td>
                         <td>
                           <v-btn icon>
-                            <v-icon medium title="delete" @click="handleItemDelete(item, i)"
+                            <v-icon
+                              medium
+                              title="delete"
+                              @click="handleItemDelete(item, i)"
                               >mdi-delete</v-icon
                             >
                           </v-btn>
@@ -189,7 +194,9 @@ export default {
     },
 
     screenPath(file) {
-      return file instanceof File ? URL.createObjectURL(file) : file && file.path;
+      return file instanceof File
+        ? URL.createObjectURL(file)
+        : file && file.path;
     },
 
     // TODO emit an empty item instead

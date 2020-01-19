@@ -12,7 +12,11 @@
         @click="closePreview"
         :title="$t('label.close')"
       ></i> -->
-      <v-icon class="img-preview-close" @click="closePreview" :title="$t('label.close')">
+      <v-icon
+        class="img-preview-close"
+        @click="closePreview"
+        :title="$t('label.close')"
+      >
         mdi-close
       </v-icon>
       <!-- <span class="img-preview-close" @click="closePreview">{{

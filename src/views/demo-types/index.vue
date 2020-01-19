@@ -6,7 +6,12 @@
       action-button-text="create"
       @ButtonClicked="initDialog('create')"
     />
-    <v-data-table :headers="headers" :items="items" hide-default-footer :loading="loading.table">
+    <v-data-table
+      :headers="headers"
+      :items="items"
+      hide-default-footer
+      :loading="loading.table"
+    >
       <template v-slot:item="{ item, index }">
         <tr>
           <td>{{ item.name }}</td>
@@ -36,7 +41,11 @@
               <v-icon medium title="edit">mdi-pencil</v-icon>
             </v-btn>
             <v-btn icon>
-              <v-icon medium title="delete" @click="handleDelete(item.id, index)">
+              <v-icon
+                medium
+                title="delete"
+                @click="handleDelete(item.id, index)"
+              >
                 mdi-delete</v-icon
               >
             </v-btn>

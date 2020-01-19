@@ -33,7 +33,13 @@
                 :close-on-content-click="false"
               >
                 <template v-slot:activator="{ on }">
-                  <v-btn class="color-button" x-large depressed :color="form.color" v-on="on" />
+                  <v-btn
+                    class="color-button"
+                    x-large
+                    depressed
+                    :color="form.color"
+                    v-on="on"
+                  />
                 </template>
                 <v-color-picker
                   :value="form.color"
@@ -77,7 +83,12 @@
 </template>
 
 <script>
-import { minLength, maxLength, required, requiredIf } from "vuelidate/lib/validators";
+import {
+  minLength,
+  maxLength,
+  required,
+  requiredIf
+} from "vuelidate/lib/validators";
 import actionMixin from "@/mixins/actionMixin";
 
 export default {

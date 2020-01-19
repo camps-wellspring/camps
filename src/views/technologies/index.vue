@@ -33,7 +33,11 @@
               <v-icon medium title="edit">mdi-pencil</v-icon>
             </v-btn>
             <v-btn icon>
-              <v-icon medium title="delete" @click="handleDelete(item.id, index)">
+              <v-icon
+                medium
+                title="delete"
+                @click="handleDelete(item.id, index)"
+              >
                 mdi-delete</v-icon
               >
             </v-btn>

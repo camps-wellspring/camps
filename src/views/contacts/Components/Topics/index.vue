@@ -9,12 +9,20 @@
       </v-btn>
     </v-toolbar>
     <!-- table -->
-    <wrapping-table :headersName="$options.headersName" pathName="topics" ref="table_ref">
+    <wrapping-table
+      :headersName="$options.headersName"
+      pathName="topics"
+      ref="table_ref"
+    >
       <template slot-scope="{ item, index }">
         <td>{{ item.name }}</td>
         <td>
-          <v-icon small title="edit" @click="handleEdit(item, index)"> mdi-pencil</v-icon>
-          <v-icon small title="delete" @click="handleDelete(item, index)"> mdi-delete</v-icon>
+          <v-icon small title="edit" @click="handleEdit(item, index)">
+            mdi-pencil</v-icon
+          >
+          <v-icon small title="delete" @click="handleDelete(item, index)">
+            mdi-delete</v-icon
+          >
         </td>
       </template>
     </wrapping-table>

@@ -83,7 +83,10 @@
                         </td>
                         <td>
                           <v-btn icon>
-                            <v-icon medium title="delete" @click="handleItemDelete(item, i)"
+                            <v-icon
+                              medium
+                              title="delete"
+                              @click="handleItemDelete(item, i)"
                               >mdi-delete</v-icon
                             >
                           </v-btn>
