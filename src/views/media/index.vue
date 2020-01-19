@@ -11,17 +11,17 @@
     />
 
     <div class="d-flex align-baseline justify-center">
-      <span class="mx-3" v-text="$t('label.information_center')" />
+      <span class="mx-3" v-text="$t('label.releases')" />
       <v-switch
         v-model="type"
         inset
         hide-details
         class="mx-4"
-        true-value="main_gallery"
-        false-value="information_center"
+        true-value="events"
+        false-value="releases"
         :loading="loading.fetch"
       />
-      <span v-text="$t('label.honorary_exhibition')" />
+      <span v-text="$t('label.events')" />
     </div>
 
     <v-container>
@@ -47,7 +47,7 @@ export default {
       photos: [],
       newPhotos: [],
 
-      type: "main_gallery",
+      type: "events",
 
       loading: {
         fetch: false,
@@ -69,7 +69,9 @@ export default {
     fetchItems() {
       this.loading.fetch = true;
       const query = { pagination: "all" };
-      this.type === "information_center" && (query.information_center = true);
+      this.type === "releases"
+        ? (query.releases = true)
+        : (query.events = true);
       IndexData({ reqName: "photos-galleries", query })
         .then(res => {
           this.photos = res.data.data;
@@ -78,7 +80,7 @@ export default {
           this.loading.fetch = false;
         })
         .catch(() => {
-          this.type === "main_gallery" ? "information_center" : "main_gallery";
+          this.type === "events" ? "releases" : "events";
           this.loading.fetch = false;
         });
     },

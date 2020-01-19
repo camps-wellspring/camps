@@ -257,7 +257,9 @@
     "edit_extra_service": "Edit Extra Service",
     "honorary_exhibition": "Honorary Exhibition",
     "information_center": "Information Center",
-    "upload_book": "Upload Book"
+    "upload_book": "Upload Book",
+    "releases": "Releases",
+    "events": "Events"
   },
   "title": {
     "edit_service": "Edit Service",
