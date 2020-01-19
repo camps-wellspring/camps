@@ -68,6 +68,7 @@ export default {
           this.tableLoading = false;
           const { data, meta } = res.data;
           this.items = data;
+
           this.pagination = meta;
         })
         .catch(err => console.log(err));
@@ -90,6 +91,9 @@ export default {
             });
         }
       });
+    },
+    handleUpdateItems(data, index) {
+      this.$set(this.items, index, data);
     }
   },
   watch: {

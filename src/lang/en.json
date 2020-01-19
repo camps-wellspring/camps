@@ -22,7 +22,9 @@
   },
   "fields": {
     "password": "Password",
-    "email": "Email"
+    "email": "Email",
+    "name": "Name",
+    "short_description": "Short Description"
   },
   "validation": {
     "required": "%{attribute} is required",
@@ -39,7 +41,12 @@
     "password_min": "must be 6 numbers",
     "numeric": "must be numbers",
     "email": "%{attribute} is not valid Email Address",
-    "url": " not valid Url"
+    "url": " not valid Url",
+    "file_type": "File Type must be only pdf",
+    "file_size": "File Size",
+    "imageType": "Image type must bee jpg,png",
+    "imageSize": "image Size must be less than",
+    "imageDimensions": "invalid Image Demensions"
   },
   "message": {
     "no_results": "No results found.",
@@ -98,7 +105,8 @@
     "settings": "Settings",
     "orders": "Orders",
     "exhibition": "Exhibition",
-    "gallery_exhibition": "Gallery Exhibition"
+    "gallery_exhibition": "Gallery Exhibition",
+    "books": "Books"
   },
   "table": {
     "profile": "Profile",
@@ -138,7 +146,8 @@
     "handle_close": "Handle Close",
     "order_data_name": "Order Name",
     "seen": "Seen",
-    "closed": "Closed"
+    "closed": "Closed",
+    "book": "Books"
   },
   "input": {
     "user_name": "User Name",
@@ -148,7 +157,8 @@
     "message": "Message",
     "name": "Name",
     "global_contact_location_1": "First  Location",
-    "global_contact_location_2": "Second  Location"
+    "global_contact_location_2": "Second  Location",
+    "short_description": "Short Description"
   },
   "label": {
     "upload_image": "Upload Image",
@@ -246,10 +256,15 @@
     "create_extra_service": "Create Extra Service",
     "edit_extra_service": "Edit Extra Service",
     "honorary_exhibition": "Honorary Exhibition",
-    "information_center": "Information Center"
+    "information_center": "Information Center",
+    "upload_book": "Upload Book"
   },
   "title": {
     "edit_service": "Edit Service",
-    "create_service": "Create Service"
+    "create_service": "Create Service",
+    "Create_book": "Create Book",
+    "edit_book": "Edit Book",
+    "upload_your_book": "Upload Your Book *",
+    "upload_book_cover": "Upload Your Book Cover *"
   }
 }

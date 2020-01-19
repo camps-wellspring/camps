@@ -23,7 +23,7 @@ import NoData from "@/components/NoData";
 import ReadMore from "vue-read-more";
 import "./directives";
 import { messages } from "@/lang";
-
+import { imagePreviewMixin } from "@/utils/mixins/imagePreview/imagePreviewMixin";
 Vue.use(Vuelidate);
 Vue.use(VueSweetalert2);
 Vue.use(VueGoogleMaps, {
@@ -41,6 +41,7 @@ Vue.use(ReadMore);
 
 // Mixins -----------------------------------------------
 Vue.mixin(SweetAlert);
+Vue.mixin(imagePreviewMixin);
 
 // Components -------------------------------------------
 Vue.component("form-group", FormGroup);
@@ -58,7 +59,7 @@ Vue.component("NoData", NoData);
 Vue.component("DialogComponent", DialogComponent);
 Vue.component("toggle-service", ToggleService);
 Vue.component("TextField", TextField);
-Vue.component("wrapping-table", WrappingTable);
+Vue.component("WrappingTable", WrappingTable);
 
 Vue.filter("truncate", function(value, strCount = 50) {
   if (!value) {

@@ -10,6 +10,9 @@ export const isPhone = val => {
 export function isValidImgType(file) {
   return /\.(jpe?g|png)$/i.test(file.name);
 }
+export function isValidPdfFile(file) {
+  return /^[a-z0-9_()\-\[\]]+\.pdf$/i.test(file.name);
+}
 
 export function isValidImgSize(fileSize, maxSize) {
   let sizeInKB = fileSize / 1024 / 1024;

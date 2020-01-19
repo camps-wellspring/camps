@@ -56,7 +56,6 @@ export default {
       default: null
     },
     imgId: {
-      type: Number,
       default: null
     },
     width: {
@@ -93,16 +92,20 @@ export default {
   },
   watch: {
     reset: {
-      handler(newValue) {
-        if (newValue === true) {
+      handler(value) {
+        if (value) {
           this.resetImageFile();
         }
-      }
+      },
+      immediate: false
     },
     resetToggle: {
-      handler() {
-        this.resetImageFile();
-      }
+      handler(value) {
+        if (value) {
+          this.resetImageFile();
+        }
+      },
+      immediate: true
     },
     imgUrl: {
       handler(newValue) {
