@@ -1,6 +1,6 @@
 const base = function() {
   if (process.env.NODE_ENV === "development") {
-    return "https://dev.api.solutionplus.net";
+    return "https://dev.api.adabiriyadh.sa";
   } else if (process.env.NODE_ENV === "online_dev") {
     return "https://dev.api.solutionplus.net";
   } else if (process.env.NODE_ENV === "testing") {
