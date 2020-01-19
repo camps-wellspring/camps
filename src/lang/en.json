@@ -106,7 +106,8 @@
     "orders": "Orders",
     "exhibition": "Exhibition",
     "gallery_exhibition": "Gallery Exhibition",
-    "books": "Books"
+    "books": "Books",
+    "events": "Events"
   },
   "table": {
     "profile": "Profile",
@@ -147,7 +148,9 @@
     "order_data_name": "Order Name",
     "seen": "Seen",
     "closed": "Closed",
-    "book": "Books"
+    "book": "Books",
+    "serial": "Serial",
+    "date": "Date"
   },
   "input": {
     "user_name": "User Name",
