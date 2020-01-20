@@ -180,16 +180,6 @@ export const asyncRouterMap = [
           icon: "mdi-account-circle"
         }
       },
-      {
-        path: "service-page",
-        component: () => import("@/views/settings"),
-        name: "service_page",
-
-        meta: {
-          title: "Service",
-          icon: "mdi-account-circle"
-        }
-      },
 
       {
         path: "socials",

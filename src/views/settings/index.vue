@@ -19,7 +19,7 @@ export default {
     about_page: () => import("./Components/AboutUs"),
     contact_page: () => import("./Components/ContactPage"),
     managers_page: () => import("./Components/ManagersPage"),
-    service_page: () => import("./Components/ServicePage"),
+
     socials_page: () => import("./Components/Socials")
   },
   data() {

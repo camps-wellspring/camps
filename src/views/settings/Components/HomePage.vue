@@ -19,9 +19,7 @@ export default {
     return {
       form: {
         home_hero_title: "",
-        home_hero_description: "",
-        home_our_store_description: "",
-        home_our_works: ""
+        home_hero_description: ""
       }
     };
   }

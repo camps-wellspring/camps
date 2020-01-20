@@ -62,8 +62,8 @@ export default {
     createTableHeaders() {
       this.headers = TableHeaders(this.headersName);
     },
-    handleGetItems() {
-      IndexData({ reqName: this.pathName })
+    handleGetItems(query) {
+      IndexData({ reqName: this.pathName, query })
         .then(res => {
           this.tableLoading = false;
           const { data, meta } = res.data;
