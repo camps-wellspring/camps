@@ -24,7 +24,10 @@
     "password": "Password",
     "email": "Email",
     "name": "Name",
-    "short_description": "Short Description"
+    "short_description": "Short Description",
+    "description": "Description",
+    "address": "Address",
+    "speakers": "Speakers"
   },
   "validation": {
     "required": "%{attribute} is required",
@@ -72,7 +75,8 @@
     "submit": "Submit",
     "close": "Close",
     "add": "Add",
-    "got_it": "Got It"
+    "got_it": "Got It",
+    "add_speaker": "Add Speaker"
   },
   "heading": {
     "members": "Members",
@@ -270,6 +274,9 @@
     "Create_book": "Create Book",
     "edit_book": "Edit Book",
     "upload_your_book": "Upload Your Book *",
-    "upload_book_cover": "Upload Your Book Cover *"
+    "upload_book_cover": "Upload Your Book Cover *",
+    "Create_event": "Create Event",
+    "edit_event": "Edit Event",
+    "upload_image": "Upload Image"
   }
 }
