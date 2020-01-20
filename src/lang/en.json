@@ -27,7 +27,9 @@
     "short_description": "Short Description",
     "description": "Description",
     "address": "Address",
-    "speakers": "Speakers"
+    "speakers": "Speakers",
+    "url": "URL",
+    "date": "Event Date"
   },
   "validation": {
     "required": "%{attribute} is required",
@@ -165,7 +167,8 @@
     "name": "Name",
     "global_contact_location_1": "First  Location",
     "global_contact_location_2": "Second  Location",
-    "short_description": "Short Description"
+    "short_description": "Short Description",
+    "description": "Description"
   },
   "label": {
     "upload_image": "Upload Image",
@@ -266,7 +269,8 @@
     "information_center": "Information Center",
     "upload_book": "Upload Book",
     "releases": "Releases",
-    "events": "Events"
+    "events": "Events",
+    "event_date": "event Date is required *"
   },
   "title": {
     "edit_service": "Edit Service",
@@ -277,6 +281,7 @@
     "upload_book_cover": "Upload Your Book Cover *",
     "Create_event": "Create Event",
     "edit_event": "Edit Event",
-    "upload_image": "Upload Image"
+    "upload_image": "Upload Image",
+    "image_rqeuired": "Image Field is required *"
   }
 }

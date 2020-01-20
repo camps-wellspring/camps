@@ -42,7 +42,7 @@ Vue.use(ReadMore);
 // Mixins -----------------------------------------------
 Vue.mixin(SweetAlert);
 Vue.mixin(imagePreviewMixin);
-
+Vue.use(require("vue-moment"));
 // Components -------------------------------------------
 Vue.component("form-group", FormGroup);
 Vue.component("formWrapper", templates.FormWrapper);

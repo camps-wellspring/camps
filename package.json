@@ -13,10 +13,12 @@
   "dependencies": {
     "axios": "^0.19.0",
     "core-js": "^2.6.10",
+    "date-fns": "^2.9.0",
     "js-cookie": "^2.2.1",
     "nprogress": "^0.2.0",
     "vue": "^2.6.10",
     "vue-i18n": "^8.14.1",
+    "vue-moment": "^4.1.0",
     "vue-read-more": "^1.1.1",
     "vue-router": "^3.0.3",
     "vue-sweetalert2": "^2.1.1",
