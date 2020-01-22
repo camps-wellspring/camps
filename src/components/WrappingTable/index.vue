@@ -103,6 +103,29 @@ export default {
         this.handleGetItems(this.queries);
       },
       immediate: true
+    },
+    items: {
+      handler(val) {
+        const { current_page } = this.pagination;
+        if (val.length == 0 && this.$route.query.page > 1) {
+          this.$router.push({
+            query: {
+              page: current_page - 1
+            }
+          });
+        }
+        if (
+          val.length > this.pagination.per_page &&
+          this.$route.query.page >= 1
+        ) {
+          this.$router.push({
+            query: {
+              page: current_page + 1
+            }
+          });
+        }
+      },
+      immediate: true
     }
   }
 };
