@@ -220,12 +220,12 @@ export default {
         console.log(res);
         const { book } = res.data;
         this.$refs.table_ref.items.push(book);
+        this.$refs.dialog_ref.toggleDialog();
+        this.onDialogClose();
       } catch (error) {
         console.log(error);
       } finally {
         this.btnLoading = false;
-        this.onDialogClose();
-        this.$refs.dialog_ref.toggleDialog();
       }
     },
     async editBook(reqData, slug) {

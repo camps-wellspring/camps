@@ -11,7 +11,7 @@ export function isValidImgType(file) {
   return /\.(jpe?g|png)$/i.test(file.name);
 }
 export function isValidPdfFile(file) {
-  return /^[a-z0-9_()\-\[\]]+\.pdf$/i.test(file.name);
+  return /^[a-z0-9_()\-[\]]+\.pdf$/i.test(file.name);
 }
 
 export function isValidImgSize(fileSize, maxSize) {
