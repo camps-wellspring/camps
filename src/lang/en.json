@@ -113,7 +113,8 @@
     "exhibition": "Exhibition",
     "gallery_exhibition": "Gallery Exhibition",
     "books": "Books",
-    "events": "Events"
+    "events": "Events",
+    "wsadmin": "WS Admin"
   },
   "table": {
     "profile": "Profile",
