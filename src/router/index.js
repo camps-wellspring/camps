@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
 import Layout from "@/Layout";
+import cookie from "js-cookie";
 
 Vue.use(Router);
 
@@ -26,6 +27,13 @@ export const constantRouterMap = [
     path: "/login",
     component: () => import("@/views/login/index"),
     hidden: true
+    //     beforeEnter: (to, from, next) => {
+    //       if (cookie.get("token")) {
+    //         next("/");
+    //       } else {
+    //         next();
+    //       }
+    //     }
   },
   {
     path: "/401",
@@ -41,8 +49,25 @@ export const constantRouterMap = [
   }
 ];
 
-export default new Router({
+const router = new Router({
   mode: "history",
   //   base: process.env.BASE_URL,
   routes: constantRouterMap
 });
+router.beforeEach((to, from, next) => {
+  if (cookie.get("token")) {
+    if (to.path === "/login") {
+      next("/");
+    } else {
+      next();
+    }
+  } else {
+    if (to.path === "/login") {
+      next();
+    } else {
+      next("/login");
+    }
+  }
+});
+
+export default router;
