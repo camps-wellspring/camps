@@ -94,14 +94,14 @@ export default {
       } else {
         console.log("request 2");
         let data = {
-          username: this.email,
+          email: this.email,
           password: this.password
         };
         this.$store
           .dispatch("LoginByEmail", data)
           .then(() => {
-            this.loading = false;
             this.$router.push({ path: this.redirect || "/" });
+            this.loading = false;
           })
           .catch(() => {
             this.loading = false;

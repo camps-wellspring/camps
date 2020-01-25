@@ -1,4 +1,5 @@
-import { loginByEmail, logout, getUserInfo } from "@/api/login";
+import { loginByEmail, logout } from "@/api/login";
+// getUserInfo
 import { getToken, setToken, removeToken } from "@/utils/auth";
 import Cookies from "js-cookie";
 
@@ -24,13 +25,14 @@ const user = {
 
   actions: {
     LoginByEmail({ commit }, userInfo) {
-      const email = userInfo.username.trim();
+      const email = userInfo.email;
       return new Promise((resolve, reject) => {
         loginByEmail(email, userInfo.password)
           .then(response => {
             const data = response.data;
-            commit("SET_TOKEN", data.access_token);
-            setToken(data.access_token);
+            commit("SET_TOKEN", data.token);
+            setToken(data.token);
+            // window.location.reload();
             resolve();
           })
           .catch(error => {
@@ -39,23 +41,23 @@ const user = {
       });
     },
 
-    GetUserInfo({ commit }) {
-      return new Promise((resolve, reject) => {
-        getUserInfo()
-          .then(response => {
-            if (!response.data) {
-              reject("Verification failed, please login again.");
-            }
-            const data = response.data;
-            let user = data.user;
-            commit("SET_USER", user);
-            resolve(user);
-          })
-          .catch(error => {
-            reject(error);
-          });
-      });
-    },
+    // GetUserInfo({ commit }) {
+    //   return new Promise((resolve, reject) => {
+    //     getUserInfo()
+    //       .then(response => {
+    //         if (!response.data) {
+    //           reject("Verification failed, please login again.");
+    //         }
+    //         const data = response.data;
+    //         let user = data.user;
+    //         commit("SET_USER", user);
+    //         resolve(user);
+    //       })
+    //       .catch(error => {
+    //         reject(error);
+    //       });
+    //   });
+    // },
 
     LogOut({ commit, state }) {
       return new Promise((resolve, reject) => {

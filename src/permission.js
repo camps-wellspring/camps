@@ -1,5 +1,5 @@
 import router from "./router";
-import store from "./store";
+// import store from "./store";
 import { getToken } from "@/utils/auth"; // getToken from cookie
 
 import NProgress from "nprogress"; // progress bar
@@ -16,25 +16,6 @@ router.beforeEach((to, from, next) => {
     if (to.path === "/login") {
       next({ path: "/" });
       NProgress.done();
-    } else {
-      if (!store.getters.user.firstname) {
-        store
-          .dispatch("GetUserInfo")
-          .then(() => {
-            store.dispatch("GenerateRoutesNoPermissions").then(() => {
-              router.addRoutes(store.getters.addRouters);
-              next({ ...to, replace: true });
-            });
-          })
-          .catch(err => {
-            console.log(err);
-            store.dispatch("ClientLogOut").then(() => {
-              next({ path: "/" });
-            });
-          });
-      } else {
-        next();
-      }
     }
   } else {
     /* Has No Token */

@@ -1,16 +1,16 @@
 import request from "@/utils/request";
 import { client_secret, client_id, grant_type } from "@/config/auth";
 
-export function loginByEmail(username, password) {
+export function loginByEmail(email, password) {
   const data = {
-    username,
+    email,
     password,
     client_id,
     client_secret,
     grant_type
   };
   return request({
-    url: "/oauth/token",
+    url: "/login",
     method: "post",
     data
   });
@@ -23,9 +23,9 @@ export function logout() {
   });
 }
 
-export function getUserInfo() {
-  return request({
-    url: "api/profile/user",
-    method: "get"
-  });
-}
+// export function getUserInfo() {
+//   return request({
+//     url: "profile",
+//     method: "get"
+//   });
+// }

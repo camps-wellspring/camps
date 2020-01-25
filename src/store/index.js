@@ -4,7 +4,7 @@ import Vuex from "vuex";
 import user from "./modules/user";
 import errors from "./modules/errors";
 import notification from "./modules/notification";
-import permission from "./modules/permission";
+// import permission from "./modules/permission";
 import locale from "./modules/locale";
 
 import getters from "./getters";
@@ -16,7 +16,7 @@ export default new Vuex.Store({
     user,
     errors,
     notification,
-    permission,
+    // permission,
 
     locale
   },

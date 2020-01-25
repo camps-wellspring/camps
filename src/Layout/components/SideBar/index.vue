@@ -1,6 +1,6 @@
 <template>
   <v-app id="inspire">
-    <v-navigation-drawer
+    <!-- <v-navigation-drawer
       v-model="drawer"
       :clipped="$vuetify.breakpoint.lgAndUp"
       app
@@ -14,7 +14,7 @@
           :base-path="route.path"
         ></sidebar-item>
       </v-list>
-    </v-navigation-drawer>
+    </v-navigation-drawer> -->
 
     <v-app-bar :clipped-left="$vuetify.breakpoint.lgAndUp" app dark>
       <v-toolbar-title style="width: 300px" class="ml-0 pl-4">
@@ -50,15 +50,15 @@
 
 <script>
 import cookie from "js-cookie";
-import { mapGetters } from "vuex";
-import SidebarItem from "./SideBarItem";
+// import { mapGetters } from "vuex";
+// import SidebarItem from "./SideBarItem";
 
 export default {
   props: {
     source: String
   },
   components: {
-    SidebarItem
+    // SidebarItem
   },
   computed: {
     isRight() {
@@ -67,8 +67,8 @@ export default {
       } else {
         return false;
       }
-    },
-    ...mapGetters(["permission_routers"])
+    }
+    // ...mapGetters(["permission_routers"])
   },
   data: () => ({
     dialog: false,

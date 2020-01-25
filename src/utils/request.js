@@ -1,15 +1,10 @@
 import axios from "axios";
 import store from "@/store";
-import { baseURL } from "@/config/requests";
 import { getToken } from "@/utils/auth";
 
 // create an axios instance
 const service = axios.create({
-  //   baseURL: process.env.BASE_API, // api base_url
-  //   baseURL: "http://localhost:8000", // api base_url
-  // baseURL: "http://brands.solutionplus.net", // api base_url
-  // baseURL: process.env.VUE_APP_BASE_URL, // api base_url
-  baseURL: baseURL,
+  baseURL: "http://52.215.93.142:81/api/admin-panel",
 
   timeout: 20000 // request timeout
 });
